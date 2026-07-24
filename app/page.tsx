@@ -112,8 +112,12 @@ export default function Home() {
           aria-label={theme === "dark" ? "Включить светлую тему" : "Включить тёмную тему"}
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
-          <span className={theme === "light" ? "active" : ""}><img src="/assets/sun.svg" alt="" /></span>
-          <span className={theme === "dark" ? "active" : ""}><img src="/assets/moon.svg" alt="" /></span>
+          <span className={`theme-option ${theme === "light" ? "active" : ""}`}>
+            <span className="theme-icon theme-icon--sun" aria-hidden="true" />
+          </span>
+          <span className={`theme-option ${theme === "dark" ? "active" : ""}`}>
+            <span className="theme-icon theme-icon--moon" aria-hidden="true" />
+          </span>
         </button>
       </header>
 
@@ -125,7 +129,6 @@ export default function Home() {
         <p className="hero-description reveal" style={{ "--delay": "120ms" } as React.CSSProperties}>
           9+ лет создаю продукты с нуля и развиваю мобильные / веб-сервисы для B2C и B2B.
         </p>
-        <div className="scroll-cue" aria-hidden="true"><span /></div>
       </section>
 
       <section className="projects" id="projects" aria-label="Избранные проекты">
