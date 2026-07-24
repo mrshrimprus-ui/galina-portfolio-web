@@ -168,6 +168,13 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
       aria-labelledby={`${project.slug}-title`}
       data-cursor="project"
     >
+      {project.slug === "mrshrimp" && (
+        <a
+          className="project-link"
+          href="/projects/mrshrimp"
+          aria-label="Открыть кейс MrShrimp"
+        />
+      )}
       <div className="project-copy">
         <h2 id={`${project.slug}-title`}>{project.title}</h2>
         <p>{project.description}</p>
