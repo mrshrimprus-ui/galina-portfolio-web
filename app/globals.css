@@ -24,6 +24,23 @@ html {
   background: var(--background);
 }
 
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 body {
   margin: 0;
   background: var(--background);
@@ -31,6 +48,105 @@ body {
   font-family: "Manrope", Arial, sans-serif;
   font-size: 18px;
   transition: background-color 500ms cubic-bezier(.22, 1, .36, 1), color 500ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.custom-cursor-enabled,
+.custom-cursor-enabled a,
+.custom-cursor-enabled button,
+.custom-cursor-enabled [data-cursor] {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  color: #fff;
+  pointer-events: none;
+  opacity: 0;
+  contain: layout style;
+  will-change: transform;
+  transition: color 300ms, opacity 180ms;
+}
+
+.custom-cursor.is-visible {
+  opacity: 1;
+}
+
+.custom-cursor::before {
+  content: "";
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  left: -80px;
+  top: -80px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: scale(.1);
+  transition: transform 380ms cubic-bezier(.22, 1, .36, 1), opacity 180ms;
+}
+
+.custom-cursor[data-mode=""],
+.custom-cursor[data-mode="link"],
+.custom-cursor[data-mode="text"] {
+  mix-blend-mode: difference;
+}
+
+.custom-cursor[data-mode="link"]::before {
+  transform: scale(.26);
+}
+
+.custom-cursor[data-mode="text"]::before {
+  transform: scale(.36);
+}
+
+.custom-cursor[data-mode="project"] {
+  color: #fff;
+  mix-blend-mode: normal;
+}
+
+.custom-cursor[data-mode="project"]::before {
+  transform: scale(1);
+}
+
+.custom-cursor.is-pressed::before {
+  transform: scale(.08);
+}
+
+.custom-cursor[data-mode="link"].is-pressed::before {
+  transform: scale(.21);
+}
+
+.custom-cursor[data-mode="text"].is-pressed::before {
+  transform: scale(.3);
+}
+
+.custom-cursor[data-mode="project"].is-pressed::before {
+  transform: scale(.86);
+}
+
+.custom-cursor-label {
+  position: absolute;
+  left: -80px;
+  top: -80px;
+  width: 160px;
+  height: 160px;
+  display: grid;
+  place-items: center;
+  color: #111113;
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0;
+  transform: scale(.65);
+  transition: opacity 240ms, transform 380ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.custom-cursor[data-mode="project"] .custom-cursor-label {
+  opacity: 1;
+  transform: scale(1);
 }
 
 a {
@@ -55,6 +171,16 @@ main {
   align-items: center;
   position: relative;
   z-index: 10;
+  opacity: 0;
+  transform: translateY(-18px);
+  animation: header-enter 900ms cubic-bezier(.22, 1, .36, 1) 120ms forwards;
+}
+
+@keyframes header-enter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .brand {
@@ -198,13 +324,14 @@ footer a:focus-visible::after {
 .project-card {
   --pointer-x: 0px;
   --pointer-y: 0px;
+  --scroll-lag: 0px;
+  --image-scale: .94;
   height: 700px;
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-radius: 80px;
   color: #fff;
-  cursor: default;
   transform: translateZ(0);
 }
 
@@ -235,12 +362,20 @@ footer a:focus-visible::after {
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.025em;
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 850ms cubic-bezier(.22, 1, .36, 1) 180ms,
+    transform 850ms cubic-bezier(.22, 1, .36, 1) 180ms;
 }
 
 .project-copy p {
   width: 376px;
   margin: 0;
   line-height: 1.4;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 850ms cubic-bezier(.22, 1, .36, 1) 250ms,
+    transform 850ms cubic-bezier(.22, 1, .36, 1) 250ms;
 }
 
 .project-meta {
@@ -251,6 +386,10 @@ footer a:focus-visible::after {
   width: 330px;
   margin: 0;
   line-height: 1.4;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 850ms cubic-bezier(.22, 1, .36, 1) 330ms,
+    transform 850ms cubic-bezier(.22, 1, .36, 1) 330ms;
 }
 
 .project-meta span {
@@ -260,8 +399,10 @@ footer a:focus-visible::after {
 .project-visual {
   position: absolute;
   z-index: 2;
-  transform: translate3d(var(--pointer-x), var(--pointer-y), 0);
-  transition: transform 850ms cubic-bezier(.22, 1, .36, 1);
+  opacity: 0;
+  transform: translate3d(var(--pointer-x), calc(var(--pointer-y) + var(--scroll-lag)), 0) scale(var(--image-scale));
+  transition: transform 700ms cubic-bezier(.22, 1, .36, 1),
+    opacity 1000ms cubic-bezier(.22, 1, .36, 1) 240ms;
   will-change: transform;
 }
 
@@ -325,7 +466,7 @@ footer a:focus-visible::after {
   height: 821px;
   left: 56%;
   top: 0;
-  transform: translate3d(var(--pointer-x), var(--pointer-y), 0) rotate(-10.56deg);
+  transform: translate3d(var(--pointer-x), calc(var(--pointer-y) + var(--scroll-lag)), 0) rotate(-10.56deg) scale(var(--image-scale));
 }
 
 .project-card--smarthome .screen-mask {
@@ -347,24 +488,28 @@ footer a:focus-visible::after {
   object-fit: cover;
 }
 
-.project-arrow {
-  position: absolute;
-  z-index: 5;
-  right: 54px;
-  top: 44px;
-  font-size: 34px;
-  opacity: 0;
-  transform: translate(-12px, 12px);
-  transition: opacity 350ms, transform 500ms cubic-bezier(.22, 1, .36, 1);
-}
-
-.project-card:hover .project-arrow {
-  opacity: 1;
-  transform: translate(0, 0);
-}
-
 .project-card:hover .project-visual {
-  transition-duration: 280ms;
+  --image-scale: 1.025;
+  transition-duration: 250ms;
+}
+
+.project-card.is-visible {
+  --image-scale: 1;
+}
+
+.project-card.is-visible:hover {
+  --image-scale: 1.025;
+}
+
+.project-card.is-visible .project-copy h2,
+.project-card.is-visible .project-copy p,
+.project-card.is-visible .project-meta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card.is-visible .project-visual {
+  opacity: 1;
 }
 
 footer {
@@ -386,14 +531,56 @@ footer a {
 
 .reveal {
   opacity: 0;
-  transform: translateY(36px);
-  transition: opacity 900ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms),
-    transform 900ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms);
+  filter: blur(6px);
+  transform: translateY(58px);
+  transition: opacity 1100ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms),
+    transform 1100ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms),
+    filter 900ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms);
 }
 
 .reveal.is-visible {
   opacity: 1;
+  filter: blur(0);
   transform: translateY(0);
+}
+
+.reveal-heading {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+.reveal-heading span {
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(50px);
+  transition: clip-path 1050ms cubic-bezier(.22, 1, .36, 1),
+    transform 1050ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.reveal-heading span + span {
+  transition-delay: 90ms;
+}
+
+.reveal-heading.is-visible span {
+  clip-path: inset(0 0 0 0);
+  transform: translateY(0);
+}
+
+.project-card.reveal {
+  opacity: 0;
+  filter: none;
+  clip-path: inset(11% 0 0 0 round 80px);
+  transform: translateY(90px) scale(.965);
+  transition: opacity 1000ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms),
+    transform 1200ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms),
+    clip-path 1200ms cubic-bezier(.22, 1, .36, 1) var(--delay, 0ms);
+}
+
+.project-card.reveal.is-visible {
+  opacity: 1;
+  clip-path: inset(0 0 0 0 round 80px);
+  transform: translateY(0) scale(1);
 }
 
 @media (max-width: 900px) {
@@ -427,6 +614,14 @@ footer a {
     height: min(720px, 130vw);
     min-height: 600px;
     border-radius: 48px;
+  }
+
+  .project-card.reveal {
+    clip-path: inset(9% 0 0 0 round 48px);
+  }
+
+  .project-card.reveal.is-visible {
+    clip-path: inset(0 0 0 0 round 48px);
   }
 
   .project-copy {
@@ -504,6 +699,14 @@ footer a {
     height: 600px;
     min-height: 0;
     border-radius: 32px;
+  }
+
+  .project-card.reveal {
+    clip-path: inset(7% 0 0 0 round 32px);
+  }
+
+  .project-card.reveal.is-visible {
+    clip-path: inset(0 0 0 0 round 32px);
   }
 
   .project-copy {
@@ -604,6 +807,27 @@ footer a {
 
   .reveal {
     opacity: 1;
+    filter: none;
     transform: none;
+  }
+
+  .reveal-heading span,
+  .project-card .project-copy h2,
+  .project-card .project-copy p,
+  .project-card .project-meta,
+  .project-card .project-visual {
+    opacity: 1;
+    clip-path: none;
+    transform: none;
+  }
+
+  .project-card--smarthome .project-visual {
+    transform: rotate(-10.56deg);
+  }
+}
+
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none;
   }
 }
