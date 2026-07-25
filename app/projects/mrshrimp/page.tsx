@@ -3,6 +3,182 @@
 import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
 
+const processStages = [
+  {
+    label: "Исследование",
+    title: "Поведенческие персоны",
+    description:
+      "Осознанный здоровист — мотиватор здоровье и профилактика. Поддерживающий активность — больше про физическую форму.",
+    card:
+      "Провела 6 глубинных интервью, выделила 2 поведенческие персоны, их драйверы и барьеры. На основе выводов сформировала CJM основного сценария и общий User Flow.",
+    tags: ["Интервью", "Персоны", "CJM", "User Flow"],
+    visual: "research",
+  },
+  {
+    label: "Проектирование",
+    title: "Персонажи-тренеры",
+    description:
+      "Дружелюбная подача, меньше давления и больше разнообразия в коротких разминках.",
+    card:
+      "Спроектировала основной пользовательский сценарий, структуру разминок и систему персонажей, которые помогают выбрать подходящий формат тренировки.",
+    tags: ["User Flow", "Wireframes", "UI", "Персонажи"],
+    visual: "design",
+  },
+  {
+    label: "Тестирование",
+    title: "Наблюдения после тестов",
+    description:
+      "Проверила понимание интерфейса, визуальные предпочтения и потребности пользователей.",
+    card:
+      "Провела 10 немодерируемых тестов раннего прототипа с участниками из 3 профессий и собрала ключевые точки для следующей итерации.",
+    tags: ["UX-тестирование", "Прототип", "Инсайты"],
+    visual: "testing",
+  },
+  {
+    label: "Разработка",
+    title: "От дизайна к работающему продукту",
+    description:
+      "Самостоятельно реализовала приложение и проверила решения уже в работающем продукте.",
+    card:
+      "Собрала приложение во FlutterFlow, реализовала основные сценарии и бизнес-логику, подключила Firebase, аналитику, авторизацию и уведомления.",
+    tags: ["FlutterFlow", "Firebase", "GA4", "iOS", "Android"],
+    visual: "development",
+  },
+  {
+    label: "Релиз",
+    title: "Запуск продукта за месяц",
+    description:
+      "Подготовила продукт к публикации, собрала обратную связь и выпустила первую рабочую версию.",
+    card:
+      "Подготовила сборки, страницы продукта и материалы для запуска. После релиза собрала первые пользовательские сигналы.",
+    tags: ["App Store", "Google Play", "Launch"],
+    visual: "release",
+  },
+  {
+    label: "Аналитика",
+    title: "От данных к следующему циклу",
+    description:
+      "Собрала продуктовые метрики и превратила наблюдения в следующие гипотезы развития.",
+    card:
+      "Настроила аналитику ключевых сценариев, изучила поведение пользователей и определила направления следующей итерации.",
+    tags: ["GA4", "Метрики", "Гипотезы"],
+    visual: "analytics",
+  },
+] as const;
+
+function ProcessSlider() {
+  const [activeStage, setActiveStage] = useState(0);
+  const stage = processStages[activeStage];
+
+  const move = (direction: number) => {
+    setActiveStage(
+      (current) => (current + direction + processStages.length) % processStages.length,
+    );
+  };
+
+  return (
+    <section className="shrimp-story-section shrimp-process">
+      <div className="shrimp-section-title reveal">
+        <p>Процесс</p>
+        <h2 data-cursor="text">
+          Исследования, дизайн, разработка
+          <br />и аналитика — полный цикл продукта
+        </h2>
+      </div>
+
+      <div
+        className={`shrimp-process-slider reveal ${
+          activeStage === 0 ? "is-reference" : ""
+        }`}
+      >
+        {activeStage === 0 ? (
+          <img
+            className="shrimp-process-reference"
+            src="/assets/mrshrimp-process-research.png"
+            alt=""
+          />
+        ) : (
+          <div
+            className={`shrimp-process-scene shrimp-process-scene--${stage.visual}`}
+            key={stage.label}
+          >
+            <div className="shrimp-process-art" aria-hidden="true">
+              {stage.visual === "testing" && (
+                <div className="process-insights">
+                  <span>Ждали аудио во время разминки</span>
+                  <span>Формат казался слишком лёгким</span>
+                  <span>Стилистики воспринимали по-разному</span>
+                </div>
+              )}
+              {stage.visual === "development" && (
+                <div className="process-code">
+                  <span />
+                  <span />
+                </div>
+              )}
+              {(stage.visual === "release" || stage.visual === "analytics") && (
+                <img src="/assets/mrshrimp-screen.png" alt="" />
+              )}
+              {stage.visual === "design" && (
+                <img src="/assets/mrshrimp-context-grid.png" alt="" />
+              )}
+            </div>
+            <div className="shrimp-process-result">
+              <h3>{stage.title}</h3>
+              <p>{stage.description}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="shrimp-process-tabs" role="tablist" aria-label="Этапы процесса">
+          {processStages.map((item, index) => (
+            <button
+              className={index === activeStage ? "is-active" : ""}
+              type="button"
+              role="tab"
+              aria-selected={index === activeStage}
+              key={item.label}
+              onClick={() => setActiveStage(index)}
+              data-cursor="link"
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span> {item.label}
+              {index === activeStage && (
+                <span className="shrimp-process-tab-copy">
+                  {item.card}
+                  <span className="shrimp-process-tags">
+                    {item.tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </span>
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        <div className="shrimp-process-arrows">
+          <button
+            type="button"
+            aria-label="Предыдущий этап"
+            onClick={() => move(-1)}
+            data-cursor="link"
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            aria-label="Следующий этап"
+            onClick={() => move(1)}
+            data-cursor="link"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CaseCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
 
@@ -207,6 +383,8 @@ export default function MrShrimpCase() {
           />
         </figure>
       </section>
+
+      <ProcessSlider />
 
       <footer className="shrimp-footer">
         <p>2026</p>
