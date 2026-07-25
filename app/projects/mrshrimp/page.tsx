@@ -576,7 +576,89 @@ function CaseCursor() {
     <div className="custom-cursor" ref={cursorRef} aria-hidden="true">
       <ArrowIcon direction="left" />
       <ArrowIcon direction="right" />
+      <span className="case-next-cursor">
+        <img src="/assets/punto-screen.png" alt="" />
+      </span>
     </div>
+  );
+}
+
+function ResultSection() {
+  const metrics = [
+    ["31%", "33 из 106", "запустили разминку"],
+    ["26%", "28 из 106", "вернулись в другой день"],
+    ["10%", "10 из 101", "вернулись через неделю (D7)"],
+  ];
+
+  return (
+    <section className="shrimp-story-section shrimp-result">
+      <div className="shrimp-section-title reveal">
+        <p>Результат</p>
+        <h2 data-cursor="text">
+          Большинство запущенных разминок
+          <br />
+          доходят до завершения
+        </h2>
+        <p className="shrimp-result-subtitle">
+          Зона роста — активация и регулярный возврат
+        </p>
+      </div>
+
+      <div className="shrimp-result-stage reveal">
+        <div className="shrimp-result-primary">
+          <strong>73%</strong>
+          <span>201 запуск → 146 завершений</span>
+        </div>
+
+        <div className="shrimp-result-phone" aria-hidden="true">
+          <div className="shrimp-result-screen">
+            <img src="/assets/mrshrimp-result/completion.png" alt="" />
+            <div className="shrimp-result-complete">
+              <strong>Молодец!<br />Разминка закончена</strong>
+              <span>Готово</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="shrimp-result-details">
+          <div className="shrimp-result-metrics">
+            {metrics.map(([value, sample, label]) => (
+              <div className="shrimp-result-metric" key={value}>
+                <div>
+                  <strong>{value}</strong>
+                  <span>{sample}</span>
+                </div>
+                <p>{label}</p>
+              </div>
+            ))}
+          </div>
+          <p className="shrimp-result-note">
+            D1 — 11% · DAU/MAU: 8% → 9%
+            <br />
+            1 мая — 8 июля · 106 реальных пользователей
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NextProject() {
+  return (
+    <a
+      className="shrimp-next-project"
+      href="/#projects"
+      aria-label="Перейти к следующему проекту Punto Pago"
+      data-cursor="next-project"
+    >
+      <span className="shrimp-next-track" aria-hidden="true">
+        <span>Следующий проект →</span>
+        <span>Следующий проект →</span>
+        <span>Следующий проект →</span>
+        <span>Следующий проект →</span>
+      </span>
+      <span className="sr-only">Следующий проект — Punto Pago</span>
+    </a>
   );
 }
 
@@ -716,6 +798,10 @@ export default function MrShrimpCase() {
       <ProcessSlider />
 
       <SolutionSlider />
+
+      <ResultSection />
+
+      <NextProject />
 
       <footer className="shrimp-footer">
         <p>2026</p>
