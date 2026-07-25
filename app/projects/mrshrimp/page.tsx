@@ -166,8 +166,23 @@ function SolutionVisual({
 function SolutionSlider() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
+  const [slideWidth, setSlideWidth] = useState(0);
   const dragStart = useRef<number | null>(null);
   const wheelLock = useRef(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+    const measure = () => {
+      const slide = slider.querySelector<HTMLElement>(".solution-slide");
+      if (slide) setSlideWidth(slide.getBoundingClientRect().width);
+    };
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(slider);
+    measure();
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const move = (direction: number) => {
     setActiveSlide(
@@ -181,12 +196,6 @@ function SolutionSlider() {
     dragStart.current = null;
     setDragOffset(0);
   };
-
-  const visibleSlides = [-1, 0, 1].map((position) => {
-    const index =
-      (activeSlide + position + solutionSlides.length) % solutionSlides.length;
-    return { slide: solutionSlides[index], index, position };
-  });
 
   return (
     <section className="shrimp-story-section shrimp-solution">
@@ -209,6 +218,7 @@ function SolutionSlider() {
 
       <div
         className="shrimp-solution-slider reveal"
+        ref={sliderRef}
         role="region"
         aria-roledescription="карусель"
         aria-label="Ключевые решения приложения"
@@ -238,16 +248,20 @@ function SolutionSlider() {
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
       >
-        <div className={`shrimp-solution-track ${dragStart.current !== null ? "is-dragging" : ""}`}>
-          {visibleSlides.map(({ slide, index, position }) => (
+        <div
+          className={`shrimp-solution-track ${dragStart.current !== null ? "is-dragging" : ""}`}
+          style={{
+            transform: `translate3d(calc(50vw - ${slideWidth / 2}px - ${activeSlide * (slideWidth + 24)}px + ${dragOffset}px), 0, 0)`,
+          }}
+        >
+          {solutionSlides.map((slide, index) => (
             <article
-              className={`solution-slide solution-slide--${slide.visual} solution-slide--position-${position + 1}`}
+              className={`solution-slide solution-slide--${slide.visual} ${index === activeSlide ? "is-active" : ""}`}
               aria-label={`${index + 1} из ${solutionSlides.length}: ${slide.title}`}
-              aria-hidden={position !== 0}
-              key={`${slide.title}-${position}`}
-              style={{ "--drag-offset": `${dragOffset}px` } as React.CSSProperties}
+              aria-hidden={index !== activeSlide}
+              key={slide.title}
             >
-              <div className="solution-slide__copy">
+              <div className="solution-slide__copy" key={`copy-${activeSlide}-${index}`}>
                 <h3>{slide.title}</h3>
                 <p>{slide.description}</p>
               </div>
@@ -411,18 +425,17 @@ function ProcessSlider() {
               data-cursor="link"
             >
               <span>{String(index + 1).padStart(2, "0")}</span> {item.label}
-              <span className="shrimp-process-tab-copy">
-                <span className="shrimp-process-tab-copy-inner">
-                  {item.card}
-                  <span className="shrimp-process-tags">
-                    {item.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
-                  </span>
-                </span>
-              </span>
             </button>
           ))}
+        </div>
+
+        <div className="shrimp-process-detail" key={`detail-${stage.label}`}>
+          <p>{stage.card}</p>
+          <div className="shrimp-process-tags">
+            {stage.tags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
         </div>
 
         <div className="shrimp-process-arrows">
