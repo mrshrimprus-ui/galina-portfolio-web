@@ -169,7 +169,10 @@ function SolutionSlider() {
   const [isSnapping, setIsSnapping] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [slideWidth, setSlideWidth] = useState(0);
+  const [slideHeight, setSlideHeight] = useState(0);
   const dragStart = useRef<number | null>(null);
+  const dragDistance = useRef(0);
+  const suppressClick = useRef(false);
   const wheelLock = useRef(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -181,9 +184,13 @@ function SolutionSlider() {
       // offsetWidth is the real layout width. getBoundingClientRect() includes
       // the 0.94 scale used for side slides and caused cumulative centering drift.
       if (slide) setSlideWidth(slide.offsetWidth);
+      const processSlider = document.querySelector<HTMLElement>(".shrimp-process-slider");
+      if (processSlider) setSlideHeight(processSlider.offsetHeight);
     };
     const resizeObserver = new ResizeObserver(measure);
     resizeObserver.observe(slider);
+    const processSlider = document.querySelector<HTMLElement>(".shrimp-process-slider");
+    if (processSlider) resizeObserver.observe(processSlider);
     measure();
     return () => resizeObserver.disconnect();
   }, []);
@@ -195,9 +202,16 @@ function SolutionSlider() {
 
   const finishDrag = () => {
     if (dragStart.current === null) return;
-    if (Math.abs(dragOffset) > 70) move(dragOffset > 0 ? -1 : 1);
+    if (Math.abs(dragDistance.current) > 70) {
+      move(dragDistance.current > 0 ? -1 : 1);
+      suppressClick.current = true;
+    }
     dragStart.current = null;
+    dragDistance.current = 0;
     setDragOffset(0);
+    window.setTimeout(() => {
+      suppressClick.current = false;
+    }, 0);
   };
 
   const loopSlides = [
@@ -228,6 +242,7 @@ function SolutionSlider() {
       <div
         className="shrimp-solution-slider reveal"
         ref={sliderRef}
+        data-cursor="carousel-right"
         role="region"
         aria-roledescription="карусель"
         aria-label="Ключевые решения приложения"
@@ -252,16 +267,28 @@ function SolutionSlider() {
           event.currentTarget.setPointerCapture(event.pointerId);
         }}
         onPointerMove={(event) => {
+          const rect = event.currentTarget.getBoundingClientRect();
+          event.currentTarget.dataset.cursor =
+            event.clientX < rect.left + rect.width / 2 ? "carousel-left" : "carousel-right";
           if (dragStart.current === null) return;
-          setDragOffset(event.clientX - dragStart.current);
+          const distance = event.clientX - dragStart.current;
+          dragDistance.current = distance;
+          if (Math.abs(distance) > 8) suppressClick.current = true;
+          setDragOffset(distance);
         }}
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
+        onClick={(event) => {
+          if (suppressClick.current || (event.target as HTMLElement).closest("button")) return;
+          const rect = event.currentTarget.getBoundingClientRect();
+          move(event.clientX < rect.left + rect.width / 2 ? -1 : 1);
+        }}
       >
         <div
           className={`shrimp-solution-track ${dragStart.current !== null ? "is-dragging" : ""} ${isSnapping ? "is-snapping" : ""}`}
           style={{
             transform: `translate3d(calc(50vw - ${slideWidth / 2}px - ${trackIndex * (slideWidth + 24)}px + ${dragOffset}px), 0, 0)`,
+            height: slideHeight ? `${slideHeight}px` : undefined,
           }}
           onTransitionEnd={(event) => {
             if (event.propertyName !== "transform") return;
@@ -295,31 +322,9 @@ function SolutionSlider() {
           )})}
         </div>
 
-        <div className="shrimp-solution-controls">
-          <div className="shrimp-solution-count" aria-live="polite">
-            <span>{String(activeSlide + 1).padStart(2, "0")}</span>
-            <span>/</span>
-            <span>{String(solutionSlides.length).padStart(2, "0")}</span>
-          </div>
-          <div className="shrimp-solution-arrows">
-            <button
-              type="button"
-              aria-label="Предыдущий слайд"
-              onClick={() => move(-1)}
-              data-cursor="link"
-            >
-              <ArrowIcon direction="left" />
-            </button>
-            <button
-              type="button"
-              aria-label="Следующий слайд"
-              onClick={() => move(1)}
-              data-cursor="link"
-            >
-              <ArrowIcon direction="right" />
-            </button>
-          </div>
-        </div>
+        <p className="sr-only" aria-live="polite">
+          Слайд {activeSlide + 1} из {solutionSlides.length}
+        </p>
       </div>
     </section>
   );
@@ -426,7 +431,29 @@ function ProcessSlider() {
         </h2>
       </div>
 
-      <div className="shrimp-process-slider reveal">
+      <div
+        className="shrimp-process-slider reveal"
+        data-cursor="carousel-right"
+        role="region"
+        aria-roledescription="карусель"
+        aria-label="Этапы процесса"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowLeft") move(-1);
+          if (event.key === "ArrowRight") move(1);
+        }}
+        onPointerMove={(event) => {
+          if ((event.target as HTMLElement).closest("button")) return;
+          const rect = event.currentTarget.getBoundingClientRect();
+          event.currentTarget.dataset.cursor =
+            event.clientX < rect.left + rect.width / 2 ? "carousel-left" : "carousel-right";
+        }}
+        onClick={(event) => {
+          if ((event.target as HTMLElement).closest("button")) return;
+          const rect = event.currentTarget.getBoundingClientRect();
+          move(event.clientX < rect.left + rect.width / 2 ? -1 : 1);
+        }}
+      >
         <div
           className={`shrimp-process-scene shrimp-process-scene--${stage.visual}`}
           key={stage.label}
@@ -464,24 +491,6 @@ function ProcessSlider() {
           ))}
         </div>
 
-        <div className="shrimp-process-arrows">
-          <button
-            type="button"
-            aria-label="Предыдущий этап"
-            onClick={() => move(-1)}
-            data-cursor="link"
-          >
-            <ArrowIcon direction="left" />
-          </button>
-          <button
-            type="button"
-            aria-label="Следующий этап"
-            onClick={() => move(1)}
-            data-cursor="link"
-          >
-            <ArrowIcon direction="right" />
-          </button>
-        </div>
       </div>
     </section>
   );
@@ -508,11 +517,18 @@ function CaseCursor() {
     document.documentElement.classList.add("custom-cursor-enabled");
 
     const updateMode = () => {
-      const nextMode =
-        document
-          .elementFromPoint(targetX, targetY)
-          ?.closest<HTMLElement>("[data-cursor]")
-          ?.dataset.cursor ?? "";
+      const interactive = document
+        .elementFromPoint(targetX, targetY)
+        ?.closest<HTMLElement>("[data-cursor]");
+      let nextMode = interactive?.dataset.cursor ?? "";
+
+      if (interactive && nextMode.startsWith("carousel")) {
+        const rect = interactive.getBoundingClientRect();
+        nextMode =
+          targetX < rect.left + rect.width / 2
+            ? "carousel-left"
+            : "carousel-right";
+      }
 
       if (nextMode !== mode) {
         mode = nextMode;
@@ -556,7 +572,12 @@ function CaseCursor() {
     };
   }, []);
 
-  return <div className="custom-cursor" ref={cursorRef} aria-hidden="true" />;
+  return (
+    <div className="custom-cursor" ref={cursorRef} aria-hidden="true">
+      <ArrowIcon direction="left" />
+      <ArrowIcon direction="right" />
+    </div>
+  );
 }
 
 function CaseExperience() {
