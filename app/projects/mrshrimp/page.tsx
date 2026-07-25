@@ -66,6 +66,204 @@ const processStages = [
   },
 ] as const;
 
+const solutionSlides = [
+  {
+    title: "Старт в один тап",
+    description:
+      "Без регистрации и обязательного онбординга — можно сразу начать.",
+    visual: "start",
+  },
+  {
+    title: "Подстроить под себя",
+    description:
+      "Перед стартом можно выбрать длительность, формат и тренера — под ситуацию и настроение.",
+    visual: "setup",
+  },
+  {
+    title: "Каждый запуск — новый комплекс",
+    description:
+      "При каждом запуске приложение собирает новый комплекс из библиотеки упражнений.",
+    visual: "workout",
+  },
+  {
+    title: "Ощущение результата",
+    description:
+      "После разминки пользователь получает похвалу, видит прогресс и может открыть награду.",
+    visual: "result",
+  },
+  {
+    title: "Видеть регулярность",
+    description:
+      "Дни в движении, календарь, уровни и челленджи превращают отдельные разминки в заметный прогресс.",
+    visual: "progress",
+  },
+] as const;
+
+function SolutionVisual({
+  visual,
+}: {
+  visual: (typeof solutionSlides)[number]["visual"];
+}) {
+  if (visual === "start") {
+    return (
+      <div className="solution-visual solution-visual--start" aria-hidden="true">
+        <img src="/assets/mrshrimp-solution/hand-phone.png" alt="" />
+      </div>
+    );
+  }
+
+  if (visual === "setup") {
+    return (
+      <div className="solution-visual solution-visual--setup" aria-hidden="true">
+        <div className="solution-phone solution-phone--setup-a">
+          <img src="/assets/mrshrimp-solution/screen-setup-a.png" alt="" />
+        </div>
+        <div className="solution-phone solution-phone--setup-b">
+          <img src="/assets/mrshrimp-solution/screen-setup-b.png" alt="" />
+        </div>
+      </div>
+    );
+  }
+
+  if (visual === "workout") {
+    return (
+      <div className="solution-visual solution-visual--workout" aria-hidden="true">
+        <div className="solution-phone solution-phone--landscape">
+          <img src="/assets/mrshrimp-solution/screen-workout.png" alt="" />
+        </div>
+      </div>
+    );
+  }
+
+  if (visual === "result") {
+    return (
+      <div className="solution-visual solution-visual--result" aria-hidden="true">
+        <div className="solution-phone solution-phone--result-a">
+          <img src="/assets/mrshrimp-solution/screen-result-a.png" alt="" />
+        </div>
+        <div className="solution-phone solution-phone--result-b">
+          <img src="/assets/mrshrimp-solution/screen-result-b.png" alt="" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="solution-visual solution-visual--progress" aria-hidden="true">
+      <div className="solution-phone solution-phone--progress-a">
+        <img src="/assets/mrshrimp-solution/screen-progress-a.png" alt="" />
+      </div>
+      <div className="solution-phone solution-phone--progress-b">
+        <img src="/assets/mrshrimp-solution/screen-progress-b.png" alt="" />
+      </div>
+      <div className="solution-phone solution-phone--progress-c">
+        <img src="/assets/mrshrimp-solution/screen-progress-c.png" alt="" />
+      </div>
+    </div>
+  );
+}
+
+function SolutionSlider() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const touchStart = useRef<number | null>(null);
+
+  const move = (direction: number) => {
+    setActiveSlide(
+      (current) => (current + direction + solutionSlides.length) % solutionSlides.length,
+    );
+  };
+
+  return (
+    <section className="shrimp-story-section shrimp-solution">
+      <div className="shrimp-section-title reveal">
+        <p>Решение</p>
+        <h2 data-cursor="text">
+          Быстрая разминка
+          <br />
+          без лишних усилий
+        </h2>
+        <div className="shrimp-solution-intro">
+          <p>
+            JTBD: Когда я несколько часов работаю за компьютером и перестаю замечать
+            напряжение в теле, я хочу получить короткое напоминание подвигаться, чтобы
+            не доводить себя до сильной усталости.
+          </p>
+          <p>Начать → Размяться → Увидеть результат → Вернуться</p>
+        </div>
+      </div>
+
+      <div
+        className="shrimp-solution-slider reveal"
+        role="region"
+        aria-roledescription="карусель"
+        aria-label="Ключевые решения приложения"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowLeft") move(-1);
+          if (event.key === "ArrowRight") move(1);
+        }}
+        onTouchStart={(event) => {
+          touchStart.current = event.touches[0]?.clientX ?? null;
+        }}
+        onTouchEnd={(event) => {
+          if (touchStart.current === null) return;
+          const distance = (event.changedTouches[0]?.clientX ?? touchStart.current) - touchStart.current;
+          if (Math.abs(distance) > 45) move(distance > 0 ? -1 : 1);
+          touchStart.current = null;
+        }}
+      >
+        <div
+          className="shrimp-solution-track"
+          style={{
+            transform: `translateX(calc(-${activeSlide * 100}% - ${activeSlide * 24}px))`,
+          }}
+        >
+          {solutionSlides.map((slide, index) => (
+            <article
+              className={`solution-slide solution-slide--${slide.visual}`}
+              aria-label={`${index + 1} из ${solutionSlides.length}: ${slide.title}`}
+              aria-hidden={index !== activeSlide}
+              key={slide.title}
+            >
+              <div className="solution-slide__copy">
+                <h3>{slide.title}</h3>
+                <p>{slide.description}</p>
+              </div>
+              <SolutionVisual visual={slide.visual} />
+            </article>
+          ))}
+        </div>
+
+        <div className="shrimp-solution-controls">
+          <div className="shrimp-solution-count" aria-live="polite">
+            <span>{String(activeSlide + 1).padStart(2, "0")}</span>
+            <span>/</span>
+            <span>{String(solutionSlides.length).padStart(2, "0")}</span>
+          </div>
+          <div className="shrimp-solution-arrows">
+            <button
+              type="button"
+              aria-label="Предыдущий слайд"
+              onClick={() => move(-1)}
+              data-cursor="link"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              aria-label="Следующий слайд"
+              onClick={() => move(1)}
+              data-cursor="link"
+            >
+              →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ProcessVisual({ visual }: { visual: (typeof processStages)[number]["visual"] }) {
   if (visual === "research") {
     return (
@@ -420,6 +618,8 @@ export default function MrShrimpCase() {
           />
         </figure>
       </section>
+
+      <SolutionSlider />
 
       <ProcessSlider />
 
