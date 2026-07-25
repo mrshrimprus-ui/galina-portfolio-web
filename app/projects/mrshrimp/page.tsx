@@ -165,6 +165,8 @@ function SolutionVisual({
 
 function SolutionSlider() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(1);
+  const [isSnapping, setIsSnapping] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [slideWidth, setSlideWidth] = useState(0);
   const dragStart = useRef<number | null>(null);
@@ -185,9 +187,8 @@ function SolutionSlider() {
   }, []);
 
   const move = (direction: number) => {
-    setActiveSlide(
-      (current) => (current + direction + solutionSlides.length) % solutionSlides.length,
-    );
+    setActiveSlide((current) => (current + direction + solutionSlides.length) % solutionSlides.length);
+    setTrackIndex((current) => current + direction);
   };
 
   const finishDrag = () => {
@@ -196,6 +197,12 @@ function SolutionSlider() {
     dragStart.current = null;
     setDragOffset(0);
   };
+
+  const loopSlides = [
+    solutionSlides[solutionSlides.length - 1],
+    ...solutionSlides,
+    solutionSlides[0],
+  ];
 
   return (
     <section className="shrimp-story-section shrimp-solution">
@@ -238,6 +245,7 @@ function SolutionSlider() {
           if (event.key === "ArrowRight") move(1);
         }}
         onPointerDown={(event) => {
+          if ((event.target as HTMLElement).closest("button")) return;
           dragStart.current = event.clientX;
           event.currentTarget.setPointerCapture(event.pointerId);
         }}
@@ -249,25 +257,40 @@ function SolutionSlider() {
         onPointerCancel={finishDrag}
       >
         <div
-          className={`shrimp-solution-track ${dragStart.current !== null ? "is-dragging" : ""}`}
+          className={`shrimp-solution-track ${dragStart.current !== null ? "is-dragging" : ""} ${isSnapping ? "is-snapping" : ""}`}
           style={{
-            transform: `translate3d(calc(50vw - ${slideWidth / 2}px - ${activeSlide * (slideWidth + 24)}px + ${dragOffset}px), 0, 0)`,
+            transform: `translate3d(calc(50vw - ${slideWidth / 2}px - ${trackIndex * (slideWidth + 24)}px + ${dragOffset}px), 0, 0)`,
+          }}
+          onTransitionEnd={(event) => {
+            if (event.propertyName !== "transform") return;
+            if (trackIndex === 0) {
+              setIsSnapping(true);
+              setTrackIndex(solutionSlides.length);
+              requestAnimationFrame(() => requestAnimationFrame(() => setIsSnapping(false)));
+            } else if (trackIndex === solutionSlides.length + 1) {
+              setIsSnapping(true);
+              setTrackIndex(1);
+              requestAnimationFrame(() => requestAnimationFrame(() => setIsSnapping(false)));
+            }
           }}
         >
-          {solutionSlides.map((slide, index) => (
+          {loopSlides.map((slide, index) => {
+            const realIndex = (index - 1 + solutionSlides.length) % solutionSlides.length;
+            const isActive = index === trackIndex;
+            return (
             <article
-              className={`solution-slide solution-slide--${slide.visual} ${index === activeSlide ? "is-active" : ""}`}
-              aria-label={`${index + 1} из ${solutionSlides.length}: ${slide.title}`}
-              aria-hidden={index !== activeSlide}
-              key={slide.title}
+              className={`solution-slide solution-slide--${slide.visual} ${isActive ? "is-active" : ""}`}
+              aria-label={`${realIndex + 1} из ${solutionSlides.length}: ${slide.title}`}
+              aria-hidden={!isActive}
+              key={`${slide.title}-${index}`}
             >
-              <div className="solution-slide__copy" key={`copy-${activeSlide}-${index}`}>
+              <div className="solution-slide__copy">
                 <h3>{slide.title}</h3>
                 <p>{slide.description}</p>
               </div>
               <SolutionVisual visual={slide.visual} />
             </article>
-          ))}
+          )})}
         </div>
 
         <div className="shrimp-solution-controls">
@@ -425,17 +448,18 @@ function ProcessSlider() {
               data-cursor="link"
             >
               <span>{String(index + 1).padStart(2, "0")}</span> {item.label}
+              <span className="shrimp-process-tab-copy">
+                <span className="shrimp-process-tab-copy-inner">
+                  <span className="shrimp-process-tab-description">{item.card}</span>
+                  <span className="shrimp-process-tags">
+                    {item.tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </span>
+                </span>
+              </span>
             </button>
           ))}
-        </div>
-
-        <div className="shrimp-process-detail" key={`detail-${stage.label}`}>
-          <p>{stage.card}</p>
-          <div className="shrimp-process-tags">
-            {stage.tags.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
-          </div>
         </div>
 
         <div className="shrimp-process-arrows">
