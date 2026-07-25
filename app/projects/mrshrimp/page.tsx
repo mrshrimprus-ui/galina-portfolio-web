@@ -8,63 +8,132 @@ const processStages = [
     label: "Исследование",
     title: "Поведенческие персоны",
     description:
-      "Осознанный здоровист — мотиватор здоровье и профилактика. Поддерживающий активность — больше про физическую форму.",
+      "Осознанный здоровист — заботится о здоровье и профилактике. Поддерживающий активность — хочет сохранять физическую форму.",
     card:
-      "Провела 6 глубинных интервью, выделила 2 поведенческие персоны, их драйверы и барьеры. На основе выводов сформировала CJM основного сценария и общий User Flow.",
-    tags: ["Интервью", "Персоны", "CJM", "User Flow"],
+      "Провела 6 глубинных интервью и выделила 2 поведенческие персоны с разными драйверами и барьерами. На основе выводов собрала CJM основного сценария и общий User Flow.",
+    tags: ["Интерьвю", "Персоны", "CJM", "User Flow"],
     visual: "research",
   },
   {
     label: "Проектирование",
     title: "Персонажи-тренеры",
     description:
-      "Дружелюбная подача, меньше давления и больше разнообразия в коротких разминках.",
+      "Дружелюбная подача, меньше давления и больше разнообразия.",
     card:
-      "Спроектировала основной пользовательский сценарий, структуру разминок и систему персонажей, которые помогают выбрать подходящий формат тренировки.",
-    tags: ["User Flow", "Wireframes", "UI", "Персонажи"],
+      "На основе исследования сформировала концепцию персонажей-тренеров: они снижают ощущение давления и добавляют разнообразие. Разработала UI-kit, ключевые сценарии и corner cases.",
+    tags: ["Концепция", "UI-kit", "Сценарии"],
     visual: "design",
   },
   {
     label: "Тестирование",
     title: "Наблюдения после тестов",
     description:
-      "Проверила понимание интерфейса, визуальные предпочтения и потребности пользователей.",
+      "Тестирование показало риски и направления для следующих итераций.",
     card:
-      "Провела 10 немодерируемых тестов раннего прототипа с участниками из 3 профессий и собрала ключевые точки для следующей итерации.",
-    tags: ["UX-тестирование", "Прототип", "Инсайты"],
+      "Провела 10 модерируемых тестов раннего прототипа с участниками из 3 профилей. Проверяла драйверы и барьеры, восприятие персонажей и понятность первой разминки.",
+    tags: ["Модерируемое UX-тестирование", "Профили"],
     visual: "testing",
   },
   {
     label: "Разработка",
     title: "От дизайна к работающему продукту",
     description:
-      "Самостоятельно реализовала приложение и проверила решения уже в работающем продукте.",
+      "Самостоятельно реализовала приложение и проверяла решения уже в работающем продукте.",
     card:
-      "Собрала приложение во FlutterFlow, реализовала основные сценарии и бизнес-логику, подключила Firebase, аналитику, авторизацию и уведомления.",
-    tags: ["FlutterFlow", "Firebase", "GA4", "iOS", "Android"],
+      "Собрала приложение во FlutterFlow: реализовала основные сценарии, состояния и бизнес-логику, подключила Firebase, аналитику, авторизацию и уведомления. Подготовила сборки для iOS и Android.",
+    tags: ["FlutterFlow", "Firebase", "GA4", "iOS · Android"],
     visual: "development",
   },
   {
     label: "Релиз",
-    title: "Запуск продукта за месяц",
+    title: "Довела продукт до пользователей",
     description:
-      "Подготовила продукт к публикации, собрала обратную связь и выпустила первую рабочую версию.",
+      "Приложение опубликовано в App Store и Google Play",
     card:
-      "Подготовила сборки, страницы продукта и материалы для запуска. После релиза собрала первые пользовательские сигналы.",
-    tags: ["App Store", "Google Play", "Launch"],
+      "Подготовила релизные сборки и страницы в сторах, организовала внешнее тестирование и прошла модерацию. Выпустила iOS-версию в App Store, Android-версию довела до открытого тестирования.",
+    tags: ["TestFlight", "Google Play", "App Store"],
     visual: "release",
   },
   {
     label: "Аналитика",
-    title: "От данных к следующему циклу",
+    title: "От данных к следующим итерациям",
     description:
-      "Собрала продуктовые метрики и превратила наблюдения в следующие гипотезы развития.",
+      "Анализирую воронку и поведение пользователей, чтобы находить точки роста и проверять продуктовые гипотезы.",
     card:
-      "Настроила аналитику ключевых сценариев, изучила поведение пользователей и определила направления следующей итерации.",
-    tags: ["GA4", "Метрики", "Гипотезы"],
+      "Настроила продуктовые события в GA4 и собрала дашборды в Tableau. Отслеживаю активацию, использование, завершение разминок, повторные запуски и возвраты.",
+    tags: ["Firebase", "BigQuery", "Tableau", "GA4"],
     visual: "analytics",
   },
 ] as const;
+
+function ProcessVisual({ visual }: { visual: (typeof processStages)[number]["visual"] }) {
+  if (visual === "research") {
+    return (
+      <div className="process-visual process-visual--research" aria-hidden="true">
+        <img src="/assets/mrshrimp-process/research-back.png" alt="" />
+        <img src="/assets/mrshrimp-process/research-front.png" alt="" />
+      </div>
+    );
+  }
+
+  if (visual === "design") {
+    return (
+      <div className="process-visual process-visual--design" aria-hidden="true">
+        <img src="/assets/mrshrimp-process/design.png" alt="" />
+      </div>
+    );
+  }
+
+  if (visual === "testing") {
+    const insights = [
+      ["test-a.png", "Ждали аудио во время разминки", "Повысить приоритет аудио"],
+      ["test-b.png", "Формат казался слишком лёгким", "Яснее объяснять пользу"],
+      ["test-c.png", "Стилистику воспринимали по-разному", "Продолжить проверку"],
+    ];
+    return (
+      <div className="process-visual process-visual--testing" aria-hidden="true">
+        {insights.map(([icon, title, caption]) => (
+          <div className="process-insight" key={title}>
+            <img src={`/assets/mrshrimp-process/${icon}`} alt="" />
+            <span>
+              <strong>{title}</strong>
+              <small>{caption}</small>
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (visual === "development") {
+    return (
+      <div className="process-visual process-visual--development" aria-hidden="true">
+        <img src="/assets/mrshrimp-process/development-a.png" alt="" />
+        <img src="/assets/mrshrimp-process/development-b.png" alt="" />
+      </div>
+    );
+  }
+
+  if (visual === "release") {
+    return (
+      <div className="process-visual process-visual--release" aria-hidden="true">
+        <img src="/assets/mrshrimp-process/release-device.png" alt="" />
+        <img src="/assets/mrshrimp-process/release-screen.png" alt="" />
+        <img src="/assets/mrshrimp-process/release-frame.png" alt="" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="process-visual process-visual--analytics" aria-hidden="true">
+      {["analytics-a.png", "analytics-b.png", "analytics-c.png", "analytics-d.png"].map(
+        (image) => (
+          <img src={`/assets/mrshrimp-process/${image}`} alt="" key={image} />
+        ),
+      )}
+    </div>
+  );
+}
 
 function ProcessSlider() {
   const [activeStage, setActiveStage] = useState(0);
@@ -86,49 +155,17 @@ function ProcessSlider() {
         </h2>
       </div>
 
-      <div
-        className={`shrimp-process-slider reveal ${
-          activeStage === 0 ? "is-reference" : ""
-        }`}
-      >
-        {activeStage === 0 ? (
-          <img
-            className="shrimp-process-reference"
-            src="/assets/mrshrimp-process-research.png"
-            alt=""
-          />
-        ) : (
-          <div
-            className={`shrimp-process-scene shrimp-process-scene--${stage.visual}`}
-            key={stage.label}
-          >
-            <div className="shrimp-process-art" aria-hidden="true">
-              {stage.visual === "testing" && (
-                <div className="process-insights">
-                  <span>Ждали аудио во время разминки</span>
-                  <span>Формат казался слишком лёгким</span>
-                  <span>Стилистики воспринимали по-разному</span>
-                </div>
-              )}
-              {stage.visual === "development" && (
-                <div className="process-code">
-                  <span />
-                  <span />
-                </div>
-              )}
-              {(stage.visual === "release" || stage.visual === "analytics") && (
-                <img src="/assets/mrshrimp-screen.png" alt="" />
-              )}
-              {stage.visual === "design" && (
-                <img src="/assets/mrshrimp-context-grid.png" alt="" />
-              )}
-            </div>
-            <div className="shrimp-process-result">
-              <h3>{stage.title}</h3>
-              <p>{stage.description}</p>
-            </div>
+      <div className="shrimp-process-slider reveal">
+        <div
+          className={`shrimp-process-scene shrimp-process-scene--${stage.visual}`}
+          key={stage.label}
+        >
+          <ProcessVisual visual={stage.visual} />
+          <div className="shrimp-process-result">
+            <h3>{stage.title}</h3>
+            <p>{stage.description}</p>
           </div>
-        )}
+        </div>
 
         <div className="shrimp-process-tabs" role="tablist" aria-label="Этапы процесса">
           {processStages.map((item, index) => (
