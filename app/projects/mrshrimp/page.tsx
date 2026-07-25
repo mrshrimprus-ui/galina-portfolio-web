@@ -178,7 +178,9 @@ function SolutionSlider() {
     if (!slider) return;
     const measure = () => {
       const slide = slider.querySelector<HTMLElement>(".solution-slide");
-      if (slide) setSlideWidth(slide.getBoundingClientRect().width);
+      // offsetWidth is the real layout width. getBoundingClientRect() includes
+      // the 0.94 scale used for side slides and caused cumulative centering drift.
+      if (slide) setSlideWidth(slide.offsetWidth);
     };
     const resizeObserver = new ResizeObserver(measure);
     resizeObserver.observe(slider);
