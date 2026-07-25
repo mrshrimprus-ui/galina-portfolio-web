@@ -345,6 +345,13 @@ footer a:focus-visible::after {
   pointer-events: none;
 }
 
+.project-link {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  border-radius: inherit;
+}
+
 .project-card--mrshrimp { background: #ff8d28; }
 .project-card--punto { background: #2e2da6; }
 .project-card--smarthome { background: #da2025; }
@@ -829,5 +836,249 @@ footer a {
 @media (pointer: coarse) {
   .custom-cursor {
     display: none;
+  }
+}
+
+/* MrShrimp case */
+
+.shrimp-case {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  overflow: clip;
+}
+
+.shrimp-header {
+  width: calc(100% - (var(--page-padding) * 2));
+  height: 94px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-18px);
+  animation: header-enter 900ms cubic-bezier(.22, 1, .36, 1) 120ms forwards;
+}
+
+.shrimp-brand {
+  flex: 0 0 50%;
+  width: max-content;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.04em;
+}
+
+.shrimp-header .theme-switch {
+  margin-left: auto;
+}
+
+.shrimp-cover {
+  min-height: 790px;
+  padding: 78px var(--page-padding) 82px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  column-gap: clamp(42px, 7vw, 120px);
+}
+
+.shrimp-cover-copy {
+  padding-top: 10px;
+}
+
+.shrimp-cover h1 {
+  margin: 0;
+  font-size: clamp(70px, 7.4vw, 118px);
+  font-weight: 500;
+  line-height: .94;
+  letter-spacing: -.055em;
+}
+
+.shrimp-cover h1 span {
+  display: block;
+}
+
+.shrimp-summary {
+  width: min(405px, 100%);
+  margin: 34px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.shrimp-cover-visual {
+  width: min(610px, 100%);
+  aspect-ratio: 1.02;
+  justify-self: end;
+  align-self: start;
+  position: relative;
+  overflow: hidden;
+  border-radius: 68px;
+  background: #ff983f;
+}
+
+.shrimp-cover-visual img {
+  width: 112%;
+  height: 130%;
+  max-width: none;
+  position: absolute;
+  left: 4%;
+  bottom: -27%;
+  object-fit: contain;
+  filter: drop-shadow(0 30px 35px rgba(0, 0, 0, .25));
+}
+
+.shrimp-meta {
+  grid-column: 1;
+  align-self: end;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.shrimp-meta span {
+  display: block;
+}
+
+.shrimp-story-section {
+  min-height: 980px;
+  padding: 145px var(--page-padding) 105px;
+}
+
+.shrimp-section-title {
+  text-align: center;
+}
+
+.shrimp-section-title p {
+  margin: 0 0 28px;
+  color: var(--secondary);
+  font-size: 12px;
+}
+
+.shrimp-section-title h2 {
+  margin: 0;
+  font-size: clamp(46px, 4.25vw, 70px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+
+.shrimp-media {
+  width: min(1120px, 100%);
+  margin: 92px auto 0;
+}
+
+.shrimp-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 54px;
+}
+
+.shrimp-task {
+  padding-top: 100px;
+}
+
+.shrimp-task .shrimp-media {
+  margin-top: 78px;
+}
+
+.shrimp-footer {
+  width: calc(100% - (var(--page-padding) * 2));
+  height: 210px;
+  margin: 0 auto;
+  padding: 70px 0 54px;
+}
+
+@media (max-width: 900px) {
+  .shrimp-header nav {
+    display: none;
+  }
+
+  .shrimp-brand {
+    flex: 1;
+  }
+
+  .shrimp-cover {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 54px;
+  }
+
+  .shrimp-cover-visual {
+    grid-row: 2;
+    justify-self: center;
+  }
+
+  .shrimp-meta {
+    grid-row: 3;
+  }
+
+  .shrimp-story-section {
+    min-height: auto;
+  }
+
+  .shrimp-section-title h2 br {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .shrimp-header {
+    width: calc(100% - 32px);
+    height: 76px;
+  }
+
+  .shrimp-brand {
+    font-size: 18px;
+  }
+
+  .shrimp-cover {
+    padding: 64px 16px 76px;
+  }
+
+  .shrimp-cover h1 {
+    font-size: 62px;
+  }
+
+  .shrimp-summary {
+    font-size: 15px;
+  }
+
+  .shrimp-cover-visual {
+    border-radius: 38px;
+  }
+
+  .shrimp-meta {
+    font-size: 12px;
+  }
+
+  .shrimp-story-section {
+    padding: 100px 16px 75px;
+  }
+
+  .shrimp-section-title p {
+    margin-bottom: 18px;
+    font-size: 10px;
+  }
+
+  .shrimp-section-title h2 {
+    font-size: 38px;
+  }
+
+  .shrimp-media,
+  .shrimp-task .shrimp-media {
+    margin-top: 54px;
+  }
+
+  .shrimp-media img {
+    border-radius: 28px;
+  }
+
+  .shrimp-footer {
+    width: calc(100% - 32px);
+    height: 170px;
+    padding-bottom: 42px;
   }
 }
