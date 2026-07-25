@@ -165,13 +165,28 @@ function SolutionVisual({
 
 function SolutionSlider() {
   const [activeSlide, setActiveSlide] = useState(0);
-  const touchStart = useRef<number | null>(null);
+  const [dragOffset, setDragOffset] = useState(0);
+  const dragStart = useRef<number | null>(null);
+  const wheelLock = useRef(false);
 
   const move = (direction: number) => {
     setActiveSlide(
       (current) => (current + direction + solutionSlides.length) % solutionSlides.length,
     );
   };
+
+  const finishDrag = () => {
+    if (dragStart.current === null) return;
+    if (Math.abs(dragOffset) > 70) move(dragOffset > 0 ? -1 : 1);
+    dragStart.current = null;
+    setDragOffset(0);
+  };
+
+  const visibleSlides = [-1, 0, 1].map((position) => {
+    const index =
+      (activeSlide + position + solutionSlides.length) % solutionSlides.length;
+    return { slide: solutionSlides[index], index, position };
+  });
 
   return (
     <section className="shrimp-story-section shrimp-solution">
@@ -198,32 +213,39 @@ function SolutionSlider() {
         aria-roledescription="карусель"
         aria-label="Ключевые решения приложения"
         tabIndex={0}
+        onWheel={(event) => {
+          if (Math.abs(event.deltaX) < Math.abs(event.deltaY) || Math.abs(event.deltaX) < 12) return;
+          event.preventDefault();
+          if (wheelLock.current) return;
+          wheelLock.current = true;
+          move(event.deltaX > 0 ? 1 : -1);
+          window.setTimeout(() => {
+            wheelLock.current = false;
+          }, 520);
+        }}
         onKeyDown={(event) => {
           if (event.key === "ArrowLeft") move(-1);
           if (event.key === "ArrowRight") move(1);
         }}
-        onTouchStart={(event) => {
-          touchStart.current = event.touches[0]?.clientX ?? null;
+        onPointerDown={(event) => {
+          dragStart.current = event.clientX;
+          event.currentTarget.setPointerCapture(event.pointerId);
         }}
-        onTouchEnd={(event) => {
-          if (touchStart.current === null) return;
-          const distance = (event.changedTouches[0]?.clientX ?? touchStart.current) - touchStart.current;
-          if (Math.abs(distance) > 45) move(distance > 0 ? -1 : 1);
-          touchStart.current = null;
+        onPointerMove={(event) => {
+          if (dragStart.current === null) return;
+          setDragOffset(event.clientX - dragStart.current);
         }}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
       >
-        <div
-          className="shrimp-solution-track"
-          style={{
-            transform: `translateX(calc(-${activeSlide * 100}% - ${activeSlide * 24}px))`,
-          }}
-        >
-          {solutionSlides.map((slide, index) => (
+        <div className={`shrimp-solution-track ${dragStart.current !== null ? "is-dragging" : ""}`}>
+          {visibleSlides.map(({ slide, index, position }) => (
             <article
-              className={`solution-slide solution-slide--${slide.visual}`}
+              className={`solution-slide solution-slide--${slide.visual} solution-slide--position-${position + 1}`}
               aria-label={`${index + 1} из ${solutionSlides.length}: ${slide.title}`}
-              aria-hidden={index !== activeSlide}
-              key={slide.title}
+              aria-hidden={position !== 0}
+              key={`${slide.title}-${position}`}
+              style={{ "--drag-offset": `${dragOffset}px` } as React.CSSProperties}
             >
               <div className="solution-slide__copy">
                 <h3>{slide.title}</h3>
@@ -247,7 +269,7 @@ function SolutionSlider() {
               onClick={() => move(-1)}
               data-cursor="link"
             >
-              ←
+              <ArrowIcon direction="left" />
             </button>
             <button
               type="button"
@@ -255,12 +277,24 @@ function SolutionSlider() {
               onClick={() => move(1)}
               data-cursor="link"
             >
-              →
+              <ArrowIcon direction="right" />
             </button>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function ArrowIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg
+      className={`case-arrow-icon case-arrow-icon--${direction}`}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M4 12h15M13 6l6 6-6 6" />
+    </svg>
   );
 }
 
@@ -377,8 +411,8 @@ function ProcessSlider() {
               data-cursor="link"
             >
               <span>{String(index + 1).padStart(2, "0")}</span> {item.label}
-              {index === activeStage && (
-                <span className="shrimp-process-tab-copy">
+              <span className="shrimp-process-tab-copy">
+                <span className="shrimp-process-tab-copy-inner">
                   {item.card}
                   <span className="shrimp-process-tags">
                     {item.tags.map((tag) => (
@@ -386,7 +420,7 @@ function ProcessSlider() {
                     ))}
                   </span>
                 </span>
-              )}
+              </span>
             </button>
           ))}
         </div>
@@ -398,7 +432,7 @@ function ProcessSlider() {
             onClick={() => move(-1)}
             data-cursor="link"
           >
-            ←
+            <ArrowIcon direction="left" />
           </button>
           <button
             type="button"
@@ -406,7 +440,7 @@ function ProcessSlider() {
             onClick={() => move(1)}
             data-cursor="link"
           >
-            →
+            <ArrowIcon direction="right" />
           </button>
         </div>
       </div>
@@ -619,9 +653,9 @@ export default function MrShrimpCase() {
         </figure>
       </section>
 
-      <SolutionSlider />
-
       <ProcessSlider />
+
+      <SolutionSlider />
 
       <footer className="shrimp-footer">
         <p>2026</p>
