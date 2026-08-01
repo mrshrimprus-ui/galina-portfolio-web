@@ -2,16 +2,15 @@
 
 import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
-
+import { useNavMagnet } from "./hooks/useNavMagnet";
 const projects = [
   {
     slug: "mrshrimp",
     title: "MrShrimp",
     description:
       "Приложение с короткими разминками: полный цикл от исследования и проектирования до релиза и аналитики.",
-    meta: ["2025–2026 · Wellness · HealthTech", "Founder & Product Designer", "iOS · Android · Web · 0→1"],
-    hand: "/assets/mrshrimp-hand.png",
-    screen: "/assets/mrshrimp-screen.png",
+    meta: ["2025–2026 · Wellness · HealthTech", "Founder & Product Designer", "iOS · Android · 0→1"],
+    screen: "/assets/mrshrimp/home/screen.webp",
   },
   {
     slug: "punto",
@@ -19,8 +18,7 @@ const projects = [
     description:
       "Развитие коммерческого финтех-продукта: кошелёк, маркетплейс, банковские сервисы и web-админка.",
     meta: ["2021–2022 · Team project", "B2C · B2B · FinTech · Marketplace", "iOS · Android · Web-admin"],
-    hand: "/assets/punto-hand.png",
-    screen: "/assets/punto-screen.png",
+    screen: "/assets/punto/home/screen.webp",
   },
   {
     slug: "smarthome",
@@ -28,85 +26,9 @@ const projects = [
     description:
       "Интеграция нового IoT-устройства в систему умного дома: от документации до реализации.",
     meta: ["2024–2025 · Team project", "B2C · IoT · Smart Home", "iOS · Android"],
-    hand: "/assets/smarthome-hand.png",
-    screen: "/assets/smarthome-screen.png",
+    screen: "/assets/smarthome/home/screen.webp",
   },
 ];
-
-function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const cursor = cursorRef.current;
-    const canUseCursor =
-      window.matchMedia("(pointer: fine)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (!cursor || !canUseCursor) return;
-
-    let targetX = -100;
-    let targetY = -100;
-    let currentX = -100;
-    let currentY = -100;
-    let frame = 0;
-    let currentMode = "";
-
-    document.documentElement.classList.add("custom-cursor-enabled");
-
-    const updateMode = () => {
-      const target = document
-        .elementFromPoint(targetX, targetY)
-        ?.closest<HTMLElement>("[data-cursor]");
-      const nextMode = target?.dataset.cursor ?? "";
-
-      if (nextMode !== currentMode) {
-        currentMode = nextMode;
-        cursor.dataset.mode = nextMode;
-      }
-    };
-
-    const move = (event: PointerEvent) => {
-      targetX = event.clientX;
-      targetY = event.clientY;
-      cursor.classList.add("is-visible");
-      updateMode();
-    };
-
-    const leave = () => cursor.classList.remove("is-visible");
-    const press = () => cursor.classList.add("is-pressed");
-    const release = () => cursor.classList.remove("is-pressed");
-
-    const render = () => {
-      currentX += (targetX - currentX) * 0.17;
-      currentY += (targetY - currentY) * 0.17;
-      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      frame = requestAnimationFrame(render);
-    };
-
-    window.addEventListener("pointermove", move, { passive: true });
-    window.addEventListener("scroll", updateMode, { passive: true });
-    document.documentElement.addEventListener("mouseleave", leave);
-    window.addEventListener("pointerdown", press, { passive: true });
-    window.addEventListener("pointerup", release, { passive: true });
-    frame = requestAnimationFrame(render);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("scroll", updateMode);
-      document.documentElement.removeEventListener("mouseleave", leave);
-      window.removeEventListener("pointerdown", press);
-      window.removeEventListener("pointerup", release);
-      document.documentElement.classList.remove("custom-cursor-enabled");
-    };
-  }, []);
-
-  return (
-    <div className="custom-cursor" ref={cursorRef} aria-hidden="true">
-      <span className="custom-cursor-label">Подробнее</span>
-    </div>
-  );
-}
 
 function ProjectCard({ project, index }: { project: (typeof projects)[number]; index: number }) {
   const cardRef = useRef<HTMLElement>(null);
@@ -149,8 +71,8 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
     const rect = cardRef.current.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    cardRef.current.style.setProperty("--pointer-x", `${x * 52}px`);
-    cardRef.current.style.setProperty("--pointer-y", `${y * 38}px`);
+    cardRef.current.style.setProperty("--pointer-x", `${x * 36}px`);
+    cardRef.current.style.setProperty("--pointer-y", `${y * 26}px`);
   };
 
   const resetImage = () => {
@@ -160,7 +82,9 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
 
   return (
     <article
-      className={`project-card project-card--${project.slug} reveal`}
+      className={`project-card project-card--${project.slug} ${
+        index === 0 ? "is-visible" : "reveal"
+      }`}
       ref={cardRef}
       style={{ "--delay": `${index * 80}ms` } as React.CSSProperties}
       onPointerMove={moveImage}
@@ -168,26 +92,25 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
       aria-labelledby={`${project.slug}-title`}
       data-cursor="project"
     >
-      {project.slug === "mrshrimp" && (
-        <a
-          className="project-link"
-          href="/projects/mrshrimp"
-          aria-label="Открыть кейс MrShrimp"
-        />
-      )}
+      <a
+        className="project-link"
+        href={`/projects/${project.slug}`}
+        aria-label={`Открыть кейс ${project.title}`}
+      />
       <div className="project-copy">
-        <h2 id={`${project.slug}-title`}>{project.title}</h2>
-        <p>{project.description}</p>
+        <h2 className="type-h2" id={`${project.slug}-title`}>{project.title}</h2>
+        <p className="project-description type-caption">{project.description}</p>
       </div>
 
       <div className="project-visual" aria-hidden="true">
-        <img className="project-hand" src={project.hand} alt="" />
-        <div className="screen-mask">
-          <img className="project-screen" src={project.screen} alt="" />
-        </div>
+        <img
+          className="project-art"
+          src={project.screen}
+          alt=""
+        />
       </div>
 
-      <p className="project-meta">
+      <p className="project-meta type-caption-regular">
         {project.meta.map((line) => (
           <span key={line}>{line}</span>
         ))}
@@ -197,6 +120,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
 }
 
 export default function Home() {
+  useNavMagnet();
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
@@ -217,10 +141,114 @@ export default function Home() {
     return () => lenis.destroy();
   }, []);
 
+  // HOME SCROLL DEPTH START
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const title = document.querySelector<HTMLElement>(".hero h1");
+    const description =
+      document.querySelector<HTMLElement>(".hero-description");
+
+    const cards = Array.from(
+      document.querySelectorAll<HTMLElement>(".project-card"),
+    );
+
+    let frame = 0;
+
+    const clamp = (
+      value: number,
+      minimum: number,
+      maximum: number,
+    ) => Math.max(minimum, Math.min(maximum, value));
+
+    const updateParallax = () => {
+      const viewportCenter = window.innerHeight / 2;
+
+      if (title) {
+        const rect = title.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+
+        title.style.setProperty(
+          "--hero-title-scroll-y",
+          `${clamp((viewportCenter - center) * 0.055, -26, 26)}px`,
+        );
+      }
+
+      if (description) {
+        const rect = description.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+
+        description.style.setProperty(
+          "--hero-description-scroll-y",
+          `${clamp((viewportCenter - center) * 0.035, -16, 16)}px`,
+        );
+      }
+
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+
+        const cardOffset = clamp(
+          (viewportCenter - center) * 0.018,
+          -10,
+          10,
+        );
+
+        const copyOffset = clamp(
+          (viewportCenter - center) * 0.04,
+          -20,
+          20,
+        );
+
+        const metaOffset = clamp(
+          (viewportCenter - center) * 0.026,
+          -14,
+          14,
+        );
+
+        card.style.setProperty(
+          "--project-card-scroll-y",
+          `${cardOffset}px`,
+        );
+
+        card.querySelector<HTMLElement>(".project-copy")
+          ?.style.setProperty(
+            "--project-copy-scroll-y",
+            `${copyOffset}px`,
+          );
+
+        card.querySelector<HTMLElement>(".project-meta")
+          ?.style.setProperty(
+            "--project-meta-scroll-y",
+            `${metaOffset}px`,
+          );
+      });
+    };
+
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updateParallax);
+    };
+
+    updateParallax();
+
+    window.addEventListener("scroll", scheduleUpdate, {
+      passive: true,
+    });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
+  }, []);
+  // HOME SCROLL DEPTH END
+
+useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
-      { threshold: 0.12 },
+      { threshold: 0.05 },
     );
     document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
     return () => observer.disconnect();
@@ -228,15 +256,14 @@ export default function Home() {
 
   return (
     <>
-      <CustomCursor />
       <main>
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="Galina Chumak — наверх" data-cursor="link">
+      <header className="site-header text-normal shared-container">
+        <a className="brand text-logo" href="#top" aria-label="Galina Chumak — наверх" data-cursor="link">
           Galina Chumak
         </a>
         <nav aria-label="Основная навигация">
-          <a href="#projects" data-cursor="link">Проекты</a>
-          <a href="#about" data-cursor="link">Обо мне</a>
+          <a href="#projects" data-cursor="nav">Проекты</a>
+          <a href="/about" data-cursor="nav">Обо мне</a>
         </nav>
         <button
           className="theme-switch"
@@ -255,12 +282,12 @@ export default function Home() {
       </header>
 
       <section className="hero" id="top">
-        <h1 className="reveal reveal-heading" data-cursor="text">
+        <h1 className="type-title reveal reveal-heading">
           <span>Senior Product</span>
           <span>Designer</span>
         </h1>
-        <p className="hero-description reveal" style={{ "--delay": "120ms" } as React.CSSProperties}>
-          9+ лет создаю продукты с нуля и развиваю мобильные / веб-сервисы для B2C и B2B.
+        <p className="hero-description type-caption text-secondary reveal" style={{ "--delay": "120ms" } as React.CSSProperties}>
+          9+ лет создаю продукты с нуля и развиваю мобильные и веб-сервисы для B2C и B2B.
         </p>
       </section>
 
@@ -269,11 +296,6 @@ export default function Home() {
           <ProjectCard key={project.slug} project={project} index={index} />
         ))}
       </section>
-
-      <footer id="about">
-        <p>2026</p>
-        <a href="mailto:galina-done@yandex.com" data-cursor="link">Связаться ↗</a>
-      </footer>
       </main>
     </>
   );

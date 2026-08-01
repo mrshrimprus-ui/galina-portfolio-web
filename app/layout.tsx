@@ -1,6 +1,9 @@
+import SiteFooter from "./projects/components/SiteFooter";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
+import RussianTypography from "./components/RussianTypography";
+import GlobalCursor from "./components/GlobalCursor";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -39,7 +42,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" data-theme="dark">
-      <body>{children}</body>
+      <body>
+        <GlobalCursor />
+        <RussianTypography />
+        {children}
+              <SiteFooter />
+      </body>
     </html>
   );
 }

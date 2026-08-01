@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
 
 :root {
   --background: #09090a;
@@ -6,6 +6,7 @@
   --secondary: rgba(255, 255, 255, 0.6);
   --switch: #333335;
   --page-padding: clamp(20px, 6.25vw, 100px);
+  --text-secondary: rgba(255, 255, 255, 0.6);
 }
 
 :root[data-theme="light"] {
@@ -49,6 +50,180 @@ body {
   font-size: 18px;
   transition: background-color 500ms cubic-bezier(.22, 1, .36, 1), color 500ms cubic-bezier(.22, 1, .36, 1);
 }
+
+/* TYPOGRAPHY SYSTEM START */
+
+.type-title,
+.type-h1,
+.type-h2,
+.type-h3,
+.type-text-l,
+.type-text,
+.type-text-s,
+.type-caption,
+.type-caption-regular,
+.text-normal,
+.type-section-label {
+  font-family: inherit;
+  font-style: normal;
+}
+
+.type-title {
+  font-size: 190px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -.06em;
+}
+
+.type-h1 {
+  font-size: 100px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -.06em;
+}
+
+.type-h2 {
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 54px;
+  letter-spacing: -.03em;
+}
+
+.type-h3 {
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.type-text-l {
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.type-text-xl {
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+
+.type-text {
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.type-text-s {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.type-caption {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.type-caption-regular {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.type-caption-small {
+  font-family: inherit;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+
+.text-normal {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+
+.text-logo {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.type-title,
+.type-h1,
+.type-h2,
+.type-h3 {
+  color: var(--foreground);
+}
+
+.type-section-label {
+  display: block;
+  margin: 0 0 28px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+  .type-title {
+    font-size: clamp(72px, 15vw, 120px);
+  }
+
+  .type-h1 {
+    font-size: clamp(56px, 11vw, 76px);
+  }
+
+  .type-h2 {
+    font-size: clamp(40px, 8vw, 52px);
+  }
+
+  .type-h3 {
+    font-size: clamp(30px, 6vw, 38px);
+  }
+}
+
+@media (max-width: 560px) {
+  .type-text-l {
+  }
+
+  .type-text {
+    font-size: 23px;
+  }
+
+  .type-text-s {
+    font-size: 18px;
+  }
+
+  .type-caption {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+}
+
+/* TYPOGRAPHY SYSTEM END */
 
 .custom-cursor-enabled,
 .custom-cursor-enabled a,
@@ -161,7 +336,7 @@ body {
   transform: scale(.86);
 }
 
-.custom-cursor[data-mode="next-project"]::before {
+.custom-cursor[data-mode="case-next"]::before {
   opacity: 0;
 }
 
@@ -192,12 +367,12 @@ body {
   object-fit: contain;
 }
 
-.custom-cursor[data-mode="next-project"] .case-next-cursor {
+.custom-cursor[data-mode="case-next"] .case-next-cursor {
   opacity: 1;
   transform: scale(1);
 }
 
-.custom-cursor[data-mode="next-project"].is-pressed .case-next-cursor {
+.custom-cursor[data-mode="case-next"].is-pressed .case-next-cursor {
   transform: scale(.9);
 }
 
@@ -259,9 +434,6 @@ main {
 .brand {
   flex: 0 0 50%;
   width: max-content;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
 }
 
 nav {
@@ -272,8 +444,6 @@ nav {
 
 nav a {
   position: relative;
-  font-weight: 500;
-  line-height: 1.4;
 }
 
 nav a::after,
@@ -370,10 +540,9 @@ footer a:focus-visible::after {
 .hero h1 {
   grid-column: 1 / -1;
   margin: 0;
-  font-size: clamp(74px, 10vw, 160px);
-  font-weight: 600;
-  line-height: 0.8;
-  letter-spacing: -0.035em;
+  font-weight: 500;
+  font-size: clamp(100px, 10vw, 190px);
+  line-height: 1;
 }
 
 .hero h1 span {
@@ -382,14 +551,11 @@ footer a:focus-visible::after {
 
 .hero-description {
   grid-column: 2;
-  width: min(350px, 100%);
-  margin: 6px 0 0 20px;
-  font-weight: 500;
-  line-height: 1.4;
+margin: 6px 0 0 20px;
 }
 
 .projects {
-  padding-top: 78px;
+  padding-top: 64px;
   display: grid;
   gap: 24px;
 }
@@ -438,10 +604,10 @@ footer a:focus-visible::after {
 
 .project-copy h2 {
   margin: 0 0 16px;
-  font-size: 64px;
+  font-size: clamp(42px, 5.5vw, 64px);
   font-weight: 500;
   line-height: 1.1;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   opacity: 0;
   transform: translateY(36px);
   transition: opacity 850ms cubic-bezier(.22, 1, .36, 1) 180ms,
@@ -451,8 +617,7 @@ footer a:focus-visible::after {
 .project-copy p {
   width: 376px;
   margin: 0;
-  line-height: 1.4;
-  opacity: 0;
+opacity: 0;
   transform: translateY(28px);
   transition: opacity 850ms cubic-bezier(.22, 1, .36, 1) 250ms,
     transform 850ms cubic-bezier(.22, 1, .36, 1) 250ms;
@@ -710,13 +875,13 @@ footer a {
   }
 
   .project-copy h2 {
-    font-size: clamp(42px, 8vw, 58px);
+    font-size: clamp(42px, 8vw, 44px);
   }
 
   .project-meta {
     left: 42px;
     bottom: 42px;
-    font-size: 15px;
+    font-size: clamp(14px, 1.5vw, 16px);
   }
 
   .project-card--mrshrimp .project-visual {
@@ -737,7 +902,7 @@ footer a {
 
 @media (max-width: 560px) {
   body {
-    font-size: 15px;
+    font-size: 18px;
   }
 
   main {
@@ -749,7 +914,6 @@ footer a {
   }
 
   .brand {
-    font-size: 18px;
   }
 
   .theme-switch .theme-option {
@@ -763,12 +927,11 @@ footer a {
   }
 
   .hero h1 {
-    font-size: clamp(48px, 15vw, 84px);
+    font-size: clamp(72px, 15vw, 84px);
   }
 
   .hero-description {
-    width: 270px;
-  }
+}
 
   .projects {
     padding-top: 45px;
@@ -796,7 +959,7 @@ footer a {
   }
 
   .project-copy h2 {
-    font-size: 40px;
+    font-size: clamp(42px, 8vw, 44px);
     margin-bottom: 10px;
   }
 
@@ -808,7 +971,7 @@ footer a {
     left: 28px;
     bottom: 30px;
     width: 280px;
-    font-size: 13px;
+    font-size: clamp(14px, 1.5vw, 16px);
   }
 
   .project-arrow {
@@ -921,6 +1084,28 @@ footer a {
   overflow: clip;
 }
 
+/* Make most body text inside the MrShrimp case use the caption-18 visual
+   (color + readable 18px size) while keeping headings' sizes intact. */
+.shrimp-case {
+  color: var(--foreground);
+}
+
+.shrimp-case :where(p, span, li, small, .shrimp-meta, .shrimp-result-note) {
+}
+
+/* Force caption-18 appearance for common typographic utility classes
+   within the MrShrimp case so they visually match caption-18. */
+.shrimp-case .type-text,
+.shrimp-case .type-text-s,
+.shrimp-case .type-caption-regular,
+.shrimp-case .text-normal {
+}
+
+.shrimp-content {
+  width: min(1540px, 100%);
+  margin: 0 auto;
+}
+
 .shrimp-header {
   width: calc(100% - (var(--page-padding) * 2));
   height: 94px;
@@ -937,9 +1122,6 @@ footer a {
 .shrimp-brand {
   flex: 0 0 50%;
   width: max-content;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -.04em;
 }
 
 .shrimp-header .theme-switch {
@@ -952,8 +1134,8 @@ footer a {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr auto;
   column-gap: clamp(42px, 7vw, 120px);
+  align-items: start;
 }
 
 .shrimp-cover-copy {
@@ -962,10 +1144,6 @@ footer a {
 
 .shrimp-cover h1 {
   margin: 0;
-  font-size: clamp(70px, 7.4vw, 118px);
-  font-weight: 500;
-  line-height: .94;
-  letter-spacing: -.055em;
 }
 
 .shrimp-cover h1 span {
@@ -975,8 +1153,6 @@ footer a {
 .shrimp-summary {
   width: min(405px, 100%);
   margin: 34px 0 0;
-  font-size: 16px;
-  line-height: 1.45;
 }
 
 .shrimp-cover-visual {
@@ -988,6 +1164,8 @@ footer a {
   overflow: hidden;
   border-radius: 68px;
   background: #ff983f;
+  display: grid;
+  align-items: end;
 }
 
 .shrimp-cover-visual img {
@@ -1002,11 +1180,16 @@ footer a {
 }
 
 .shrimp-meta {
-  grid-column: 1;
-  align-self: end;
   margin: 0;
-  font-size: 14px;
-  line-height: 1.35;
+  padding: 28px 30px 24px;
+  background: rgba(0, 0, 0, .18);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, .1);
+}
+
+.shrimp-meta span {
+  display: block;
 }
 
 .shrimp-meta span {
@@ -1024,17 +1207,21 @@ footer a {
 
 .shrimp-section-title p {
   margin: 0 0 28px;
-  color: var(--secondary);
-  font-size: 18px;
-  line-height: 1.4;
+}
+
+.shrimp-solution-intro,
+.solution-slide__copy p,
+.shrimp-process-tab-copy,
+.shrimp-result-primary span,
+.shrimp-result-metric span {
+}
+
+.shrimp-result-note,
+.shrimp-result-metric p {
 }
 
 .shrimp-section-title h2 {
   margin: 0;
-  font-size: clamp(46px, 4.25vw, 70px);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -.045em;
 }
 
 .shrimp-media {
@@ -1066,12 +1253,6 @@ footer a {
   width: min(700px, calc(100% - (var(--page-padding) * 2)));
   margin: 36px auto 0;
   color: var(--secondary);
-  font-size: 18px;
-  line-height: 1.4;
-}
-
-.shrimp-solution-intro p {
-  margin: 0;
 }
 
 .shrimp-solution-intro p + p {
@@ -1159,19 +1340,19 @@ footer a {
 
 .solution-slide--start,
 .solution-slide--workout {
-  background-image: url("/assets/mrshrimp-solution/bg-jungle.png");
+  background-image: url("/assets/mrshrimp/solution/bg-jungle.png");
 }
 
 .solution-slide--setup {
-  background-image: url("/assets/mrshrimp-solution/bg-capi.png");
+  background-image: url("/assets/mrshrimp/solution/bg-capi.png");
 }
 
 .solution-slide--result {
-  background-image: url("/assets/mrshrimp-solution/bg-result.png");
+  background-image: url("/assets/mrshrimp/solution/bg-result.png");
 }
 
 .solution-slide--progress {
-  background-image: url("/assets/mrshrimp-solution/bg-progress.png");
+  background-image: url("/assets/mrshrimp/solution/bg-progress.png");
 }
 
 .solution-slide__copy {
@@ -1322,7 +1503,7 @@ footer a {
   display: flex;
   gap: 8px;
   color: var(--secondary);
-  font-size: 14px;
+  font-size: clamp(16px, 2vw, 18px);
 }
 
 .shrimp-solution-count span:first-child {
@@ -1418,7 +1599,7 @@ footer a {
   color: rgba(255, 255, 255, .6);
   font: inherit;
   font-size: clamp(13px, 1.169cqw, 18px);
-  font-weight: 500;
+  font-weight: 300;
   text-align: left;
   cursor: pointer;
   transition:
@@ -1718,16 +1899,11 @@ footer a {
 
 .shrimp-process-result h3 {
   margin: 0 0 min(24px, 1.558cqw);
-  font-size: clamp(23px, 2.078cqw, 32px);
-  line-height: 1;
-  letter-spacing: 0;
 }
 
 .shrimp-process-result p {
   margin: 0;
   color: rgba(255, 255, 255, .6);
-  font-size: clamp(13px, 1.169cqw, 18px);
-  line-height: 1.4;
 }
 
 @keyframes process-enter {
@@ -1743,8 +1919,8 @@ footer a {
 
 .shrimp-result {
   min-height: auto;
-  padding-top: 145px;
-  padding-bottom: 130px;
+  padding-top: 80px;
+  padding-bottom: 100px;
 }
 
 .shrimp-result .shrimp-section-title {
@@ -1756,37 +1932,32 @@ footer a {
   width: min(1140px, 100%);
   margin: 24px auto 0 !important;
   color: var(--foreground) !important;
-  font-size: clamp(24px, 2.5vw, 38px) !important;
-  line-height: 1.4 !important;
 }
 
 .shrimp-result-stage {
-  width: min(1540px, calc(100vw - 32px));
-  min-height: 850px;
-  margin: 80px auto 0;
-  padding: 0 7.8% 24px;
+  width: min(1600px, calc(100vw - 32px));
+  max-width: 1400px;
+  margin: 40px auto 0;
+  padding: 80px 6% 48px;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  background-image: url("/assets/mrshrimp-result/texture.png");
-  background-repeat: no-repeat;
-  background-position: center 18%;
-  background-size: 100% auto;
+  align-items: center;
 }
 
 .shrimp-result-primary {
-  position: absolute;
+  position: relative;
   z-index: 3;
-  top: 0;
-  left: 7.8%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 36px;
 }
 
 .shrimp-result-primary strong {
   font-size: clamp(104px, 12.4vw, 190px);
-  font-weight: 500;
+  font-weight: 300;
   line-height: 1;
   letter-spacing: -.055em;
 }
@@ -1794,44 +1965,31 @@ footer a {
 .shrimp-result-primary span {
   font-size: clamp(14px, 1.3vw, 20px);
   line-height: 1.4;
+  font-weight: 300;
+  color: var(--secondary);
 }
 
 .shrimp-result-phone {
-  width: min(1004px, 73%);
-  aspect-ratio: 2.04;
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  top: 235px;
-  padding: 14px;
-  border: 3px solid rgba(255, 255, 255, .75);
-  border-radius: 64px;
-  background: #15171d;
-  transform: translateX(-50%);
-  box-shadow: 0 36px 80px rgba(0, 0, 0, .26);
-}
-
-.shrimp-result-screen {
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  border-radius: 50px;
-  background: #15171d;
-}
-
-.shrimp-result-screen::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.18), transparent 38%);
-  pointer-events: none;
-}
-
-.shrimp-result-screen img {
   width: 100%;
-  height: 100%;
+  max-width: 1400px;
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+  margin: 0 auto 40px;
+  overflow: visible;
+}
+
+.shrimp-result-full {
+  width: 100%;
+  height: auto;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 
 .shrimp-result-complete {
@@ -1865,23 +2023,30 @@ footer a {
 .shrimp-result-details {
   position: relative;
   z-index: 3;
+  margin-top: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .shrimp-result-metrics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 50px);
+  justify-items: center;
 }
 
 .shrimp-result-metric > div {
   display: flex;
-  align-items: baseline;
-  gap: 18px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .shrimp-result-metric strong {
-  font-size: clamp(42px, 4.2vw, 64px);
-  font-weight: 500;
+  font-size: clamp(48px, 5vw, 80px);
+  font-weight: 300;
   line-height: 1.1;
 }
 
@@ -1897,9 +2062,6 @@ footer a {
 
 .shrimp-result-note {
   margin: 40px 0 0;
-  font-size: clamp(14px, 1.3vw, 20px);
-  font-weight: 500;
-  line-height: 1.4;
 }
 
 .shrimp-next-project {
@@ -1921,10 +2083,10 @@ footer a {
 }
 
 .shrimp-next-track span {
-  padding-right: .22em;
+  padding: 0 2rem 0 .2em;
   flex: 0 0 auto;
   font-size: clamp(84px, 12.4vw, 190px);
-  font-weight: 500;
+  font-weight: 300;
   line-height: 1;
   letter-spacing: -.055em;
   white-space: nowrap;
@@ -1936,8 +2098,11 @@ footer a {
 }
 
 @keyframes shrimp-next-marquee {
-  to {
+  0% {
     transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 
@@ -2011,7 +2176,6 @@ footer a {
   }
 
   .shrimp-brand {
-    font-size: 18px;
   }
 
   .shrimp-cover {
@@ -2079,15 +2243,13 @@ footer a {
   }
 
   .shrimp-next-track span {
-    font-size: 72px;
+    font-size: clamp(64px, 8vw, 64px);
   }
 
   .shrimp-cover h1 {
-    font-size: 62px;
   }
 
   .shrimp-summary {
-    font-size: 15px;
   }
 
   .shrimp-cover-visual {
@@ -2095,7 +2257,6 @@ footer a {
   }
 
   .shrimp-meta {
-    font-size: 12px;
   }
 
   .shrimp-story-section {
@@ -2104,12 +2265,9 @@ footer a {
 
   .shrimp-section-title p {
     margin-bottom: 18px;
-    font-size: 18px;
-    line-height: 1.4;
   }
 
   .shrimp-section-title h2 {
-    font-size: 38px;
   }
 
   .shrimp-media,
@@ -2132,8 +2290,6 @@ footer a {
   .shrimp-solution-intro {
     width: calc(100% - 32px);
     margin-top: 28px;
-    font-size: 18px;
-    line-height: 1.4;
   }
 
   .shrimp-solution-slider {
@@ -2242,6 +2398,7 @@ footer a {
 
   .shrimp-solution-arrows button {
     width: 48px;
+
     height: 48px;
   }
 
@@ -2262,7 +2419,7 @@ footer a {
 
   .shrimp-process-tabs button {
     min-height: 42px;
-    font-size: 13px;
+    font-size: clamp(16px, 1.5vw, 18px);
   }
 
   .shrimp-process-tabs button.is-active {
@@ -2294,7 +2451,6 @@ footer a {
 
   .shrimp-process-result h3 {
     margin-bottom: 10px;
-    font-size: 24px;
   }
 
   .shrimp-process-result p {
@@ -2320,5 +2476,5846 @@ footer a {
     width: calc(100% - 32px);
     height: 170px;
     padding-bottom: 42px;
+  }
+}
+
+@media (min-width: 761px) {
+  .shrimp-result {
+    padding-top: 80px;
+    padding-bottom: 120px;
+    overflow: visible;
+  }
+
+  .shrimp-result .shrimp-section-title {
+    width: min(1040px, calc(100% - 64px));
+    margin: 0 auto;
+  }
+
+  .shrimp-result .shrimp-section-title h2 {
+  }
+
+  .shrimp-result-subtitle {
+  }
+
+  .shrimp-result-stage {
+    width: min(1120px, calc(100vw - 80px));
+    max-width: none;
+    margin: -200px auto 0;
+    padding: 0;
+    display: block;
+    position: relative;
+  }
+
+  .shrimp-result-primary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    margin: 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .shrimp-result-primary strong {
+    font-size: clamp(112px, 11vw, 150px);
+  }
+
+  .shrimp-result-primary span {
+    font-size: clamp(16px, 1.5vw, 16px);
+  }
+
+  .shrimp-result-stage {
+    width: min(1440px, calc(100vw - 48px));
+    margin: 56px auto 0;
+  }
+
+  .shrimp-result-phone {
+    width: 150%;
+    max-width: none;
+    margin-left: -10%;
+    margin-top: -140px;
+    transform: translateX(-140px);
+  }
+
+  .shrimp-result-primary {
+    top: 16%;
+    left: 2%;
+  }
+
+  .shrimp-result-details {
+    width: 62%;
+    margin: 0 0 0 2%;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .shrimp-result-metrics {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 42px;
+    justify-items: start;
+  }
+
+  .shrimp-result-metric {
+    text-align: left;
+  }
+
+  .shrimp-result-metric > div {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .shrimp-result-metric strong {
+    font-size: clamp(44px, 4.5vw, 62px);
+  }
+
+  .shrimp-result-metric span {
+    padding-bottom: 6px;
+  }
+
+  .shrimp-result-metric p {
+    margin-top: 5px;
+  }
+
+  .shrimp-result-note {
+    margin-top: 26px;
+    text-align: left;
+  }
+}
+
+/* SHRIMP COVER DESKTOP START */
+@media (min-width: 901px) {
+  .shrimp-cover {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    align-items: stretch;
+  }
+
+  .shrimp-cover-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .shrimp-cover-visual {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: stretch;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .shrimp-meta {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    margin: 0;
+    padding: 0;
+    color: var(--foreground);
+    background: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+}
+/* SHRIMP COVER DESKTOP END */
+
+/* SHRIMP COVER MOTION START */
+.shrimp-cover-visual {
+  --cover-pointer-x: 0px;
+  --cover-pointer-y: 0px;
+  --cover-scroll-y: 0px;
+}
+
+.shrimp-cover-visual img {
+  width: auto;
+  height: 112%;
+  max-width: none;
+  left: 62%;
+  bottom: -32%;
+  transform: translate3d(
+    calc(-50% + var(--cover-pointer-x)),
+    calc(var(--cover-pointer-y) + var(--cover-scroll-y)),
+    0
+  );
+  transition: transform 350ms cubic-bezier(.2, .8, .2, 1);
+  will-change: transform;
+}
+/* SHRIMP COVER MOTION END */
+
+/* SHRIMP META SYNC START */
+.shrimp-cover:has(.reveal-heading.is-visible) .shrimp-meta.reveal {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+  transition-delay: 0ms;
+}
+/* SHRIMP META SYNC END */
+
+/* UNIFIED HEADER START */
+.site-header,
+.shrimp-header {
+  width: 100%;
+  height: 94px;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: center;
+
+  position: relative;
+  z-index: 10;
+}
+
+.site-header .brand,
+.shrimp-header .shrimp-brand {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+
+  width: max-content;
+}
+
+.site-header nav,
+.shrimp-header nav {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: start;
+
+  display: flex;
+  align-items: center;
+  gap: clamp(48px, 6vw, 100px);
+}
+
+.site-header nav a,
+.shrimp-header nav a {
+}
+
+.site-header .theme-switch,
+.shrimp-header .theme-switch {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  margin-left: 0;
+}
+
+@media (max-width: 900px) {
+  .site-header,
+  .shrimp-header {
+    grid-template-columns: 1fr auto;
+    column-gap: 12px;
+  }
+
+  .site-header nav,
+  .shrimp-header nav {
+    display: none;
+  }
+
+  .site-header .theme-switch,
+  .shrimp-header .theme-switch {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-header,
+  .shrimp-header {
+    width: 100%;
+    height: 76px;
+  }
+
+  .site-header .brand,
+  .shrimp-header .shrimp-brand {
+  }
+}
+/* UNIFIED HEADER END */
+
+
+
+/* HERO HEADER GRID SYNC START */
+@media (min-width: 901px) {
+  .hero {
+    column-gap: 16px;
+  }
+
+  .hero-description {
+    margin-left: 0;
+  }
+}
+/* HERO HEADER GRID SYNC END */
+
+/* CASE 1400 SYSTEM START */
+
+/* Одна внешняя область для всего кейса */
+.shrimp-header,
+.shrimp-content,
+.shrimp-footer {
+  width: min(1400px, calc(100% - 64px));
+  max-width: 1400px;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+/* Хедер без дополнительных внутренних отступов */
+.shrimp-header {
+  padding-inline: 0;
+}
+
+/* Все секции внутри кейса используют всю ширину контейнера */
+.shrimp-cover,
+.shrimp-story-section,
+.shrimp-context,
+.shrimp-task,
+.shrimp-process,
+.shrimp-solution,
+.shrimp-result {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Одинаковая двухколоночная сетка первого экрана и хедера */
+@media (min-width: 901px) {
+  .shrimp-cover {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+  }
+
+  .shrimp-cover-visual {
+    width: 100%;
+    max-width: none;
+    height: 700px;
+    min-height: 0;
+    justify-self: stretch;
+  }
+
+  .shrimp-meta {
+    margin-bottom: 20px;
+  }
+}
+
+/* Обычные изображения и большие блоки больше не живут
+   в собственных контейнерах разной ширины */
+.shrimp-media,
+.shrimp-task .shrimp-media,
+.shrimp-process-slider,
+.shrimp-solution-slider,
+.shrimp-result-stage {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Следующий проект намеренно не ограничиваем:
+   он находится за пределами .shrimp-content */
+
+@media (max-width: 900px) {
+  .shrimp-header,
+  .shrimp-content,
+  .shrimp-footer {
+    width: calc(100% - 32px);
+  }
+
+  .shrimp-cover,
+  .shrimp-story-section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* CASE 1400 SYSTEM END */
+
+/* THEME SWITCH FLOW START */
+.theme-switch {
+  --theme-option-width: 44px;
+  --theme-switch-height: 36px;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, var(--theme-option-width));
+  height: var(--theme-switch-height);
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  isolation: isolate;
+  overflow: visible;
+}
+
+.theme-switch::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+
+  width: var(--theme-option-width);
+  height: var(--theme-switch-height);
+  border-radius: 999px;
+  background: var(--switch);
+
+  transform: translateX(0);
+  transition: transform 520ms cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.theme-switch:has(.theme-option:last-child.active)::before {
+  transform: translateX(var(--theme-option-width));
+}
+
+.theme-switch .theme-option,
+.theme-switch:hover .theme-option,
+.theme-switch:hover .theme-option + .theme-option {
+  position: relative;
+  z-index: 1;
+
+  width: var(--theme-option-width);
+  height: var(--theme-switch-height);
+  background: transparent;
+  transform: none;
+  opacity: .45;
+
+  transition: opacity 300ms ease;
+}
+
+.theme-switch .theme-option.active {
+  background: transparent;
+  opacity: 1;
+}
+
+.theme-switch:hover .theme-option:not(.active) {
+  opacity: .7;
+}
+
+.theme-switch:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+@media (max-width: 560px) {
+  .theme-switch {
+    --theme-option-width: 38px;
+    --theme-switch-height: 32px;
+  }
+}
+/* THEME SWITCH FLOW END */
+
+/* SHRIMP COVER WOW START */
+.shrimp-cover-visual {
+  --cover-scroll-rotate: 0deg;
+  --cover-intro-y: 90px;
+  --cover-intro-scale: .94;
+  --cover-intro-rotate: -2deg;
+}
+
+.shrimp-cover-visual.reveal {
+  opacity: 0;
+  filter: none;
+  clip-path: inset(10% 0 0 0 round 68px);
+  transform: translateY(70px) scale(.97);
+
+  transition:
+    opacity 850ms cubic-bezier(.22, 1, .36, 1),
+    transform 1100ms cubic-bezier(.22, 1, .36, 1),
+    clip-path 1100ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.shrimp-cover-visual.reveal.is-visible {
+  opacity: 1;
+  clip-path: inset(0 0 0 0 round 68px);
+  transform: translateY(0) scale(1);
+
+  --cover-intro-y: 0px;
+  --cover-intro-scale: 1;
+  --cover-intro-rotate: 0deg;
+}
+
+.shrimp-cover-visual img {
+  transform:
+    translate3d(
+      calc(-50% + var(--cover-pointer-x)),
+      calc(
+        var(--cover-pointer-y) +
+        var(--cover-scroll-y) +
+        var(--cover-intro-y)
+      ),
+      0
+    )
+    rotate(calc(var(--cover-scroll-rotate) + var(--cover-intro-rotate)))
+    scale(var(--cover-intro-scale));
+
+  transition: transform 1000ms cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+}
+
+.shrimp-cover-visual.is-visible img {
+  transition:
+    transform 500ms cubic-bezier(.2, .8, .2, 1);
+}
+
+@media (max-width: 560px) {
+  .shrimp-cover-visual.reveal {
+    clip-path: inset(7% 0 0 0 round 38px);
+  }
+
+  .shrimp-cover-visual.reveal.is-visible {
+    clip-path: inset(0 0 0 0 round 38px);
+  }
+}
+/* SHRIMP COVER WOW END */
+
+/* SHRIMP BLOCK PARALLAX START */
+.shrimp-cover-visual {
+  --cover-block-scroll-y: 0px;
+  translate: 0 var(--cover-block-scroll-y);
+  will-change: translate, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrimp-cover-visual {
+    translate: none;
+  }
+}
+/* SHRIMP BLOCK PARALLAX END */
+
+/* CONTEXT CLEAN STATIC START */
+.shrimp-context .shrimp-section-title {
+  margin-bottom: 0;
+}
+
+.shrimp-context-grid {
+  width: 100%;
+  height: 760px;
+  margin-top: 120px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.shrimp-context-card {
+  --context-scroll-y: 0px;
+
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+
+  border-radius: 56px;
+  background: #202020;
+}
+
+html[data-theme="light"] .shrimp-context-card {
+  background: #ededed;
+}
+
+.shrimp-context-card--left {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+
+.shrimp-context-card--top {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.shrimp-context-card--video {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.shrimp-context-card img,
+.shrimp-context-card video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: block;
+  width: auto;
+  max-width: none;
+
+  transform: translate(-50%, -50%);
+  translate: 0 var(--context-scroll-y);
+
+  transition: translate 100ms linear;
+  will-change: translate;
+}
+
+/* Телефон полностью помещается */
+.shrimp-context-card--left img {
+  height: 92%;
+}
+
+/* Верхний телефон остаётся крупным */
+.shrimp-context-card--top img {
+  width: 116%;
+  height: auto;
+}
+
+/* Видео имеет запас для движения */
+.shrimp-context-card--video video {
+  height: 120%;
+  object-fit: cover;
+}
+
+@media (max-width: 700px) {
+  .shrimp-context-grid {
+    height: auto;
+    margin-top: 64px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+
+  .shrimp-context-card {
+    grid-column: 1;
+    grid-row: auto;
+    border-radius: 36px;
+  }
+
+  .shrimp-context-card--left {
+    aspect-ratio: 4 / 5;
+  }
+
+  .shrimp-context-card--top,
+  .shrimp-context-card--video {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrimp-context-card img,
+  .shrimp-context-card video {
+    translate: none;
+    transition: none;
+  }
+}
+/* CONTEXT CLEAN STATIC END */
+
+/* MVP PARALLAX CSS START */
+.shrimp-mvp-media {
+  --mvp-scroll-y: 0px;
+
+  width: 100%;
+  aspect-ratio: 16 / 8.5;
+  margin: 120px 0 0;
+  position: relative;
+  overflow: hidden;
+
+  border-radius: 56px;
+  background: #ff983f;
+}
+
+.shrimp-mvp-media img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: block;
+  width: 100%;
+  height: 118%;
+  max-width: none;
+  object-fit: cover;
+
+  transform: translate(-50%, -50%);
+  translate: 0 var(--mvp-scroll-y);
+
+  transition: translate 100ms linear;
+  will-change: translate;
+}
+
+@media (max-width: 700px) {
+  .shrimp-mvp-media {
+    aspect-ratio: 16 / 10;
+    margin-top: 64px;
+    border-radius: 36px;
+  }
+
+  .shrimp-mvp-media img {
+    height: 116%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrimp-mvp-media img {
+    translate: none;
+    transition: none;
+  }
+}
+/* MVP PARALLAX CSS END */
+
+
+
+/* PROCESS RESULT POSITION START */
+.shrimp-process-result {
+  width: 300px;
+  right: 80px;
+  bottom: 130px;
+}
+
+.shrimp-process-result h3 {
+  margin: 0 0 20px;
+}
+
+.shrimp-process-result p {
+  margin: 0;
+  color: var(--secondary);
+}
+
+@media (max-width: 700px) {
+  .shrimp-process-result {
+    width: calc(100% - 48px);
+    right: 24px;
+    bottom: 24px;
+    left: auto;
+  }
+}
+/* PROCESS RESULT POSITION END */
+
+/* PROCESS RESULT TYPOGRAPHY START */
+.shrimp-process-result {
+  width: 250px;
+  right: 80px;
+  bottom: 80px;
+}
+
+.shrimp-process-result .type-text-l {
+  margin: 0 0 20px;
+  color: var(--foreground) !important;
+}
+
+.shrimp-process-result .type-text {
+  margin: 0;
+  color: var(--secondary) !important;
+}
+
+@media (max-width: 700px) {
+  .shrimp-process-result {
+    width: calc(100% - 48px);
+    right: 24px;
+    bottom: 24px;
+  }
+}
+/* PROCESS RESULT TYPOGRAPHY END */
+
+/* PROCESS RESULT PLACEMENT FINAL START */
+.shrimp-process-result {
+  width: 300px;
+  right: 48px;
+  bottom: 48px;
+}
+
+@media (max-width: 700px) {
+  .shrimp-process-result {
+    width: calc(100% - 48px);
+    right: 24px;
+    bottom: 24px;
+  }
+}
+/* PROCESS RESULT PLACEMENT FINAL END */
+
+/* PROCESS TABS MORPH START */
+.shrimp-process-tabs {
+  width: 360px;
+  top: 48px;
+  left: 48px;
+  gap: 8px;
+  interpolate-size: allow-keywords;
+}
+
+.shrimp-process-tabs button {
+  width: max-content;
+  max-width: 360px;
+  min-height: 0;
+  padding: 0;
+
+  display: grid;
+  grid-template-rows: auto 0fr;
+
+  overflow: hidden;
+  border: 0;
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, .13);
+  box-shadow: none;
+
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(24px) saturate(150%);
+
+  color: rgba(255, 255, 255, .86);
+  text-align: left;
+
+  transition:
+    width 320ms cubic-bezier(.22, 1, .36, 1),
+    grid-template-rows 320ms cubic-bezier(.22, 1, .36, 1),
+    background-color 200ms ease;
+}
+
+.shrimp-process-tabs button.is-active {
+  width: 360px;
+  min-height: 0 !important;
+  padding: 0 !important;
+  grid-template-rows: auto 1fr;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .16);
+}
+
+.shrimp-process-tab-head {
+  width: max-content;
+  min-height: 0;
+  height: auto;
+  padding: 16px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  white-space: nowrap;
+}
+
+.shrimp-process-tabs button.is-active
+  .shrimp-process-tab-head {
+  padding-bottom: 10px;
+}
+
+.shrimp-process-tab-index,
+.shrimp-process-tab-label {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.shrimp-process-tab-copy {
+  width: 0 !important;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(10px);
+
+  transition:
+    opacity 160ms ease,
+    transform 220ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.shrimp-process-tabs button.is-active
+  .shrimp-process-tab-copy {
+  width: 100% !important;
+  opacity: 1;
+  transform: translateY(0);
+
+  transition-delay: 70ms;
+}
+
+.shrimp-process-tab-copy-inner {
+  min-height: 0;
+  padding: 0 16px 16px;
+  overflow: hidden;
+}
+
+.shrimp-process-tab-description {
+  display: block;
+
+  color: var(--secondary);
+}
+
+.shrimp-process-tags {
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.shrimp-process-tags > span {
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, .14);
+  color: rgba(255, 255, 255, .76);
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.shrimp-process-tabs button:hover:not(.is-active) {
+  background: rgba(255, 255, 255, .18);
+  transform: none;
+}
+
+@media (max-width: 560px) {
+  .shrimp-process-tabs {
+    width: calc(100% - 32px);
+    top: 18px;
+    left: 16px;
+    gap: 8px;
+  }
+
+  .shrimp-process-tabs button,
+  .shrimp-process-tabs button.is-active {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrimp-process-tabs button,
+  .shrimp-process-tab-copy {
+    transition: none;
+  }
+}
+/* PROCESS TABS MORPH END */
+
+/* CASE CARD RADIUS SYSTEM START */
+.shrimp-case {
+  --case-card-radius: 56px;
+  --case-card-radius-mobile: 36px;
+}
+
+.shrimp-cover-visual,
+.shrimp-context-card,
+.shrimp-mvp-media,
+.shrimp-process-slider,
+.solution-slide,
+.shrimp-media {
+  border-radius: var(--case-card-radius);
+}
+
+.shrimp-media {
+  overflow: hidden;
+}
+
+.shrimp-media > img {
+  border-radius: inherit;
+}
+
+@media (max-width: 700px) {
+  .shrimp-cover-visual,
+  .shrimp-context-card,
+  .shrimp-mvp-media,
+  .shrimp-process-slider,
+  .solution-slide,
+  .shrimp-media {
+    border-radius: var(--case-card-radius-mobile);
+  }
+}
+/* CASE CARD RADIUS SYSTEM END */
+
+/* PROCESS SPACING AND MOTION START */
+
+/* Ровно 10px между названием активного таба и описанием */
+.shrimp-process-tabs button.is-active .shrimp-process-tab-head {
+  padding: 16px 16px 10px !important;
+  margin: 0 !important;
+}
+
+.shrimp-process-tabs button.is-active .shrimp-process-tab-copy {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.shrimp-process-tabs button.is-active .shrimp-process-tab-copy-inner {
+  padding: 0 16px 16px !important;
+  margin: 0 !important;
+}
+
+.shrimp-process-tab-description {
+  margin: 0 !important;
+}
+
+/* Более плавное раскрытие карточки */
+.shrimp-process-tabs button {
+  transition:
+    width 500ms cubic-bezier(.22, 1, .36, 1),
+    grid-template-rows 500ms cubic-bezier(.22, 1, .36, 1),
+    background-color 300ms ease-out !important;
+}
+
+.shrimp-process-tab-copy {
+  transition:
+    opacity 420ms cubic-bezier(.22, 1, .36, 1),
+    transform 500ms cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+.shrimp-process-tabs button.is-active .shrimp-process-tab-copy {
+  transition-delay: 90ms !important;
+}
+
+/* Смена сцены, текста и изображения */
+.shrimp-process-scene,
+.shrimp-process-scene .process-visual,
+.shrimp-process-scene .shrimp-process-result {
+  animation-duration: 650ms !important;
+  animation-timing-function: cubic-bezier(.22, 1, .36, 1) !important;
+  animation-fill-mode: both;
+}
+
+/* PROCESS SPACING AND MOTION END */
+
+/* PROCESS SEQUENCE MOTION START */
+
+/* 1. Сначала раскрывается таб */
+.shrimp-process-tabs button {
+  transition:
+    width 380ms cubic-bezier(.22, 1, .36, 1),
+    grid-template-rows 380ms cubic-bezier(.22, 1, .36, 1),
+    background-color 240ms ease-out !important;
+}
+
+/* Убираем общую одновременную анимацию всей сцены */
+.shrimp-process-scene {
+  animation: none !important;
+}
+
+/* 2. Затем появляется изображение */
+.process-visual {
+  animation:
+    process-image-enter 540ms cubic-bezier(.22, 1, .36, 1)
+    280ms both !important;
+}
+
+/* 3. Последним появляется текст справа снизу */
+.shrimp-process-result {
+  animation:
+    process-result-enter 520ms cubic-bezier(.22, 1, .36, 1)
+    650ms both !important;
+}
+
+@keyframes process-image-enter {
+  from {
+    opacity: 0;
+    filter: blur(7px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes process-result-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(32px, 12px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-visual,
+  .shrimp-process-result {
+    animation: none !important;
+  }
+}
+
+/* PROCESS SEQUENCE MOTION END */
+
+/* PROCESS PREMIUM MOTION START */
+
+/* Таб раскрывается мягко, без резкого торможения */
+.shrimp-process-tabs button {
+  transition:
+    width 480ms cubic-bezier(.16, 1, .3, 1),
+    grid-template-rows 480ms cubic-bezier(.16, 1, .3, 1),
+    background-color 280ms ease-out !important;
+}
+
+/* Текст внутри активного таба слегка поднимается */
+.shrimp-process-tab-copy {
+  transform: translateY(7px);
+  transition:
+    opacity 360ms cubic-bezier(.16, 1, .3, 1),
+    transform 440ms cubic-bezier(.16, 1, .3, 1) !important;
+}
+
+.shrimp-process-tabs button.is-active .shrimp-process-tab-copy {
+  transform: translateY(0);
+  transition-delay: 45ms !important;
+}
+
+/* Не анимируем всю сцену одним куском */
+.shrimp-process-scene {
+  animation: none !important;
+}
+
+/* Изображение появляется почти одновременно с раскрытием таба */
+.shrimp-process-scene > .process-visual {
+  transform-origin: 60% 50%;
+  animation:
+    process-premium-image 620ms cubic-bezier(.16, 1, .3, 1)
+    55ms both !important;
+}
+
+/* Текст справа появляется чуть позже */
+.shrimp-process-result {
+  animation:
+    process-premium-result 540ms cubic-bezier(.16, 1, .3, 1)
+    145ms both !important;
+}
+
+@keyframes process-premium-image {
+  0% {
+    opacity: 0;
+    transform: scale(.985) translate3d(0, 8px, 0);
+    filter: blur(2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes process-premium-result {
+  0% {
+    opacity: 0;
+    transform: translate3d(18px, 8px, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrimp-process-scene > .process-visual,
+  .shrimp-process-result {
+    animation: none !important;
+  }
+}
+
+/* PROCESS PREMIUM MOTION END */
+
+/* PROCESS RESEARCH IMAGE START */
+.process-visual--research img {
+  display: none !important;
+}
+
+.process-visual--research::before {
+  content: "";
+  position: absolute;
+  width: 56%;
+  height: 78%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: url("/assets/mrshrimp/process/mrshrimp-progress_01.png") center / contain no-repeat;
+}
+/* PROCESS RESEARCH IMAGE END */
+
+
+/* PROCESS DESIGN VIDEO FINAL START */
+.process-visual--design {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden;
+  transform: none !important;
+}
+
+.process-visual--design video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+/* PROCESS DESIGN VIDEO FINAL END */
+
+/* PROCESS RESEARCH FIT CORRECT START */
+.process-visual--research {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+.process-visual--research::before {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+
+  left: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+
+  background-size: auto 100% !important;
+  background-position: center bottom !important;
+  background-repeat: no-repeat !important;
+}
+/* PROCESS RESEARCH FIT CORRECT END */
+
+/* PROCESS TESTING CARDS FINAL START */
+.process-visual--testing {
+  --insight-border: rgba(255, 255, 255, .12);
+  --insight-background: rgba(255, 255, 255, .012);
+  --insight-title: rgba(255, 255, 255, .94);
+  --insight-copy: rgba(255, 255, 255, .56);
+  --insight-icon: rgba(255, 255, 255, .48);
+}
+
+html[data-theme="light"] .process-visual--testing {
+  --insight-border: rgba(0, 0, 0, .13);
+  --insight-background: rgba(0, 0, 0, .018);
+  --insight-title: rgba(0, 0, 0, .9);
+  --insight-copy: rgba(0, 0, 0, .55);
+  --insight-icon: rgba(0, 0, 0, .48);
+}
+
+.process-visual--testing .process-insight {
+  position: absolute;
+  width: 31%;
+  min-height: 20%;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(14px, 1.5cqw, 22px);
+
+  padding: clamp(20px, 2.3cqw, 34px);
+
+  border: 1px solid var(--insight-border);
+  border-radius: clamp(22px, 2.1cqw, 32px);
+  background: var(--insight-background);
+}
+
+.process-visual--testing .process-insight--audio {
+  left: 48%;
+  top: 8.5%;
+}
+
+.process-visual--testing .process-insight--format {
+  left: 35.5%;
+  top: 35%;
+}
+
+.process-visual--testing .process-insight--style {
+  left: 26.5%;
+  top: 63%;
+}
+
+.process-insight-icon {
+  width: clamp(24px, 2.1cqw, 32px);
+  height: clamp(24px, 2.1cqw, 32px);
+  flex: 0 0 auto;
+
+  background-color: var(--insight-icon);
+
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.process-insight-icon--audio {
+  -webkit-mask-image:
+    url("/assets/mrshrimp/process/mrshrimp-test-audio.svg");
+  mask-image:
+    url("/assets/mrshrimp/process/mrshrimp-test-audio.svg");
+}
+
+.process-insight-icon--format {
+  -webkit-mask-image:
+    url("/assets/mrshrimp/process/mrshrimp-test-format.svg");
+  mask-image:
+    url("/assets/mrshrimp/process/mrshrimp-test-format.svg");
+}
+
+.process-insight-icon--style {
+  -webkit-mask-image:
+    url("/assets/mrshrimp/process/mrshrimp-test-style.svg");
+  mask-image:
+    url("/assets/mrshrimp/process/mrshrimp-test-style.svg");
+}
+
+.process-visual--testing .process-insight > span {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.process-visual--testing .process-insight strong {
+  color: var(--insight-title);
+  font-size: clamp(17px, 1.55cqw, 24px);
+  font-weight: 500;
+  line-height: 1.22;
+}
+
+.process-visual--testing .process-insight small {
+  color: var(--insight-copy);
+  font-size: clamp(14px, 1.17cqw, 18px);
+  font-weight: 400;
+  line-height: 1.35;
+}
+/* PROCESS TESTING CARDS FINAL END */
+
+/* PROCESS RELEASE DEVICE FINAL START */
+.process-visual--release {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+.process-visual--release img {
+  position: absolute !important;
+  width: auto !important;
+  height: 100% !important;
+  max-width: 48% !important;
+
+  left: 54% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  display: block !important;
+  object-fit: contain !important;
+}
+/* PROCESS RELEASE DEVICE FINAL END */
+
+/* PROCESS ANALYTICS IMAGE START */
+.process-visual--analytics {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+.process-visual--analytics img {
+  display: none !important;
+}
+
+.process-visual--analytics::before {
+  content: "";
+  position: absolute;
+
+  width: 58%;
+  height: calc(100% - 96px);
+
+  left: 52%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  background:
+    url("/assets/mrshrimp/process/analytics.png")
+    center / contain no-repeat;
+}
+/* PROCESS ANALYTICS IMAGE END */
+
+/* PROCESS RELEASE + ANALYTICS LARGE */
+
+/* Релиз — крупный телефон */
+.process-visual--release img {
+  width: auto !important;
+  height: 104% !important;
+  max-width: none !important;
+
+  left: 52% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+/* Аналитика — крупная композиция */
+.process-visual--analytics::before {
+  width: 72% !important;
+  height: 100% !important;
+
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  background-size: contain !important;
+  background-position: center !important;
+}
+
+
+/* PROCESS ANALYTICS TRUE HEIGHT */
+.process-visual--analytics {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
+.process-visual--analytics::before {
+  content: "" !important;
+  position: absolute !important;
+
+  height: 100% !important;
+  width: auto !important;
+  aspect-ratio: 803 / 800;
+
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  background:
+    url("/assets/mrshrimp/process/analytics.png")
+    center / 100% 100% no-repeat !important;
+}
+/* PROCESS ANALYTICS TRUE HEIGHT END */
+
+/* PROCESS ANALYTICS FIT FIX */
+.process-visual--analytics::before {
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+
+  left: 0 !important;
+  top: 0 !important;
+  transform: none !important;
+
+  background-size: auto 100% !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* PROCESS ANALYTICS VISUAL CENTER */
+.process-visual--analytics::before {
+  background-position: 56% center !important;
+}
+
+/* PROCESS ANALYTICS FIGMA POSITION */
+.process-visual--analytics::before {
+  inset: auto !important;
+
+  left: 19.42% !important;
+  top: 0 !important;
+
+  width: 52.14% !important;
+  height: 91.12% !important;
+
+  transform: none !important;
+
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* PROCESS ANALYTICS POSITION ABSOLUTE FINAL */
+.shrimp-process-scene
+.process-visual.process-visual--analytics::before {
+  content: "" !important;
+  position: absolute !important;
+
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+
+  transform: none !important;
+  aspect-ratio: auto !important;
+
+  background-image:
+    url("/assets/mrshrimp/process/analytics.png") !important;
+  background-size: auto 100% !important;
+  background-position: 50% 50% !important;
+  background-repeat: no-repeat !important;
+}
+/* PROCESS ANALYTICS POSITION ABSOLUTE FINAL END */
+
+/* PROCESS ANALYTICS SHIFT RIGHT */
+.shrimp-process-scene
+.process-visual.process-visual--analytics::before {
+  background-position: 58% center !important;
+}
+
+/* PROCESS ANALYTICS SHIFT RIGHT MORE */
+.shrimp-process-scene
+.process-visual.process-visual--analytics::before {
+  background-position: 64% center !important;
+}
+
+
+
+/* PROCESS ANALYTICS SHIFT RIGHT MORE */
+
+.shrimp-process-scene
+
+.process-visual.process-visual--analytics::before {
+
+  background-position: 80% center !important;
+
+}
+
+
+/* PROCESS ANALYTICS SCALE UP */
+.shrimp-process-scene
+.process-visual.process-visual--analytics::before {
+  background-size: auto 118% !important;
+  background-position: 64% center !important;
+}
+
+
+
+/* PROCESS ANALYTICS SCALE UP */
+
+.shrimp-process-scene
+
+.process-visual.process-visual--analytics::before {
+
+  background-size: auto 118% !important;
+
+  background-position: 80% center !important;
+
+}
+
+
+
+
+/* PROCESS ANALYTICS SCALE UP */
+
+.shrimp-process-scene
+
+.process-visual.process-visual--analytics::before {
+
+  background-size: auto 118% !important;
+
+  background-position: 90% center !important;
+
+}
+
+
+
+
+/* PROCESS ANALYTICS SCALE UP */
+
+.shrimp-process-scene
+
+.process-visual.process-visual--analytics::before {
+
+  background-size: auto 118% !important;
+
+  background-position: 110% center !important;
+
+}
+
+/* PROCESS TABS MOTION START */
+
+.shrimp-process-tabs {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+}
+
+/* Паддинг всегда ровно 16px */
+.shrimp-process-tabs > button,
+.shrimp-process-tabs > button.is-active {
+  width: max-content !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+
+  padding: 16px !important;
+  box-sizing: border-box !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+
+  overflow: hidden !important;
+
+  border-radius: 24px;
+
+  transform-origin: top left;
+  will-change: transform;
+
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease !important;
+}
+
+/* Размер открытой плашки */
+.shrimp-process-tabs > button.is-active {
+  width: 360px !important;
+  background: rgba(255, 255, 255, .16) !important;
+}
+
+/* Заголовок не меняет положение и паддинг */
+.shrimp-process-tab-head,
+.shrimp-process-tabs button.is-active .shrimp-process-tab-head {
+  width: max-content !important;
+  min-height: 0 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+
+  white-space: nowrap !important;
+
+  transition: none !important;
+}
+
+/* Описание появляется отдельно */
+.shrimp-process-tab-copy,
+.shrimp-process-tabs button.is-active .shrimp-process-tab-copy {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  display: block !important;
+  grid-template-rows: none !important;
+
+  margin: 10px 0 0 !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.shrimp-process-tab-copy-inner,
+.shrimp-process-tabs button.is-active .shrimp-process-tab-copy-inner {
+  display: block !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+}
+
+@media (max-width: 560px) {
+  .shrimp-process-tabs > button.is-active {
+    width: min(360px, calc(100vw - 64px)) !important;
+  }
+}
+
+/* PROCESS TABS MOTION END */
+
+
+
+/* PROCESS BLUE HIGHLIGHT FIX */
+
+.shrimp-process-slider,
+.shrimp-process-slider * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shrimp-process-slider img,
+.shrimp-process-slider video {
+  -webkit-user-drag: none;
+}
+
+.shrimp-process-tabs button:focus {
+  outline: none;
+}
+
+.shrimp-process-tabs button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .7);
+  outline-offset: 3px;
+}
+
+/* PROCESS BLUE HIGHLIGHT FIX END */
+
+/* PROCESS TABS NO OUTLINE START */
+
+.shrimp-process-tabs > button,
+.shrimp-process-tabs > button.is-active,
+.shrimp-process-tabs > button:focus,
+.shrimp-process-tabs > button:focus-visible {
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* PROCESS TABS NO OUTLINE END */
+
+
+/* RELEASE IMAGE FLICKER FIX */
+
+.process-visual--release,
+.process-visual--release img {
+  opacity: 1 !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+.process-visual--release img {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* RELEASE IMAGE FLICKER FIX END */
+
+/* PROCESS SOFT TRANSITION START */
+
+.shrimp-process-visual-stack,
+.shrimp-process-visual-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.shrimp-process-visual-stack {
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shrimp-process-visual-layer {
+  transform-origin: center;
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+.shrimp-process-visual-layer > .process-visual {
+  pointer-events: none;
+}
+
+.shrimp-process-result {
+  z-index: 3 !important;
+  will-change: opacity, transform;
+}
+
+.shrimp-process-tabs {
+  z-index: 4;
+}
+
+/* PROCESS SOFT TRANSITION END */
+
+
+/* PROCESS RESULT MOTION FIX */
+
+.shrimp-process-result {
+  animation: none !important;
+}
+
+/* PROCESS RESULT MOTION FIX END */
+
+
+
+
+
+
+
+
+
+
+
+/* SOLUTION APPLE SLIDER START */
+
+.shrimp-solution {
+  overflow: visible !important;
+}
+
+.shrimp-solution-slider {
+  width: 100vw !important;
+  max-width: none !important;
+  height: auto !important;
+
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: 0 !important;
+  padding-bottom: 76px;
+
+  position: relative;
+  overflow: visible !important;
+}
+
+.shrimp-solution-viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.shrimp-solution-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.shrimp-solution-track {
+  width: max-content !important;
+  height: auto !important;
+  min-height: 0 !important;
+
+  display: flex !important;
+  gap: 20px !important;
+
+  padding:
+    0
+    max(32px, calc((100vw - 1200px) / 2)) !important;
+
+  transform: none !important;
+  transition: none !important;
+}
+
+.solution-slide,
+.solution-slide.is-active {
+  width: min(1200px, calc(100vw - 64px)) !important;
+  height: auto !important;
+  aspect-ratio: 7 / 4;
+
+  flex:
+    0 0
+    min(1200px, calc(100vw - 64px)) !important;
+
+  position: relative;
+  overflow: hidden;
+
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+
+  border-radius: var(--case-card-radius);
+  background: #171817 !important;
+
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+.solution-slide::before {
+  display: none !important;
+}
+
+.solution-visual--asset {
+  position: absolute !important;
+  z-index: 0;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.solution-visual__background {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+
+  position: absolute !important;
+  inset: 0 !important;
+
+  display: block;
+  object-fit: cover !important;
+  object-position: center !important;
+  transform: none !important;
+}
+
+.solution-visual__picture {
+  width: auto !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  display: block;
+  object-fit: contain !important;
+  object-position: right center !important;
+  transform: none !important;
+}
+
+.solution-slide__copy {
+  width: min(410px, 40%) !important;
+
+  position: absolute !important;
+  z-index: 3 !important;
+  top: 50% !important;
+  left: 72px !important;
+
+  transform: translateY(-50%) !important;
+}
+
+.solution-slide__copy h3 {
+  margin-bottom: 20px !important;
+}
+
+.solution-carousel-controls {
+  min-height: 56px;
+  padding: 8px;
+
+  position: absolute;
+  z-index: 8;
+  bottom: 10px;
+  left: 50%;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border-radius: 999px;
+  background: rgba(40, 40, 42, .96);
+  transform: translateX(-50%);
+}
+
+.solution-carousel-controls > button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  cursor: pointer;
+
+  transition:
+    opacity 180ms ease,
+    background-color 180ms ease;
+}
+
+.solution-carousel-controls > button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, .16);
+}
+
+.solution-carousel-controls > button:disabled {
+  opacity: .25;
+  cursor: default;
+}
+
+.solution-carousel-controls .case-arrow-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.solution-carousel-dots {
+  height: 40px;
+  padding: 0 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.solution-carousel-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .48);
+  cursor: pointer;
+
+  transition:
+    width 350ms cubic-bezier(.22, 1, .36, 1),
+    background-color 220ms ease;
+}
+
+.solution-carousel-dots button.is-active {
+  width: 34px;
+  background: #fff;
+}
+
+@media (max-width: 700px) {
+  .shrimp-solution-slider {
+    padding-bottom: 68px;
+  }
+
+  .shrimp-solution-track {
+    gap: 12px !important;
+    padding-inline: 16px !important;
+  }
+
+  .solution-slide,
+  .solution-slide.is-active {
+    width: calc(100vw - 32px) !important;
+    height: 560px !important;
+    aspect-ratio: auto;
+
+    flex-basis: calc(100vw - 32px) !important;
+    border-radius: var(--case-card-radius-mobile);
+  }
+
+  .solution-slide__copy {
+    width: calc(100% - 48px) !important;
+    top: auto !important;
+    right: 24px !important;
+    bottom: 28px !important;
+    left: 24px !important;
+
+    transform: none !important;
+  }
+
+  .solution-visual__picture {
+    height: 72% !important;
+  }
+}
+
+/* SOLUTION APPLE SLIDER END */
+
+
+/* SOLUTION SLIDE MOTION START */
+
+/* Только точки, без общей подложки */
+.solution-carousel-controls {
+  min-height: 0 !important;
+  padding: 0 !important;
+  bottom: 18px !important;
+  gap: 0 !important;
+  background: transparent !important;
+}
+
+.solution-carousel-dots {
+  height: 28px !important;
+  padding: 0 !important;
+  gap: 4px !important;
+}
+
+/* Размер каждой области фиксирован — точки больше не дёргают соседей */
+.solution-carousel-dots button,
+.solution-carousel-dots button.is-active {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+
+  position: relative;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.solution-carousel-dots button::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+
+  transform: translate(-50%, -50%);
+  transition:
+    width 500ms cubic-bezier(.22, 1, .36, 1),
+    background-color 300ms ease;
+}
+
+.solution-carousel-dots button.is-active::before {
+  width: 24px;
+  background: #fff;
+}
+
+/* Текст — как в блоке «Процесс» */
+.solution-slide__copy,
+.solution-slide.is-active .solution-slide__copy {
+  animation: none !important;
+  will-change: opacity, transform;
+}
+
+.solution-slide__copy {
+  opacity: 0 !important;
+  transform: translate3d(0, calc(-50% + 10px), 0) !important;
+
+  transition:
+    opacity 800ms cubic-bezier(.22, 1, .36, 1),
+    transform 800ms cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+.solution-slide.is-active .solution-slide__copy {
+  opacity: 1 !important;
+  transform: translate3d(0, -50%, 0) !important;
+  transition-delay: 100ms !important;
+}
+
+/* Фон: мягко уменьшается со 110% до 100% */
+.solution-visual__background {
+  opacity: .78 !important;
+  transform: scale(1.1) !important;
+  transform-origin: center;
+  will-change: opacity, transform;
+
+  transition:
+    opacity 900ms cubic-bezier(.22, 1, .36, 1),
+    transform 1100ms cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+.solution-slide.is-active .solution-visual__background {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+/* Иллюстрация: снизу вверх + лёгкий параллакс */
+.solution-slide {
+  --solution-parallax-x: 0px;
+  --solution-parallax-y: 0px;
+}
+
+.solution-visual__picture {
+  opacity: 0 !important;
+
+  transform:
+    translate3d(
+      var(--solution-parallax-x),
+      calc(var(--solution-parallax-y) + 18px),
+      0
+    )
+    scale(.985) !important;
+
+  will-change: opacity, transform;
+
+  transition:
+    opacity 750ms cubic-bezier(.22, 1, .36, 1),
+    transform 900ms cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+.solution-slide.is-active .solution-visual__picture {
+  opacity: 1 !important;
+
+  transform:
+    translate3d(
+      var(--solution-parallax-x),
+      var(--solution-parallax-y),
+      0
+    )
+    scale(1) !important;
+
+  transition-delay: 80ms !important;
+}
+
+@media (max-width: 700px) {
+  .solution-slide__copy {
+    transform: translate3d(0, 10px, 0) !important;
+  }
+
+  .solution-slide.is-active .solution-slide__copy {
+    transform: translate3d(0, 0, 0) !important;
+  }
+
+  .solution-carousel-controls {
+    bottom: 14px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solution-slide__copy,
+  .solution-visual__background,
+  .solution-visual__picture {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* SOLUTION SLIDE MOTION END */
+
+
+/* SOLUTION COUNTER FINAL START */
+
+.shrimp-solution-slider {
+  padding-bottom: 0 !important;
+}
+
+.solution-carousel-controls {
+  display: none !important;
+}
+
+.solution-slide__counter {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 22px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .14);
+  color: rgba(255, 255, 255, .9);
+
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -.02em;
+
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+@media (max-width: 700px) {
+  .solution-slide__counter {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+}
+
+/* SOLUTION COUNTER FINAL END */
+
+/* SOLUTION VERTICAL PARALLAX START */
+
+.shrimp-solution-slider {
+  --solution-scroll-y: 0px;
+}
+
+.solution-visual--asset {
+  overflow: hidden !important;
+}
+
+/* Этот слой отвечает только за движение при скролле */
+.solution-visual__picture-wrap {
+  position: absolute !important;
+  z-index: 2;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  pointer-events: none;
+
+  transform: translate3d(0, var(--solution-scroll-y), 0) !important;
+  transition: transform 100ms linear !important;
+  will-change: transform;
+}
+
+/*
+  Картинка всегда центрирована по вертикали.
+  Дополнительные 56px дают запас для движения ±28px.
+*/
+.solution-visual__picture {
+  position: absolute !important;
+  top: 50% !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  width: auto !important;
+  height: calc(100% + 56px) !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  object-fit: contain !important;
+  object-position: right center !important;
+
+  opacity: 0 !important;
+  transform:
+    translate3d(0, calc(-50% + 14px), 0)
+    scale(.985) !important;
+
+  transition:
+    opacity 750ms cubic-bezier(.22, 1, .36, 1),
+    transform 900ms cubic-bezier(.22, 1, .36, 1) !important;
+
+  will-change: opacity, transform;
+}
+
+.solution-slide.is-active .solution-visual__picture {
+  opacity: 1 !important;
+  transform:
+    translate3d(0, -50%, 0)
+    scale(1) !important;
+}
+
+.solution-slide__copy {
+  z-index: 10 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solution-visual__picture-wrap {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .solution-visual__picture,
+  .solution-slide.is-active .solution-visual__picture {
+    opacity: 1 !important;
+    transform: translate3d(0, -50%, 0) !important;
+    transition: none !important;
+  }
+}
+
+/* SOLUTION VERTICAL PARALLAX END */
+
+
+/* SOLUTION COPY REFINEMENT START */
+
+/* Более узкий текстовый блок */
+.solution-slide__copy {
+  width: 320px !important;
+  max-width: calc(100% - 144px) !important;
+}
+
+/* Компактный заголовок как в блоке «Процесс» */
+.solution-slide__copy .type-h3 {
+  margin: 0 0 14px !important;
+}
+
+/* Описание уходит в secondary */
+.solution-slide__copy .type-text {
+  margin: 0 !important;
+
+  color: rgba(255, 255, 255, .62) !important;
+}
+
+/* Небольшой стеклянный индикатор вместо тяжёлого круга */
+.solution-slide__counter {
+  width: max-content !important;
+  min-width: 0 !important;
+  height: 30px !important;
+  margin: 0 0 22px !important;
+  padding: 0 11px !important;
+
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 999px;
+
+  background: rgba(20, 20, 20, .18);
+  color: rgba(255, 255, 255, .92);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .08),
+    0 8px 24px rgba(0, 0, 0, .08);
+
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  backdrop-filter: blur(16px) saturate(130%);
+
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.solution-slide__counter-divider {
+  color: rgba(255, 255, 255, .38);
+}
+
+@media (max-width: 700px) {
+  .solution-slide__copy {
+    width: calc(100% - 48px) !important;
+    max-width: none !important;
+  }
+
+  .solution-slide__copy .type-h3 {
+  }
+
+  .solution-slide__counter {
+    height: 28px !important;
+    margin-bottom: 16px !important;
+    padding-inline: 10px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* SOLUTION COPY REFINEMENT END */
+
+
+
+
+/* RESULT METRICS FINAL START */
+
+.shrimp-result-subtitle {
+  margin: 24px 0 0 !important;
+  color: var(--secondary) !important;
+}
+
+.shrimp-result-primary > span {
+  color: var(--secondary) !important;
+}
+
+.shrimp-result-details {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.shrimp-result-metrics {
+  width: 100% !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 48px !important;
+}
+
+.shrimp-result-metric {
+  min-width: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+
+.shrimp-result-metric > div {
+  margin: 0 !important;
+
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 14px !important;
+}
+
+.shrimp-result-metric .type-h2 {
+  margin: 0 !important;
+}
+
+.shrimp-result-metric > div > .type-caption-regular {
+  color: var(--secondary) !important;
+  white-space: nowrap;
+}
+
+.shrimp-result-metric > p {
+  margin: 0 !important;
+
+  color: var(--secondary) !important;
+  white-space: nowrap;
+}
+
+.shrimp-result-note {
+  color: var(--secondary) !important;
+}
+
+@media (max-width: 1000px) {
+  .shrimp-result-metrics {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .shrimp-result-metric > p {
+    white-space: normal;
+  }
+}
+
+/* RESULT METRICS FINAL END */
+
+
+/* RESULT PHONE PARALLAX FINAL START */
+
+.shrimp-result-stage {
+  --result-phone-y: 0px;
+}
+
+/*
+  Используем отдельное свойство translate,
+  поэтому не ломаем текущее позиционирование телефона.
+*/
+.shrimp-result-phone {
+  translate: 0 var(--result-phone-y) !important;
+  will-change: translate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrimp-result-phone {
+    translate: none !important;
+  }
+}
+
+/* RESULT PHONE PARALLAX FINAL END */
+
+/* RESULT CAPTIONS FINAL START */
+
+/*
+  Размер и начертание приходят из type-caption
+  и type-caption-regular. Здесь задаётся только цвет.
+*/
+.shrimp-result .type-caption:not(.type-section-label),
+.shrimp-result .type-caption-regular {
+}
+
+.shrimp-result-subtitle {
+  margin-top: 24px !important;
+}
+
+/* RESULT CAPTIONS FINAL END */
+
+/* RESULT SUBTITLE FINAL START */
+
+.shrimp-result-subtitle.type-caption {
+  margin-top: 24px !important;
+  color: var(--secondary) !important;
+}
+
+/* RESULT SUBTITLE FINAL END */
+
+/* PROCESS SCROLL PARALLAX START */
+
+.shrimp-process-slider {
+  --process-scroll-y: 0px;
+  overflow: hidden;
+}
+
+/*
+  Двигается только визуальная часть.
+  translate не конфликтует с Motion-анимацией слоёв.
+*/
+.shrimp-process-visual-stack {
+  translate: 0 var(--process-scroll-y) !important;
+  transition: translate 100ms linear !important;
+  will-change: translate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrimp-process-visual-stack {
+    translate: none !important;
+    transition: none !important;
+  }
+}
+
+/* PROCESS SCROLL PARALLAX END */
+
+/* SOLUTION SINGLE START */
+
+.shrimp-solution-single {
+  --solution-scroll-y: 0px;
+
+  position: relative;
+  width: 100%;
+  margin: 100px auto 0;
+  aspect-ratio: 1.8 / 1;
+  overflow: hidden;
+
+  border-radius: var(--case-card-radius, 56px);
+  background: #222;
+
+  outline: none;
+}
+
+.solution-single__panel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.solution-single__counter {
+  position: absolute;
+  z-index: 10;
+  top: 24px;
+  left: 24px;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 10px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+
+  background: rgba(20, 20, 20, 0.28);
+  backdrop-filter: blur(18px);
+
+  color: rgba(255, 255, 255, 0.95);
+
+  pointer-events: none;
+}
+
+.solution-single__counter-divider {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.solution-single__copy {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: clamp(40px, 6vw, 80px);
+
+  width: min(320px, 32%);
+  transform: translateY(-50%);
+
+  color: #fff;
+}
+
+.solution-single__copy h3 {
+  margin: 0 0 20px !important;
+  color: #fff !important;
+}
+
+.solution-single__copy p {
+  margin: 0 !important;
+  color: var(--secondary) !important;
+}
+
+.shrimp-solution-single .solution-visual {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.shrimp-solution-single .solution-visual__background {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+}
+
+.shrimp-solution-single .solution-visual__picture-wrap {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  transform: translate3d(
+    0,
+    var(--solution-scroll-y),
+    0
+  ) !important;
+
+  transition: transform 100ms linear !important;
+  will-change: transform;
+}
+
+.shrimp-solution-single .solution-visual__picture {
+  position: absolute !important;
+  top: 50% !important;
+  right: 0 !important;
+  left: auto !important;
+
+  width: auto !important;
+  height: calc(100% + 56px) !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  object-fit: contain !important;
+  object-position: right center !important;
+
+  opacity: 1 !important;
+  transform: translate3d(0, -50%, 0) scale(1) !important;
+}
+
+@media (max-width: 800px) {
+  .shrimp-solution-single {
+    aspect-ratio: auto;
+    min-height: 650px;
+    border-radius: var(--case-card-radius-mobile, 36px);
+  }
+
+  .solution-single__counter {
+    top: 18px;
+    left: 18px;
+  }
+
+  .solution-single__copy {
+    top: 80px;
+    right: 28px;
+    left: 28px;
+
+    width: auto;
+    transform: none;
+  }
+
+  .shrimp-solution-single .solution-visual__picture {
+    top: auto !important;
+    right: 50% !important;
+    bottom: -15px !important;
+
+    height: 70% !important;
+
+    transform: translate3d(50%, var(--solution-scroll-y), 0) !important;
+  }
+}
+
+
+.solution-single__copy-motion {
+  width: 100%;
+}
+/* SOLUTION SINGLE END */
+
+/* SOLUTION LAYER REVEAL START */
+
+.solution-visual__background-reveal {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+
+  transform-origin: center;
+  will-change: transform;
+}
+
+.solution-visual__picture-reveal {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solution-visual__background-reveal,
+  .solution-visual__picture-reveal {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* SOLUTION LAYER REVEAL END */
+
+/* SOLUTION COPY MOTION FINAL START */
+
+.shrimp-solution-single,
+.shrimp-solution-single * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.solution-single__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 0 0 20px;
+}
+
+.solution-single__heading h3 {
+  margin: 0 !important;
+}
+
+.solution-single__counter {
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+
+  background: rgba(20, 20, 20, 0.28);
+  backdrop-filter: blur(18px);
+
+  color: rgba(255, 255, 255, 0.95);
+
+  pointer-events: none;
+}
+
+.solution-single__counter-divider {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.solution-single__copy > p {
+  margin: 0 !important;
+}
+
+@media (max-width: 600px) {
+  .solution-single__heading {
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* SOLUTION COPY MOTION FINAL END */
+
+
+/* SOLUTION COPY ALIGNMENT FINAL START */
+
+.solution-single__copy-motion {
+  width: 100%;
+}
+
+.solution-single__copy-motion > p {
+  margin: 0 !important;
+  color: var(--secondary) !important;
+}
+
+/* SOLUTION COPY ALIGNMENT FINAL END */
+
+/* SOLUTION DESCRIPTION COLOR START */
+
+.shrimp-case .solution-single__copy-motion > p.type-text {
+  color: var(--secondary) !important;
+}
+
+/* SOLUTION DESCRIPTION COLOR END */
+
+/* CASE PLACEHOLDER START */
+
+.case-placeholder {
+  min-height: 100svh;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.case-placeholder__back {
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.case-placeholder__content {
+  width: min(900px, 100%);
+  margin: auto;
+  text-align: center;
+}
+
+.case-placeholder__content h1 {
+  margin: 28px 0;
+}
+
+.case-placeholder__content .type-text {
+  max-width: 680px;
+  margin: 0 auto 40px;
+  color: var(--secondary);
+}
+
+/* CASE PLACEHOLDER END */
+
+/* CASE COVER PROJECT VISUAL START */
+
+.punto-case .shrimp-cover,
+.smarthome-case .shrimp-cover {
+  background: transparent !important;
+}
+
+.case-cover-visual {
+  position: relative;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.case-cover-visual--punto {
+  background: #2e2da6;
+}
+
+.case-cover-visual--smarthome {
+  background: #da2025;
+}
+
+.case-cover-visual .case-cover-image {
+  width: 112%;
+  height: 112%;
+  max-width: none;
+  left: 50%;
+  bottom: -6%;
+  object-fit: contain;
+  filter: drop-shadow(0 30px 35px rgba(0, 0, 0, .25));
+}
+
+.case-cover-visual--punto .case-cover-image {
+  width: 118%;
+  height: 118%;
+  left: 50%;
+  bottom: -9%;
+}
+
+.case-cover-visual--smarthome .case-cover-image {
+  width: 112%;
+  height: 112%;
+  left: 51%;
+  bottom: -6%;
+}
+
+/* CASE COVER PROJECT VISUAL END */
+
+/* HOME HERO TYPOGRAPHY FINAL START */
+
+.hero h1.type-title {
+}
+
+.hero-description.type-text-s {
+}
+
+@media (max-width: 900px) {
+  .hero h1.type-title {
+  }
+}
+
+@media (max-width: 560px) {
+  .hero h1.type-title {
+  }
+}
+
+/* HOME HERO TYPOGRAPHY FINAL END */
+
+/* HEADING CLIPPING FIX START */
+
+/* После анимации буквы больше не обрезаются по границам строки */
+.reveal-heading.is-visible span {
+  clip-path: none !important;
+}
+
+/* Запас для нижних элементов букв: g, y, p */
+.hero h1.type-title span {
+  padding-bottom: .1em;
+  margin-bottom: -.1em;
+  overflow: visible;
+}
+
+/* Расстояние между главным заголовком и серым описанием */
+.hero-description.type-text-s {
+  margin-top: 64px !important;
+}
+
+@media (max-width: 900px) {
+  .hero-description.type-text-s {
+    margin-top: 36px !important;
+  }
+}
+
+/* HEADING CLIPPING FIX END */
+
+/* HOME HERO SPACING FINAL START */
+
+@media (min-width: 901px) {
+  .hero {
+    min-height: 0 !important;
+    padding-top: 100px !important;
+    padding-bottom: 100px !important;
+  }
+
+  .hero-description.type-text-s {
+    margin-top: 40px !important;
+  }
+
+  .projects {
+    padding-top: 0 !important;
+  }
+}
+
+/* HOME HERO SPACING FINAL END */
+
+/* HOME SCROLL DEPTH START */
+
+.hero h1.type-title {
+  translate: 0 var(--hero-title-scroll-y, 0px);
+  will-change: translate;
+}
+
+.hero-description {
+  translate: 0 var(--hero-description-scroll-y, 0px);
+  will-change: translate;
+}
+
+.project-card {
+  translate: 0 var(--project-card-scroll-y, 0px);
+  will-change: translate, transform;
+}
+
+.project-copy {
+  translate: 0 var(--project-copy-scroll-y, 0px);
+  will-change: translate;
+}
+
+.project-meta {
+  translate: 0 var(--project-meta-scroll-y, 0px);
+  will-change: translate;
+}
+
+/* Возвращаем нормальное расстояние между названием и описанием */
+.project-copy h2 {
+  margin: 0 0 16px !important;
+  padding-bottom: 0 !important;
+}
+
+.project-copy p {
+  margin: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .hero h1.type-title,
+  .hero-description,
+  .project-card,
+  .project-copy,
+  .project-meta {
+    translate: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1.type-title,
+  .hero-description,
+  .project-card,
+  .project-copy,
+  .project-meta {
+    translate: none;
+  }
+}
+
+/* HOME SCROLL DEPTH END */
+
+/* HOME VISUAL LIQUID MOTION START */
+
+.project-card .project-visual,
+.project-card:hover .project-visual,
+.project-card.is-visible:hover .project-visual {
+  transition:
+    transform 850ms cubic-bezier(.16, 1, .3, 1),
+    opacity 450ms cubic-bezier(.22, 1, .36, 1) !important;
+}
+
+/* HOME VISUAL LIQUID MOTION END */
+
+
+
+/* HEADER TYPOGRAPHY FINAL START */
+
+.site-header .brand,
+.case-header .shrimp-brand,
+.shrimp-header .shrimp-brand {
+}
+
+.site-header nav a,
+.case-header nav a,
+.shrimp-header nav a {
+}
+
+/* HEADER TYPOGRAPHY FINAL END */
+
+/* HEADER NAV CURSOR START */
+
+/* Убираем полоску только у пунктов меню */
+.site-header nav a::after,
+.case-header nav a::after,
+.shrimp-header nav a::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Круг такого же размера, как на переключателе темы */
+.custom-cursor[data-mode="nav"] {
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor[data-mode="nav"]::before {
+  transform: scale(.26);
+}
+
+.custom-cursor[data-mode="nav"].is-pressed::before {
+  transform: scale(.21);
+}
+
+.custom-cursor[data-mode="nav"] .custom-cursor-label {
+  display: none !important;
+}
+
+/* HEADER NAV CURSOR END */
+
+/* HEADER NAV MAGNET START */
+
+.site-header nav a[data-cursor="nav"],
+.case-header nav a[data-cursor="nav"],
+.shrimp-header nav a[data-cursor="nav"] {
+  --nav-magnet-x: 0px;
+  --nav-magnet-y: 0px;
+
+  transform: translate3d(
+    var(--nav-magnet-x),
+    var(--nav-magnet-y),
+    0
+  ) !important;
+
+  will-change: transform;
+}
+
+/* HEADER NAV MAGNET END */
+
+/* HEADER LOGO SIZE START */
+
+.site-header .brand,
+.case-header .shrimp-brand,
+.shrimp-header .shrimp-brand {
+}
+
+/* HEADER LOGO SIZE END */\n\n\n
+
+/* HEADER MAGNET POLISH START */
+
+.theme-switch,
+.site-header .brand,
+.case-header .shrimp-brand,
+.shrimp-header .shrimp-brand {
+  will-change: transform;
+}
+
+.theme-switch:hover .theme-option,
+.theme-switch:hover .theme-option + .theme-option {
+  transform: none !important;
+}
+
+/* Убираем двойное приглушение */
+.theme-switch .theme-option {
+  opacity: 1 !important;
+}
+
+/* Неактивная иконка видна, но не перетягивает внимание */
+.theme-switch .theme-icon {
+  opacity: .34 !important;
+  transition: opacity 260ms ease;
+}
+
+.theme-switch .theme-option.active .theme-icon {
+  opacity: .64 !important;
+}
+
+/* Солнышко чуть заметнее на тёмном фоне */
+html[data-theme="dark"] .theme-icon--sun {
+  opacity: .4 !important;
+}
+
+/* HEADER MAGNET POLISH END */
+
+
+
+/* CASE TEMPLATE SYSTEM START */
+
+.case-template-section {
+  width: 100%;
+}
+
+.case-template-section__content {
+  width: 100%;
+  margin-top: 110px;
+}
+
+.case-template-context-grid {
+  width: 100%;
+  height: 760px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.case-template-placeholder {
+  min-width: 0;
+  min-height: 0;
+
+  border-radius: var(--case-card-radius, 56px);
+  background: #202020;
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+
+html[data-theme="light"] .case-template-placeholder {
+  background: #ededed;
+  border-color: rgba(0, 0, 0, .08);
+}
+
+.case-template-placeholder--tall {
+  grid-row: 1 / 3;
+}
+
+.case-template-placeholder--task {
+  height: 680px;
+}
+
+.case-template-placeholder--process {
+  height: 620px;
+}
+
+.case-template-placeholder--solution {
+  height: 700px;
+}
+
+.case-template-placeholder--result {
+  height: 760px;
+}
+
+@media (max-width: 700px) {
+  .case-template-section__content {
+    margin-top: 64px;
+  }
+
+  .case-template-context-grid {
+    height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .case-template-placeholder,
+  .case-template-placeholder--tall {
+    grid-row: auto;
+    height: 320px;
+    border-radius: var(--case-card-radius-mobile, 36px);
+  }
+
+  .case-template-placeholder--task,
+  .case-template-placeholder--process,
+  .case-template-placeholder--solution,
+  .case-template-placeholder--result {
+    height: 520px;
+  }
+}
+
+/* CASE TEMPLATE SYSTEM END */
+
+/* CASE HERO PORTRAIT FINAL START */
+
+@media (min-width: 901px) {
+  .shrimp-case .shrimp-cover-visual {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    aspect-ratio: 680 / 876 !important;
+    justify-self: stretch !important;
+    align-self: start !important;
+  }
+}
+
+.shrimp-cover-visual > img,
+.case-cover-visual .case-cover-image {
+  position: absolute !important;
+
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+
+  object-fit: cover !important;
+  object-position: center !important;
+  filter: none !important;
+
+  transform:
+    translate3d(
+      var(--cover-pointer-x, 0px),
+      calc(
+        var(--cover-pointer-y, 0px) +
+        var(--cover-scroll-y, 0px) +
+        var(--cover-intro-y, 0px)
+      ),
+      0
+    )
+    rotate(
+      calc(
+        var(--cover-scroll-rotate, 0deg) +
+        var(--cover-intro-rotate, 0deg)
+      )
+    )
+    scale(var(--cover-intro-scale, 1)) !important;
+
+  transform-origin: center !important;
+  transition: transform 700ms cubic-bezier(.16, 1, .3, 1) !important;
+  will-change: transform;
+}
+
+/* CASE HERO PORTRAIT FINAL END */
+
+/* CASE HERO SCROLL ONLY START */
+
+.shrimp-case .shrimp-cover-visual {
+  --cover-pointer-x: 0px !important;
+  --cover-pointer-y: 0px !important;
+  --cover-scroll-rotate: 0deg !important;
+
+  translate: none !important;
+}
+
+.shrimp-case .shrimp-cover-visual > img,
+.shrimp-case .case-cover-visual .case-cover-image {
+  width: 110% !important;
+  height: 110% !important;
+
+  top: -5% !important;
+  left: -5% !important;
+  right: auto !important;
+  bottom: auto !important;
+
+  object-fit: cover !important;
+  object-position: center !important;
+
+  transform:
+    translate3d(
+      0,
+      calc(
+        var(--cover-scroll-y, 0px) +
+        var(--cover-intro-y, 0px)
+      ),
+      0
+    )
+    scale(var(--cover-intro-scale, 1)) !important;
+
+  transform-origin: center !important;
+}
+
+/* CASE HERO SCROLL ONLY END */
+
+/* CASE HERO CARD POSITION START */
+
+@media (min-width: 901px) {
+  .shrimp-case .shrimp-cover-visual {
+    margin-top: 20px !important;
+  }
+}
+
+/* CASE HERO CARD POSITION END */
+
+/* CASE CONTEXT IMAGE CONTAIN START */
+
+.shrimp-context-card--image-contain img {
+  position: absolute !important;
+
+  width: 100% !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 0 !important;
+
+  object-fit: initial !important;
+  object-position: center !important;
+
+  transform: translateY(-50%) !important;
+}
+
+/* CASE CONTEXT IMAGE CONTAIN END */
+
+/* PROJECT ACCENT SYSTEM START */
+
+/* Один акцентный цвет закреплён за каждым проектом */
+
+.project-card--mrshrimp,
+.shrimp-case {
+  --project-accent: #FF8D28;
+}
+
+.project-card--punto,
+.punto-case {
+  --project-accent: #2E2DA6;
+}
+
+.project-card--smarthome,
+.smarthome-case {
+  --project-accent: #DA2025;
+}
+
+
+/* Карточки проектов на главной */
+
+.project-card {
+  background-color: var(--project-accent);
+}
+
+
+/* Страницы кейсов */
+
+.shrimp-case {
+  --case-accent: var(--project-accent);
+}
+
+
+/* Главный визуал кейса */
+
+.shrimp-case .shrimp-cover-visual {
+  background: var(--project-accent) !important;
+}
+
+
+/* Блок «Задача» */
+
+.shrimp-case .case-task-visual,
+.shrimp-case .shrimp-mvp-media {
+  background: var(--project-accent) !important;
+}
+
+
+/* Подписи разделов */
+
+
+
+/* PROJECT ACCENT SYSTEM END */
+
+/* PUNTO PROCESS VISUALS START */
+
+.punto-case .case-process-visual {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.punto-case .case-process-visual img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+
+  object-fit: contain;
+  object-position: center;
+
+  transform: translate(-50%, -50%);
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .punto-case .case-process-visual {
+    inset: 0;
+    height: 58%;
+  }
+
+  .punto-case .case-process-visual img {
+    width: auto;
+    height: 94%;
+    max-width: 94%;
+  }
+}
+
+/* PUNTO PROCESS VISUALS END */
+
+
+/* GLOBAL CURSOR FINAL START */
+
+.global-cursor-arrow {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+
+  color: #111;
+  background: #fff;
+  border-radius: 50%;
+
+  opacity: 0;
+  scale: .7;
+  translate: -50% -50%;
+
+  transition:
+    opacity 180ms ease,
+    scale 240ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.global-cursor-arrow svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.global-cursor[data-mode="carousel-left"]
+.global-cursor-arrow--left,
+.global-cursor[data-mode="carousel-right"]
+.global-cursor-arrow--right {
+  opacity: 1;
+  scale: 1;
+}
+
+.global-cursor[data-mode="project"]
+.custom-cursor-label {
+  opacity: 1;
+}
+
+.global-cursor .case-next-cursor {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.global-cursor[data-mode="case-next"]
+.case-next-cursor {
+  opacity: 1;
+}
+
+/* GLOBAL CURSOR FINAL END */
+
+
+
+/* CASE VIDEO PREVIEW START */
+
+/*
+  Фон и декоративные слои не перехватывают мышь,
+  но круг с видео остаётся интерактивным.
+*/
+.solution-visual--asset {
+  pointer-events: auto !important;
+}
+
+.solution-visual__background-reveal,
+.solution-visual__picture-reveal {
+  pointer-events: none !important;
+}
+
+
+/* Круг с видео */
+
+.case-video-preview {
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  right: 13%;
+
+  width: clamp(210px, 18vw, 290px);
+  aspect-ratio: 1;
+
+  padding: 0;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 50%;
+  background: #080910;
+
+  transform: translateY(-50%) scale(1);
+
+  transition:
+    transform 500ms cubic-bezier(.22, 1, .36, 1),
+    border-color 300ms ease,
+    box-shadow 500ms ease;
+
+  pointer-events: auto !important;
+  cursor: none !important;
+}
+
+.case-video-preview:hover {
+  transform: translateY(-50%) scale(1.09);
+  border-color: rgba(255, 255, 255, .58);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .28);
+}
+
+
+/*
+  Vimeo имеет горизонтальный формат.
+  Растягиваем плеер по высоте круга,
+  лишнюю ширину круг обрезает.
+*/
+.case-video-preview iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 178%;
+  height: 100%;
+
+  border: 0;
+
+  transform: translate(-50%, -50%);
+  pointer-events: none !important;
+}
+
+.case-video-preview__overlay {
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, .02),
+      rgba(0, 0, 0, .12)
+    );
+
+  pointer-events: none;
+}
+
+
+/* Полноразмерное видео */
+
+.case-video-modal {
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  padding: 56px 72px;
+  overflow: hidden;
+
+  border-radius: inherit;
+  background: rgba(7, 7, 9, .97);
+
+  pointer-events: auto !important;
+}
+
+.case-video-modal__player {
+  position: relative;
+
+  width: 100%;
+  max-width: 1400px;
+  aspect-ratio: 16 / 9;
+}
+
+.case-video-modal__player iframe {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+}
+
+.case-video-modal__close {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  right: 24px;
+
+  width: 52px;
+  height: 52px;
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, .34);
+  border-radius: 50%;
+  background: rgba(20, 20, 22, .76);
+
+  cursor: none;
+}
+
+.case-video-modal__close span::before,
+.case-video-modal__close span::after {
+  content: "";
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 22px;
+  height: 1.5px;
+
+  background: #fff;
+}
+
+.case-video-modal__close span::before {
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+}
+
+.case-video-modal__close span::after {
+  transform:
+    translate(-50%, -50%)
+    rotate(-45deg);
+}
+
+
+/* Режим курсора для видео */
+
+.global-cursor
+.custom-cursor-label--project,
+.global-cursor
+.custom-cursor-label--video {
+  opacity: 0 !important;
+}
+
+.global-cursor[data-mode="project"]
+.custom-cursor-label--project {
+  opacity: 1 !important;
+}
+
+.global-cursor[data-mode="video"]
+.custom-cursor-label--video {
+  opacity: 1 !important;
+}
+
+.global-cursor[data-mode="video"]
+.global-cursor-arrow {
+  opacity: 0 !important;
+}
+
+
+
+
+@media (max-width: 700px) {
+  .case-video-preview {
+    top: 61%;
+    right: 7%;
+
+    width: 150px;
+  }
+
+  .case-video-modal {
+    padding: 64px 16px 24px;
+  }
+
+  .case-video-modal__close {
+    top: 14px;
+    right: 14px;
+
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-video-preview {
+    transition: none;
+  }
+
+  .case-video-preview:hover {
+    transform: translateY(-50%);
+  }
+}
+
+/* CASE VIDEO PREVIEW END */
+
+/* VIDEO MODAL RECTANGLE FINAL START */
+
+/* Превью остаётся кругом 560px */
+.case-video-preview {
+  width: min(560px, 38vw) !important;
+  max-width: none !important;
+
+  transform: translateY(-50%) !important;
+  box-shadow: none !important;
+}
+
+.case-video-preview:hover {
+  transform: translateY(-50%) !important;
+  box-shadow: none !important;
+}
+
+
+/*
+  Открытое видео полностью накрывает слайд:
+  текст и фон остаются под ним.
+*/
+.case-video-modal {
+  position: absolute !important;
+  z-index: 200 !important;
+  inset: 0 !important;
+
+  display: block !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+
+  border-radius: inherit !important;
+  background: #050506 !important;
+}
+
+.case-video-modal__player {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+
+  aspect-ratio: auto !important;
+}
+
+.case-video-modal__player iframe {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  border: 0 !important;
+}
+
+
+/* Крестик поверх плеера */
+.case-video-modal__close {
+  z-index: 210 !important;
+  top: 24px !important;
+  right: 24px !important;
+}
+
+
+/*
+  Пока видео открыто:
+  убираем стрелки и весь кастомный курсор.
+  На видео и крестике работает обычный курсор.
+*/
+.global-cursor[data-mode="video-modal"] {
+  opacity: 0 !important;
+}
+
+html.custom-cursor-enabled .case-video-modal {
+  cursor: default !important;
+}
+
+html.custom-cursor-enabled .case-video-modal__close {
+  cursor: pointer !important;
+}
+
+
+/*
+  «Посмотреть» использует базовый класс
+  custom-cursor-label — тот же стиль, что «Подробнее».
+*/
+.global-cursor
+.custom-cursor-label--project,
+.global-cursor
+.custom-cursor-label--video {
+  opacity: 0 !important;
+}
+
+.global-cursor[data-mode="project"]
+.custom-cursor-label--project,
+.global-cursor[data-mode="video"]
+.custom-cursor-label--video {
+  opacity: 1 !important;
+}
+
+.global-cursor[data-mode="video"]
+.global-cursor-arrow,
+.global-cursor[data-mode="video"]
+.case-next-cursor {
+  opacity: 0 !important;
+}
+
+
+@media (max-width: 900px) {
+  .case-video-preview {
+    width: min(440px, 46vw) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .case-video-preview {
+    width: 190px !important;
+  }
+
+  .case-video-modal__close {
+    top: 14px !important;
+    right: 14px !important;
+  }
+}
+
+/* VIDEO MODAL RECTANGLE FINAL END */
+
+/* VIDEO ABOVE SLIDE CONTENT START */
+
+/* Видеослой становится верхним слоем слайда */
+.solution-single__panel:has(.case-video-modal)
+.solution-visual--asset {
+  position: absolute !important;
+  z-index: 500 !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  pointer-events: auto !important;
+}
+
+/* Текст скрывается, пока открыто видео */
+.solution-single__panel:has(.case-video-modal)
+.solution-single__copy {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Открытое видео заполняет весь прямоугольник */
+.solution-single__panel:has(.case-video-modal)
+.case-video-modal {
+  z-index: 600 !important;
+  inset: 0 !important;
+}
+
+/* VIDEO ABOVE SLIDE CONTENT END */
+
+/* CURSOR AND PUNTO PICTURE FINAL START */
+
+/* Сохраняем положение крупной картинки Punto */
+.punto-case .shrimp-solution-single
+.solution-visual__picture {
+  top: 50% !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  width: auto !important;
+  height: 112% !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  scale: none !important;
+  transform: translate3d(0, -50%, 0) scale(1) !important;
+  transform-origin: right center !important;
+
+  object-fit: contain !important;
+  object-position: right center !important;
+}
+
+/*
+  Используется базовый custom-cursor-label с главной.
+  Здесь меняется только видимость.
+*/
+.global-cursor .custom-cursor-label {
+  opacity: 0 !important;
+}
+
+.global-cursor[data-mode="project"]
+.custom-cursor-label,
+.global-cursor[data-mode="video"]
+.custom-cursor-label {
+  opacity: 1 !important;
+}
+
+.global-cursor[data-mode="video"]
+.global-cursor-arrow,
+.global-cursor[data-mode="video"]
+.case-next-cursor {
+  opacity: 0 !important;
+}
+
+/* CURSOR AND PUNTO PICTURE FINAL END */
+
+/* GLOBAL CURSOR UNIFIED FINAL START */
+
+/*
+  Один элемент и один стиль:
+  на главной — «Подробнее»,
+  на видео — «Посмотреть».
+*/
+.global-cursor .custom-cursor-label {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  width: 180px !important;
+  height: 180px !important;
+  min-width: 180px !important;
+  padding: 0 !important;
+
+  color: #111 !important;
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+
+  font-family: inherit !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+
+  opacity: 0 !important;
+  translate: -50% -50% !important;
+  scale: .72 !important;
+
+  transition:
+    opacity 180ms ease,
+    scale 280ms cubic-bezier(.22, 1, .36, 1) !important;
+
+  pointer-events: none !important;
+}
+
+.global-cursor .custom-cursor-label::before,
+.global-cursor .custom-cursor-label::after {
+  content: none !important;
+}
+
+.global-cursor[data-mode="project"]
+.custom-cursor-label,
+.global-cursor[data-mode="video"]
+.custom-cursor-label {
+  opacity: 1 !important;
+  scale: 1 !important;
+}
+
+.global-cursor[data-mode="project"]
+.global-cursor-arrow,
+.global-cursor[data-mode="project"]
+.case-next-cursor,
+.global-cursor[data-mode="video"]
+.global-cursor-arrow,
+.global-cursor[data-mode="video"]
+.case-next-cursor {
+  opacity: 0 !important;
+}
+
+/* GLOBAL CURSOR UNIFIED FINAL END */
+
+/* GLOBAL CURSOR EXACT SAME START */
+
+/*
+  И project, и video используют один белый круг:
+  псевдоэлемент самого курсора.
+*/
+.custom-cursor[data-mode="project"],
+.custom-cursor[data-mode="video"] {
+  color: #fff !important;
+  mix-blend-mode: normal !important;
+}
+
+.custom-cursor[data-mode="project"]::before,
+.custom-cursor[data-mode="video"]::before {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  box-shadow: none !important;
+}
+
+
+/*
+  Текст только лежит поверх круга.
+  Он больше не создаёт собственную плашку.
+*/
+.global-cursor .custom-cursor-label {
+  position: absolute !important;
+  top: -80px !important;
+  left: -80px !important;
+
+  display: grid !important;
+  width: 160px !important;
+  height: 160px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  place-items: center !important;
+
+  color: #111113 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+
+  font-family: inherit !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+
+  opacity: 0 !important;
+  translate: none !important;
+  scale: none !important;
+  transform: scale(.65) !important;
+
+  transition:
+    opacity 240ms,
+    transform 380ms cubic-bezier(.22, 1, .36, 1) !important;
+
+  pointer-events: none !important;
+}
+
+.custom-cursor[data-mode="project"]
+.custom-cursor-label,
+.custom-cursor[data-mode="video"]
+.custom-cursor-label {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+.custom-cursor[data-mode="video"]
+.global-cursor-arrow,
+.custom-cursor[data-mode="video"]
+.case-next-cursor {
+  opacity: 0 !important;
+}
+
+/* GLOBAL CURSOR EXACT SAME END */
+
+/* PUNTO PHONES AND COUNTER FINAL START */
+
+/* Первый слайд Punto: телефоны занимают высоту карточки */
+.punto-case
+.solution-slide--punto-01
+.solution-visual__picture {
+  position: absolute !important;
+  top: 50% !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  width: auto !important;
+  height: 142% !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  object-fit: contain !important;
+  object-position: right center !important;
+
+  scale: none !important;
+  transform:
+    translate3d(0, -50%, 0)
+    scale(1) !important;
+
+  transform-origin: right center !important;
+}
+
+/* Счётчик без фона и рамки во всех слайдерах */
+.solution-single__counter {
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  color: #fff !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* PUNTO PHONES AND COUNTER FINAL END */
+
+/* PUNTO PHONES RIGHT ALIGN START */
+
+.punto-case
+.solution-slide--punto-01
+.solution-visual__picture {
+  right: -7% !important;
+  left: auto !important;
+}
+
+/* PUNTO PHONES RIGHT ALIGN END */
+
+/* CLOUDINARY VIDEO FINAL START */
+
+/* Видео-превью заполняет круг */
+.case-video-preview > video {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+  object-position: center !important;
+
+  pointer-events: none !important;
+}
+
+/* Полный ролик вписывается в прямоугольник */
+.case-video-modal__player video {
+  display: block;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: contain !important;
+  object-position: center !important;
+
+  background: #000;
+}
+
+/* Нативное управление видео остаётся доступным */
+html.custom-cursor-enabled
+.case-video-modal video,
+html.custom-cursor-enabled
+.case-video-modal__player {
+  cursor: auto !important;
+}
+
+/* CLOUDINARY VIDEO FINAL END */
+
+/* VIDEO PREVIEW POLISH FINAL START */
+
+/* Круг с видео */
+.case-video-preview {
+  --video-scroll-y: 0px;
+
+  width: min(460px, 32vw) !important;
+
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+
+  transform:
+    translate3d(
+      0,
+      calc(-50% + var(--video-scroll-y)),
+      0
+    )
+    scale(1) !important;
+
+  transition:
+    transform 500ms cubic-bezier(.22, 1, .36, 1),
+    box-shadow 400ms ease !important;
+
+  will-change: transform;
+}
+
+.case-video-preview:hover {
+  transform:
+    translate3d(
+      0,
+      calc(-50% + var(--video-scroll-y)),
+      0
+    )
+    scale(1.08) !important;
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, .22) !important;
+}
+
+.case-video-preview__overlay {
+  border: 0 !important;
+}
+
+
+/* Крестик */
+.case-video-modal__close {
+  border: 0 !important;
+  outline: 0 !important;
+
+  color: #111 !important;
+  background: rgba(255, 255, 255, .78) !important;
+
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, .16) !important;
+
+  transition:
+    transform 280ms cubic-bezier(.22, 1, .36, 1),
+    background-color 200ms ease !important;
+}
+
+.case-video-modal__close:hover {
+  transform: scale(1.06);
+  background: rgba(255, 255, 255, .94) !important;
+}
+
+.case-video-modal__close span::before,
+.case-video-modal__close span::after {
+  background: #111 !important;
+}
+
+
+@media (max-width: 900px) {
+  .case-video-preview {
+    width: min(390px, 42vw) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .case-video-preview {
+    width: 180px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-video-preview,
+  .case-video-preview:hover {
+    transform: translateY(-50%) !important;
+    transition: none !important;
+  }
+}
+
+/* VIDEO PREVIEW POLISH FINAL END */
+
+/* VIDEO CLOSE BUTTON FINAL START */
+
+.case-video-modal__close {
+  width: 56px !important;
+  height: 56px !important;
+
+  border: 0 !important;
+  outline: 0 !important;
+  background: rgba(255, 255, 255, .10) !important;
+
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+
+  box-shadow: none !important;
+}
+
+.case-video-modal__close:hover {
+  background: rgba(255, 255, 255, .16) !important;
+  transform: scale(1.05);
+}
+
+.case-video-modal__close span::before,
+.case-video-modal__close span::after {
+  width: 24px !important;
+  height: 2px !important;
+  background: #fff !important;
+}
+
+/* VIDEO CLOSE BUTTON FINAL END */
+
+/* CASE HERO STATIC FRAME FINAL START */
+
+/*
+  Неподвижный цветной контейнер:
+  фон, скругление и обводка находятся только здесь.
+*/
+.case-cover-frame {
+  position: relative;
+  isolation: isolate;
+
+  width: min(610px, 100%);
+  aspect-ratio: 680 / 876;
+
+  justify-self: end;
+  align-self: start;
+
+  overflow: hidden;
+  border-radius: 56px;
+
+  background: var(--project-accent);
+  transform: translateZ(0);
+}
+
+
+/* Тонкая обводка как на карточках главной */
+.case-cover-frame::after {
+  content: "";
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+
+  border: 1px solid rgba(255, 255, 255, .04);
+  border-radius: inherit;
+  box-sizing: border-box;
+
+  pointer-events: none;
+}
+
+
+/*
+  Внутренний visual полностью заполняет контейнер.
+  У него нет собственного фона, рамки, отступов
+  и скругления.
+*/
+.case-cover-frame > .shrimp-cover-visual,
+.case-cover-frame > .case-cover-visual {
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  aspect-ratio: auto !important;
+
+  margin: 0 !important;
+
+  justify-self: stretch !important;
+  align-self: stretch !important;
+
+  overflow: visible !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+
+  background: transparent !important;
+
+  clip-path: none !important;
+  contain: none !important;
+  translate: none !important;
+}
+
+
+/* Рамка больше не рисуется на движущемся visual */
+.case-cover-frame > .shrimp-cover-visual::after,
+.case-cover-frame > .case-cover-visual::after {
+  content: none !important;
+  display: none !important;
+}
+
+
+/*
+  Параллакс остаётся только на изображении.
+  Цветной контейнер при скролле не двигается.
+*/
+.case-cover-frame .case-cover-image,
+.case-cover-frame .shrimp-cover-visual > img {
+  will-change: transform;
+}
+
+
+@media (max-width: 900px) {
+  .case-cover-frame {
+    grid-row: 2;
+    justify-self: center;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .case-cover-frame {
+    border-radius: 36px;
+  }
+}
+
+/* CASE HERO STATIC FRAME FINAL END */
+
+/* CASE OTHER CARDS BORDER FINAL START */
+
+.case-page .shrimp-context-card,
+.case-page .shrimp-mvp-media,
+.case-page .case-task-visual,
+.case-page .shrimp-process-slider,
+.case-page .shrimp-solution-single,
+.case-page .shrimp-media {
+  position: relative;
+  isolation: isolate;
+
+  overflow: hidden;
+  border-radius: 56px !important;
+}
+
+/* Тонкая рамка как на карточках главной */
+.case-page .shrimp-context-card::after,
+.case-page .shrimp-mvp-media::after,
+.case-page .case-task-visual::after,
+.case-page .shrimp-process-slider::after,
+.case-page .shrimp-solution-single::after,
+.case-page .shrimp-media::after {
+  content: "";
+  position: absolute;
+  z-index: 200;
+  inset: 0;
+
+  border: 1px solid rgba(255, 255, 255, .04);
+  border-radius: inherit;
+  box-sizing: border-box;
+
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .case-page .shrimp-context-card,
+  .case-page .shrimp-mvp-media,
+  .case-page .case-task-visual,
+  .case-page .shrimp-process-slider,
+  .case-page .shrimp-solution-single,
+  .case-page .shrimp-media {
+    border-radius: 36px !important;
+  }
+}
+
+/* CASE OTHER CARDS BORDER FINAL END */
+
+/* PUNTO RESULT START */
+
+.punto-case .shrimp-result {
+  min-height: auto;
+  padding-bottom: 160px;
+}
+
+.punto-result {
+  width: min(1120px, 100%);
+  margin: 110px auto 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* Изображение */
+
+.punto-result__visual {
+  width: min(520px, 58vw);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.punto-result__visual img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+
+  object-fit: contain;
+  object-position: center;
+
+  filter:
+    drop-shadow(
+      0 34px 50px rgba(0, 0, 0, .24)
+    );
+}
+
+.punto-result__years {
+  margin-top: 12px;
+
+  color: rgba(255, 255, 255, .5);
+
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+
+/* Метрики */
+
+.punto-result__metrics {
+  width: min(900px, 100%);
+  margin-top: 124px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(48px, 8vw, 110px);
+}
+
+.punto-result__metric {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.punto-result__metric strong {
+  display: block;
+
+  color: #fff;
+
+  font-size: clamp(112px, 13vw, 190px);
+  font-weight: 400;
+  line-height: .82;
+  letter-spacing: -.055em;
+  white-space: nowrap;
+}
+
+.punto-result__metric span {
+  margin-top: 22px;
+
+  color: rgba(255, 255, 255, .52);
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+
+/* Итоговый текст */
+
+.punto-result__summary {
+  width: min(980px, 100%);
+  margin: 94px auto 0;
+
+  color: rgba(255, 255, 255, .9);
+  text-align: center;
+}
+
+
+@media (max-width: 700px) {
+  .punto-case .shrimp-result {
+    padding-bottom: 100px;
+  }
+
+  .punto-result {
+    margin-top: 64px;
+  }
+
+  .punto-result__visual {
+    width: min(360px, 86vw);
+  }
+
+  .punto-result__years {
+    font-size: 16px;
+  }
+
+  .punto-result__metrics {
+    margin-top: 60px;
+    gap: 24px;
+  }
+
+  .punto-result__metric strong {
+    font-size: clamp(72px, 23vw, 112px);
+  }
+
+  .punto-result__metric span {
+    margin-top: 14px;
+    font-size: 13px;
+  }
+
+  .punto-result__summary {
+    margin-top: 64px;
+    text-align: left;
+  }
+}
+
+/* PUNTO RESULT END */
+
+/* PUNTO RESULT VISUAL FINAL START */
+
+.punto-result__visual {
+  --punto-result-scroll-y: 0px;
+
+  width: min(760px, 72vw) !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  translate: 0 var(--punto-result-scroll-y);
+  transition: translate 100ms linear;
+  will-change: translate;
+}
+
+.punto-result__visual img {
+  display: block;
+
+  width: 100% !important;
+  height: auto !important;
+  max-height: 720px !important;
+
+  object-fit: contain;
+  object-position: center;
+
+transition:
+    translate 100ms linear;
+
+}
+
+.punto-result__years {
+  margin-top: 10px !important;
+
+  color: rgba(255, 255, 255, .46) !important;
+
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 700px) {
+  .punto-result__visual {
+    width: min(440px, 92vw) !important;
+  }
+
+  .punto-result__visual img {
+    max-height: 520px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .punto-result__visual {
+transition: none;
+  }
+}
+
+/* PUNTO RESULT VISUAL FINAL END */
+
+/* PUNTO SOLUTION INTRO ALIGN START */
+
+.punto-case .shrimp-solution-intro {
+  width: min(900px, 100%) !important;
+  margin: 52px auto 0 !important;
+
+  color: rgba(255, 255, 255, .6) !important;
+
+  text-align: center !important;
+  text-wrap: balance;
+}
+
+@media (max-width: 700px) {
+  .punto-case .shrimp-solution-intro {
+    width: 100% !important;
+    margin-top: 32px !important;
+    padding: 0 8px;
+  }
+}
+
+/* PUNTO SOLUTION INTRO ALIGN END */
+
+/* CASE WIDTH SYSTEM FINAL START */
+
+/* Все крупные визуальные блоки — ширина общего контейнера 1200px */
+.case-page .shrimp-context-grid,
+.case-page .shrimp-mvp-media,
+.case-page .case-task-visual,
+.case-page .shrimp-process-slider,
+.case-page .shrimp-solution-single,
+.case-page .punto-result {
+  width: 100% !important;
+  max-width: none !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Вторичные тексты — единая ширина */
+.case-page .shrimp-solution-intro,
+.case-page .punto-result__summary {
+  width: min(600px, 100%) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Метрики результата совпадают с шириной текстового контейнера */
+.case-page .punto-result__metrics {
+  width: min(900px, 100%) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+/* CASE WIDTH SYSTEM FINAL END */
+
+/* CASE SECTION TITLE WIDTH FINAL START */
+
+.case-page .shrimp-section-title h2 {
+  width: min(800px, 100%) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  text-align: center !important;
+}
+
+/* CASE SECTION TITLE WIDTH FINAL END */
+
+
+
+
+
+
+
+
+
+/* PUNTO RESULT SUMMARY WIDTH FINAL START */
+
+.case-page .punto-result__summary {
+  width: min(900px, 100%) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+/* PUNTO RESULT SUMMARY WIDTH FINAL END */
+
+
+
+/* CASE TASK CAPTION FINAL START */
+
+.case-page .case-task-caption {
+  width: min(700px, 100%);
+  margin: 64px auto 0;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .case-page .case-task-caption {
+    width: 100%;
+    margin-top: 40px;
+  }
+}
+
+/* CASE TASK CAPTION FINAL END */
+
+/* CASE LARGE TEXT FINAL START */
+
+/* Единый стиль крупных поясняющих абзацев */
+.case-page .case-large-text,
+.case-page .punto-result__summary {
+  width: min(900px, 100%) !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+
+  color: rgba(255, 255, 255, .9) !important;
+
+  text-align: center !important;
+}
+
+/* Отступ подписи после изображения в блоке «Задача» */
+.case-page .case-task-caption {
+  margin-top: 64px !important;
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .case-page .case-large-text,
+  .case-page .punto-result__summary {
+  }
+
+  .case-page .case-task-caption {
+    margin-top: 40px !important;
+  }
+}
+
+/* CASE LARGE TEXT FINAL END */
+
+/* CASE HERO META ACTUAL BOTTOM FINAL START */
+
+@media (min-width: 901px) {
+  .shrimp-case .case-hero {
+    position: relative !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: auto !important;
+    column-gap: 16px !important;
+    align-items: start !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .shrimp-case .case-hero > .shrimp-cover-copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+
+  .shrimp-case .case-hero > .case-cover-frame {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+
+    width: 100% !important;
+    align-self: start !important;
+  }
+
+  .shrimp-case .case-hero > .shrimp-meta {
+    position: absolute !important;
+
+    left: 0 !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: 0 !important;
+
+    width: calc(50% - 8px) !important;
+    margin: 0 !important;
+
+    transform: none !important;
+  }
+}
+
+/* CASE HERO META ACTUAL BOTTOM FINAL END */
+
+
+
+/* CASE TASK CAPTION SPACING FINAL START */
+
+.case-page .case-task-caption-block {
+  width: 100%;
+  padding: 96px 0;
+}
+
+.case-page .case-task-caption {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 700px) {
+  .case-page .case-task-caption-block {
+    padding: 64px 0;
+  }
+}
+
+/* CASE TASK CAPTION SPACING FINAL END */
+
+/* HOME HERO DESCRIPTION LAYOUT START */
+
+.hero-description {
+}
+
+/* HOME HERO DESCRIPTION LAYOUT END */
+
+/* HOME HERO DESCRIPTION WIDTH START */
+
+.hero-description {
+max-width: 100%;
+}
+
+/* HOME HERO DESCRIPTION WIDTH END */
+
+/* HOME DESCRIPTION LAYOUT START */
+
+.hero-description {
+  width: 340px;
+  max-width: 100%;
+  text-wrap: pretty;
+}
+
+/* HOME DESCRIPTION LAYOUT END */
+
+
+
+
+
+/* SMART HOME HERO TITLE START */
+.smarthome-case .case-hero .type-h1 {
+  line-height: .95;
+}
+/* SMART HOME HERO TITLE END */
+
+
+/* SMART HOME PROCESS VISUALS START */
+
+.smarthome-case .smarthome-process-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+}
+
+/* Видео — тот же круглый интерактивный паттерн, что в Punto */
+.smarthome-case .shrimp-process-slider .case-video-preview {
+  position: relative;
+  display: block;
+  width: min(560px, 42vw);
+  aspect-ratio: 1;
+  margin: auto;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+}
+
+.smarthome-case .shrimp-process-slider .case-video-preview video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 700px) {
+  .smarthome-case .shrimp-process-slider .case-video-preview {
+    width: min(320px, 74vw);
+  }
+}
+
+/* SMART HOME PROCESS VISUALS END */
+
+
+
+/* SMART HOME PROCESS SECOND IMAGE START */
+.smarthome-case .smarthome-process-image--second {
+  object-fit: contain;
+  object-position: center;
+  background: #202022;
+}
+/* SMART HOME PROCESS SECOND IMAGE END */
+
+
+
+
+/* SMART HOME PROCESS VIDEO CENTER START */
+.smarthome-case
+.shrimp-process-visual-layer
+.smarthome-process-video-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.smarthome-case
+.smarthome-process-video-center
+.case-video-preview {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  margin: 0 !important;
+  translate: none !important;
+  transform: none !important;
+
+  pointer-events: auto;
+}
+
+.smarthome-case
+.smarthome-process-video-center
+.case-video-preview:hover {
+  transform: scale(1.08) !important;
+}
+/* SMART HOME PROCESS VIDEO CENTER END */
+
+
+
+/* SMARTHOME RESULT START */
+
+.smarthome-case .shrimp-result {
+  min-height: auto;
+  padding-bottom: 250px;
+}
+
+.smarthome-result {
+  width: 100%;
+  margin: 96px auto 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.smarthome-result__visual {
+  --smarthome-result-scroll-y: 0px;
+
+  width: min(760px, 66vw);
+  display: flex;
+  justify-content: center;
+}
+
+.smarthome-result__visual img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+  max-height: 760px;
+
+  object-fit: contain;
+  object-position: center;
+
+  translate: 0 var(--smarthome-result-scroll-y);
+  transition: translate 100ms linear;
+  will-change: translate;
+
+  filter: drop-shadow(
+    0 34px 50px rgba(0, 0, 0, 0.24)
+  );
+}
+
+.smarthome-result__summary {
+  width: min(900px, calc(100% - 64px));
+  margin: 120px auto 0;
+
+  text-align: center;
+  text-wrap: balance;
+}
+
+@media (max-width: 700px) {
+  .smarthome-case .shrimp-result {
+    padding-bottom: 64px;
+  }
+
+  .smarthome-result {
+    margin-top: 64px;
+  }
+
+  .smarthome-result__visual {
+    width: min(440px, 92vw);
+  }
+
+  .smarthome-result__visual img {
+    max-height: 520px;
+  }
+
+  .smarthome-result__summary {
+    width: calc(100% - 40px);
+    margin-top: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smarthome-result__visual img {
+    translate: none;
+    transition: none;
+  }
+}
+
+/* SMARTHOME RESULT END */
+
+
+/* MRSHRIMP JTBD COLOR START */
+.shrimp-case .shrimp-solution-intro > p {
+  color: var(--secondary);
+}
+
+
+
+/* SMARTHOME CONTEXT DESCRIPTION START */
+.smarthome-context-description {
+  width: min(980px, calc(100% - 64px));
+  margin: 96px auto 0;
+  text-align: center;
+  text-wrap: balance;
+}
+/* SMARTHOME CONTEXT DESCRIPTION END */
+
+
+/* HOME CARDS UNIFIED START */
+
+/* Одинаковая область изображения во всех трёх карточках */
+.project-card .project-visual {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 28% !important;
+  width: auto !important;
+  height: auto !important;
+  aspect-ratio: auto !important;
+  overflow: visible !important;
+
+  transform: translate3d(
+    var(--pointer-x, 0px),
+    calc(var(--pointer-y, 0px) + var(--scroll-lag, 0px)),
+    0
+  ) scale(var(--image-scale, 1)) !important;
+}
+
+/* Все изображения одного размера, полностью видны */
+.project-card .project-art {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  object-position: right center !important;
+  transform: none !important;
+  translate: none !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+@media (max-width: 700px) {
+  .project-card .project-visual {
+    top: 28% !important;
+    left: 0 !important;
+  }
+
+  .project-card .project-art {
+    object-position: center bottom !important;
+  }
+}
+
+/* HOME CARDS UNIFIED END */
+
+/* HOME IMAGES LOWER */
+.project-card .project-visual {
+  transform: translate3d(
+    var(--pointer-x, 0px),
+    calc(var(--pointer-y, 0px) + var(--scroll-lag, 0px) + 24px),
+    0
+  ) scale(var(--image-scale, 1)) !important;
+}
+
+
+/* SHRIMP HERO PHONE LOWER START */
+@media (min-width: 901px) {
+  .shrimp-case .case-cover-frame .shrimp-cover-visual > img {
+    translate: 0 64px !important;
+  }
+}
+/* SHRIMP HERO PHONE LOWER END */
+
+
+/* ABOUT PAGE START */
+
+.about-page {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.about-content {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  padding: 160px 0 0;
+}
+
+.about-title {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.about-copy {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.about-lead {
+  max-width: 680px;
+  margin: 0;
+}
+
+.about-copy__columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px;
+  margin-top: 42px;
+}
+
+.about-copy__columns p {
+  margin: 0;
+}
+
+.about-contacts {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-self: end;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 0;
+}
+
+.about-contacts a,
+.about-contacts span {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.about-contacts a:hover {
+  color: var(--secondary);
+}
+
+.about-page .site-footer {
+  margin-top: 150px;
+}
+
+@media (max-width: 900px) {
+  .about-content {
+    display: block;
+    padding: 160px 20px 0;
+  }
+
+  .about-copy {
+    margin-top: 64px;
+  }
+
+  .about-copy__columns {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .about-contacts {
+    margin-top: 96px;
+  }
+
+  .about-page .site-footer {
+    margin-top: 96px;
+  }
+}
+
+/* ABOUT PAGE END */
+
+/* GLOBAL FOOTER START */
+
+.site-container {
+  width: calc(100% - 64px);
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+.global-footer {
+  width: 100%;
+  background: var(--background);
+  color: var(--secondary);
+}
+
+.global-footer__inner {
+  padding: 24px 0 32px;
+  border-top: 1px solid color-mix(
+    in srgb,
+    var(--foreground) 20%,
+    transparent
+  );
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+@media (max-width: 600px) {
+  .site-container {
+    width: calc(100% - 40px);
+  }
+
+  .global-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* GLOBAL FOOTER END */
+
+
+/* SHARED PAGE CONTAINER FINAL */
+.site-container {
+  width: min(1400px, calc(100% - 64px)) !important;
+  max-width: none !important;
+  margin-inline: auto !important;
+  box-sizing: border-box;
+}
+
+.page-main {
+  padding-inline: 0 !important;
+}
+
+@media (max-width: 600px) {
+  .site-container {
+    width: calc(100% - 40px) !important;
+  }
+}
+
+
+/* FOOTER 1400 FORCE */
+#global-footer-inner {
+  width: min(1400px, calc(100vw - 64px)) !important;
+  max-width: none !important;
+  margin-inline: auto !important;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  #global-footer-inner {
+    width: calc(100vw - 40px) !important;
+  }
+}
+
+#global-footer-inner {
+  width: min(1400px, calc(100vw - 64px)) !important;
+  margin-inline: auto !important;
+}
+
+
+/* ONE CONTAINER FOR HEADER AND FOOTER */
+.shared-container {
+  width: min(1400px, calc(100% - 64px)) !important;
+  max-width: 1400px !important;
+  margin-inline: auto !important;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .shared-container {
+    width: calc(100% - 40px) !important;
+  }
+}
+
+
+/* FIX SOLUTION SLIDER PANEL WIDTH */
+.shrimp-solution-single .solution-single__panel {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+  flex: none !important;
+}
+
+/* FOOTER FINAL */
+.global-footer__inner {
+  width: min(1400px, calc(100vw - 64px)) !important;
+  max-width: 1400px !important;
+  margin-inline: auto !important;
+  border-top: none !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 600px) {
+  .global-footer__inner {
+    width: calc(100vw - 40px) !important;
+  }
+}
+
+
+/* ONE WIDTH FOR ALL SITE PAGES */
+main {
+  width: min(
+    calc(1400px + var(--page-padding) + var(--page-padding)),
+    100%
+  ) !important;
+  box-sizing: border-box !important;
+}
+
+
+/* UNIFIED SITE CONTAINER */
+:root {
+  --site-container-width: 1400px;
+  --site-container-padding: 32px;
+  --page-padding: var(--site-container-padding);
+}
+
+main {
+  width: min(
+    calc(
+      var(--site-container-width) +
+      var(--site-container-padding) +
+      var(--site-container-padding)
+    ),
+    100%
+  ) !important;
+  padding-inline: var(--site-container-padding) !important;
+  box-sizing: border-box !important;
+}
+
+.shared-container,
+.site-container,
+.global-footer__inner,
+#global-footer-inner {
+  width: min(
+    var(--site-container-width),
+    calc(
+      100% -
+      var(--site-container-padding) -
+      var(--site-container-padding)
+    )
+  ) !important;
+  max-width: var(--site-container-width) !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+}
+
+main .shared-container,
+main .site-container,
+.case-page .shrimp-header,
+.case-page .shrimp-content {
+  width: 100% !important;
+  max-width: var(--site-container-width) !important;
+  margin-inline: auto !important;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --site-container-padding: 20px;
+  }
+}
+
+
+/* CASE HERO FITS FIRST SCREEN */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    height: calc(100svh - 94px);
+    min-height: 700px;
+    max-height: 900px;
+    padding-top: clamp(36px, 5vh, 56px);
+    padding-bottom: clamp(36px, 5vh, 56px);
+    box-sizing: border-box;
+
+    grid-template-rows: 1fr auto;
+    align-items: start;
+  }
+
+  .case-page .shrimp-cover-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .case-page .shrimp-meta {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2;
+    grid-row: 1 / 3;
+
+    width: auto;
+    height: min(100%, 700px);
+    max-width: 100%;
+    justify-self: end;
+    align-self: center;
+  }
+}
+
+/* ALIGN CASE META WITH IMAGE BOTTOM */
+@media (min-width: 901px) {
+  .case-page .case-cover-frame {
+    align-self: end !important;
+  }
+}
+
+/* META ALIGNED WITH IMAGE BOTTOM */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    grid-template-rows: auto auto !important;
+    align-content: start !important;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: start !important;
+  }
+
+  .case-page .shrimp-cover-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .case-page .shrimp-meta {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end !important;
+  }
+}
+
+/* CASE HERO: META AND IMAGE SHARE THE SAME BOTTOM */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    --case-hero-height: min(
+      700px,
+      calc(100svh - 94px - 72px)
+    );
+
+    height: calc(100svh - 94px);
+    min-height: 0 !important;
+    padding-top: 36px;
+    padding-bottom: 36px;
+
+    grid-template-rows: 1fr auto !important;
+    align-content: start !important;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2;
+    grid-row: 1 / 3;
+
+    width: auto !important;
+    height: var(--case-hero-height) !important;
+    align-self: start !important;
+  }
+
+  .case-page .shrimp-meta {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end !important;
+  }
+}
+
+/* CASE COVER WIDTH 400PX */
+@media (min-width: 901px) {
+  .case-page .case-cover-frame {
+    width: min(400px, 100%) !important;
+    height: auto !important;
+    aspect-ratio: 680 / 876 !important;
+  }
+}
+
+/* CASE HERO COMPACT FINAL */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    height: calc(100svh - 94px) !important;
+    min-height: 620px !important;
+    padding: 40px 0 !important;
+    box-sizing: border-box;
+
+    grid-template-columns: minmax(0, 1fr) 400px !important;
+    grid-template-rows: auto auto 1fr !important;
+    column-gap: clamp(60px, 8vw, 140px);
+    align-content: start !important;
+  }
+
+  .case-page .shrimp-cover-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .case-page .shrimp-meta {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start !important;
+    margin-top: 48px !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2;
+    grid-row: 1 / 4;
+
+    width: 400px !important;
+    height: auto !important;
+    aspect-ratio: 680 / 876 !important;
+
+    align-self: start !important;
+    justify-self: end !important;
+  }
+}
+
+/* CASE HERO COMPACT FINAL */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    height: calc(100svh - 94px) !important;
+    min-height: 620px !important;
+    padding: 40px 0 !important;
+    box-sizing: border-box;
+
+    grid-template-columns: minmax(0, 1fr) 400px !important;
+    grid-template-rows: auto auto 1fr !important;
+    column-gap: clamp(60px, 8vw, 140px);
+    align-content: start !important;
+  }
+
+  .case-page .shrimp-cover-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .case-page .shrimp-meta {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start !important;
+    margin-top: 48px !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2;
+    grid-row: 1 / 4;
+
+    width: 400px !important;
+    height: auto !important;
+    aspect-ratio: 680 / 876 !important;
+
+    align-self: start !important;
+    justify-self: end !important;
+  }
+}
+
+
+/* CASE HERO FINAL FIT */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    height: calc(100svh - 94px) !important;
+    min-height: 620px !important;
+    padding: 40px 0 !important;
+    box-sizing: border-box !important;
+
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-rows: auto !important;
+    column-gap: clamp(48px, 6vw, 100px) !important;
+
+    align-content: center !important;
+    align-items: stretch !important;
+  }
+
+  .case-page .shrimp-cover-copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: start !important;
+    padding-top: 0 !important;
+  }
+
+  .case-page .shrimp-meta {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: end !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+
+    width: auto !important;
+    height: min(760px, calc(100svh - 174px)) !important;
+    max-width: 610px !important;
+    aspect-ratio: 680 / 876 !important;
+
+    align-self: center !important;
+    justify-self: end !important;
+  }
+}
+
+/* CASE META ALIGNED WITH IMAGE BOTTOM */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    grid-template-rows: auto !important;
+    align-content: start !important;
+  }
+
+  .case-page .shrimp-cover-copy,
+  .case-page .shrimp-meta,
+  .case-page .case-cover-frame {
+    grid-row: 1 !important;
+  }
+
+  .case-page .shrimp-cover-copy,
+  .case-page .shrimp-meta {
+    grid-column: 1 !important;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2 !important;
+  }
+
+  .case-page .shrimp-meta {
+    align-self: end !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+  }
+}
+
+
+/* CASE META INSIDE COPY — ALIGNED WITH IMAGE BOTTOM */
+@media (min-width: 901px) {
+  .case-page .shrimp-cover {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-rows: auto !important;
+    align-items: stretch !important;
+  }
+
+  .case-page .shrimp-cover-copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: stretch !important;
+    padding-top: 0 !important;
+  }
+
+  .case-page .shrimp-meta {
+    width: 100% !important;
+    margin: auto 0 0 !important;
+    padding: 0 !important;
+    align-self: stretch !important;
+
+    background: none !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .case-page .case-cover-frame {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+}
+
+/* CASE HEADER NAV ALIGNS WITH COVER IMAGE */
+@media (min-width: 901px) {
+  .case-page .shrimp-header {
+    grid-template-columns:
+      minmax(0, 1fr)
+      min(590px, calc(77.63svh - 135px)) !important;
+
+    column-gap: clamp(48px, 6vw, 100px) !important;
+  }
+
+  .case-page .shrimp-header nav {
+    grid-column: 2 !important;
+    justify-self: start !important;
+  }
+}
+
+
+/* HEADER: MOVE ONLY ABOUT LINK */
+@media (min-width: 901px) {
+  .site-header,
+  .case-page .shrimp-header {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    column-gap: 16px !important;
+  }
+
+  .site-header nav,
+  .case-page .shrimp-header nav {
+    grid-column: 2 !important;
+    justify-self: stretch !important;
+    position: relative !important;
+    width: 100% !important;
+  }
+
+  .site-header nav a:last-child,
+  .case-page .shrimp-header nav a:last-child {
+    position: absolute !important;
+    left: max(
+      130px,
+      calc(100% - min(590px, calc(77.63svh - 135px)))
+    ) !important;
+  }
+}
+
+/* PROJECT COVERS — CLEAN COMMON RULE */
+.case-page .case-cover-frame {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.case-page .case-cover-frame > .shrimp-cover-visual,
+.case-page .case-cover-frame > .case-cover-visual {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  clip-path: none !important;
+  transform: none !important;
+}
+
+.case-page .case-cover-frame > .shrimp-cover-visual > img,
+.case-page .case-cover-frame > .case-cover-visual > img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  /*
+    Every case cover uses the same portrait frame. `cover` keeps that frame
+    visually full even when the source artwork has a wider transparent canvas
+    (as the MrShrimp artwork does), while the centered composition preserves
+    the product mockup.
+  */
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  translate: none !important;
+}
+
+/* MRSHRIMP — ONLY MOVEMENT, SAME IMAGE SIZE */
+@media (min-width: 901px) {
+  .shrimp-case .case-cover-frame > .shrimp-cover-visual > img {
+    transform: translate3d(
+      var(--cover-pointer-x, 0px),
+      calc(var(--cover-pointer-y, 0px) + var(--cover-scroll-y, 0px)),
+      0
+    ) rotate(var(--cover-scroll-rotate, 0deg)) !important;
+
+    transition: transform 0.12s linear !important;
+    will-change: transform;
   }
 }

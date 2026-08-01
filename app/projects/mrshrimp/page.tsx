@@ -1,7 +1,15 @@
 "use client";
 
-import Lenis from "lenis";
+import CaseProjectVisual from "../components/CaseProjectVisual";
+import CaseContextGrid from "../components/CaseContextGrid";
+
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import CaseSectionHeader from "../components/CaseSectionHeader";
+import CaseHero from "../components/CaseHero";
+import CasePageShell from "../components/CasePageShell";
+import CaseTaskVisual from "../components/CaseTaskVisual";
+import CaseSolutionSlider from "../components/CaseSolutionSlider";
 
 const processStages = [
   {
@@ -104,228 +112,104 @@ function SolutionVisual({
 }: {
   visual: (typeof solutionSlides)[number]["visual"];
 }) {
-  if (visual === "start") {
-    return (
-      <div className="solution-visual solution-visual--start" aria-hidden="true">
-        <img src="/assets/mrshrimp-solution/hand-phone.png" alt="" />
-      </div>
-    );
-  }
+  const numberByVisual: Record<
+    (typeof solutionSlides)[number]["visual"],
+    string
+  > = {
+    start: "01",
+    setup: "02",
+    workout: "03",
+    result: "04",
+    progress: "05",
+  };
 
-  if (visual === "setup") {
-    return (
-      <div className="solution-visual solution-visual--setup" aria-hidden="true">
-        <div className="solution-phone solution-phone--setup-a">
-          <img src="/assets/mrshrimp-solution/screen-setup-a.png" alt="" />
-        </div>
-        <div className="solution-phone solution-phone--setup-b">
-          <img src="/assets/mrshrimp-solution/screen-setup-b.png" alt="" />
-        </div>
-      </div>
-    );
-  }
-
-  if (visual === "workout") {
-    return (
-      <div className="solution-visual solution-visual--workout" aria-hidden="true">
-        <div className="solution-phone solution-phone--landscape">
-          <img src="/assets/mrshrimp-solution/screen-workout.png" alt="" />
-        </div>
-      </div>
-    );
-  }
-
-  if (visual === "result") {
-    return (
-      <div className="solution-visual solution-visual--result" aria-hidden="true">
-        <div className="solution-phone solution-phone--result-a">
-          <img src="/assets/mrshrimp-solution/screen-result-a.png" alt="" />
-        </div>
-        <div className="solution-phone solution-phone--result-b">
-          <img src="/assets/mrshrimp-solution/screen-result-b.png" alt="" />
-        </div>
-      </div>
-    );
-  }
+  const number = numberByVisual[visual];
 
   return (
-    <div className="solution-visual solution-visual--progress" aria-hidden="true">
-      <div className="solution-phone solution-phone--progress-a">
-        <img src="/assets/mrshrimp-solution/screen-progress-a.png" alt="" />
-      </div>
-      <div className="solution-phone solution-phone--progress-b">
-        <img src="/assets/mrshrimp-solution/screen-progress-b.png" alt="" />
-      </div>
-      <div className="solution-phone solution-phone--progress-c">
-        <img src="/assets/mrshrimp-solution/screen-progress-c.png" alt="" />
-      </div>
+    <div className="solution-visual solution-visual--asset" aria-hidden="true">
+      <motion.div
+        className="solution-visual__background-reveal"
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{
+          duration: 1,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        <img
+          className="solution-visual__background"
+          src={`/assets/mrshrimp/solution/mrshrimp-solution-${number}-bg.png`}
+          alt=""
+          draggable={false}
+        />
+      </motion.div>
+
+      <motion.div
+        className="solution-visual__picture-reveal"
+        initial={{ opacity: 0, y: 48 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.85,
+          delay: 0.08,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        <div className="solution-visual__picture-wrap">
+          <img
+            className="solution-visual__picture"
+            src={`/assets/mrshrimp/solution/mrshrimp-solution-${number}-pic.png`}
+            alt=""
+            draggable={false}
+          />
+        </div>
+      </motion.div>
     </div>
   );
 }
 
 function SolutionSlider() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [trackIndex, setTrackIndex] = useState(1);
-  const [isSnapping, setIsSnapping] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [slideWidth, setSlideWidth] = useState(0);
-  const [slideHeight, setSlideHeight] = useState(0);
-  const dragStart = useRef<number | null>(null);
-  const dragDistance = useRef(0);
-  const suppressClick = useRef(false);
-  const wheelLock = useRef(false);
-  const sliderRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-    const measure = () => {
-      const slide = slider.querySelector<HTMLElement>(".solution-slide");
-      // offsetWidth is the real layout width. getBoundingClientRect() includes
-      // the 0.94 scale used for side slides and caused cumulative centering drift.
-      if (slide) setSlideWidth(slide.offsetWidth);
-      const processSlider = document.querySelector<HTMLElement>(".shrimp-process-slider");
-      if (processSlider) setSlideHeight(processSlider.offsetHeight);
-    };
-    const resizeObserver = new ResizeObserver(measure);
-    resizeObserver.observe(slider);
-    const processSlider = document.querySelector<HTMLElement>(".shrimp-process-slider");
-    if (processSlider) resizeObserver.observe(processSlider);
-    measure();
-    return () => resizeObserver.disconnect();
-  }, []);
-
-  const move = (direction: number) => {
-    setActiveSlide((current) => (current + direction + solutionSlides.length) % solutionSlides.length);
-    setTrackIndex((current) => current + direction);
-  };
-
-  const finishDrag = () => {
-    if (dragStart.current === null) return;
-    if (Math.abs(dragDistance.current) > 70) {
-      move(dragDistance.current > 0 ? -1 : 1);
-      suppressClick.current = true;
-    }
-    dragStart.current = null;
-    dragDistance.current = 0;
-    setDragOffset(0);
-    window.setTimeout(() => {
-      suppressClick.current = false;
-    }, 0);
-  };
-
-  const loopSlides = [
-    solutionSlides[solutionSlides.length - 1],
-    ...solutionSlides,
-    solutionSlides[0],
-  ];
-
   return (
     <section className="shrimp-story-section shrimp-solution">
       <div className="shrimp-section-title reveal">
-        <p>Решение</p>
-        <h2 data-cursor="text">
+        <p className="type-section-label">
+          Решение
+        </p>
+
+        <h2 className="type-h2">
           Быстрая разминка
           <br />
           без лишних усилий
         </h2>
-        <div className="shrimp-solution-intro">
-          <p>
-            JTBD: Когда я несколько часов работаю за компьютером и перестаю замечать
-            напряжение в теле, я хочу получить короткое напоминание подвигаться, чтобы
-            не доводить себя до сильной усталости.
+
+        <div className="shrimp-solution-intro type-text">
+          <p className="type-caption">
+            JTBD: Когда я долго работаю за компьютером
+            и чувствую напряжение в теле, я хочу быстро
+            сделать короткую разминку без подготовки
+            и поиска упражнений, чтобы почувствовать
+            себя лучше и постепенно сделать движение
+            частью рабочего дня.
           </p>
-          <p>Начать → Размяться → Увидеть результат → Вернуться</p>
+
+          <p className="type-caption">
+            Начать → Размяться → Увидеть результат
+            → Вернуться
+          </p>
         </div>
       </div>
 
-      <div
-        className="shrimp-solution-slider reveal"
-        ref={sliderRef}
-        data-cursor="carousel-right"
-        role="region"
-        aria-roledescription="карусель"
-        aria-label="Ключевые решения приложения"
-        tabIndex={0}
-        onWheel={(event) => {
-          if (Math.abs(event.deltaX) < Math.abs(event.deltaY) || Math.abs(event.deltaX) < 12) return;
-          event.preventDefault();
-          if (wheelLock.current) return;
-          wheelLock.current = true;
-          move(event.deltaX > 0 ? 1 : -1);
-          window.setTimeout(() => {
-            wheelLock.current = false;
-          }, 520);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "ArrowLeft") move(-1);
-          if (event.key === "ArrowRight") move(1);
-        }}
-        onPointerDown={(event) => {
-          if ((event.target as HTMLElement).closest("button")) return;
-          dragStart.current = event.clientX;
-          event.currentTarget.setPointerCapture(event.pointerId);
-        }}
-        onPointerMove={(event) => {
-          const rect = event.currentTarget.getBoundingClientRect();
-          event.currentTarget.dataset.cursor =
-            event.clientX < rect.left + rect.width / 2 ? "carousel-left" : "carousel-right";
-          if (dragStart.current === null) return;
-          const distance = event.clientX - dragStart.current;
-          dragDistance.current = distance;
-          if (Math.abs(distance) > 8) suppressClick.current = true;
-          setDragOffset(distance);
-        }}
-        onPointerUp={finishDrag}
-        onPointerCancel={finishDrag}
-        onClick={(event) => {
-          if (suppressClick.current || (event.target as HTMLElement).closest("button")) return;
-          const rect = event.currentTarget.getBoundingClientRect();
-          move(event.clientX < rect.left + rect.width / 2 ? -1 : 1);
-        }}
-      >
-        <div
-          className={`shrimp-solution-track ${dragStart.current !== null ? "is-dragging" : ""} ${isSnapping ? "is-snapping" : ""}`}
-          style={{
-            transform: `translate3d(calc(50vw - ${slideWidth / 2}px - ${trackIndex * (slideWidth + 24)}px + ${dragOffset}px), 0, 0)`,
-            height: slideHeight ? `${slideHeight}px` : undefined,
-          }}
-          onTransitionEnd={(event) => {
-            if (event.propertyName !== "transform") return;
-            if (trackIndex === 0) {
-              setIsSnapping(true);
-              setTrackIndex(solutionSlides.length);
-              requestAnimationFrame(() => requestAnimationFrame(() => setIsSnapping(false)));
-            } else if (trackIndex === solutionSlides.length + 1) {
-              setIsSnapping(true);
-              setTrackIndex(1);
-              requestAnimationFrame(() => requestAnimationFrame(() => setIsSnapping(false)));
+      <CaseSolutionSlider
+        slides={solutionSlides}
+        ariaLabel="Ключевые решения приложения"
+        renderVisual={(visual) => (
+          <SolutionVisual
+            visual={
+              visual as
+                (typeof solutionSlides)[number]["visual"]
             }
-          }}
-        >
-          {loopSlides.map((slide, index) => {
-            const realIndex = (index - 1 + solutionSlides.length) % solutionSlides.length;
-            const isActive = index === trackIndex;
-            return (
-            <article
-              className={`solution-slide solution-slide--${slide.visual} ${isActive ? "is-active" : ""}`}
-              aria-label={`${realIndex + 1} из ${solutionSlides.length}: ${slide.title}`}
-              aria-hidden={!isActive}
-              key={`${slide.title}-${index}`}
-            >
-              <div className="solution-slide__copy">
-                <h3>{slide.title}</h3>
-                <p>{slide.description}</p>
-              </div>
-              <SolutionVisual visual={slide.visual} />
-            </article>
-          )})}
-        </div>
-
-        <p className="sr-only" aria-live="polite">
-          Слайд {activeSlide + 1} из {solutionSlides.length}
-        </p>
-      </div>
+          />
+        )}
+      />
     </section>
   );
 }
@@ -346,37 +230,68 @@ function ProcessVisual({ visual }: { visual: (typeof processStages)[number]["vis
   if (visual === "research") {
     return (
       <div className="process-visual process-visual--research" aria-hidden="true">
-        <img src="/assets/mrshrimp-process/research-back.png" alt="" />
-        <img src="/assets/mrshrimp-process/research-front.png" alt="" />
+        <img src="/assets/mrshrimp/process/research-back.png" alt="" />
+        <img src="/assets/mrshrimp/process/research-front.png" alt="" />
       </div>
     );
   }
 
   if (visual === "design") {
     return (
-      <div className="process-visual process-visual--design" aria-hidden="true">
-        <img src="/assets/mrshrimp-process/design.png" alt="" />
+      <div className="process-visual process-visual--design">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          aria-hidden="true"
+        >
+          <source
+            src="https://res.cloudinary.com/dk0kxiahf/video/upload/f_mp4,vc_h264,q_auto/v1775294269/manki_forearm_rotation_yixabe.mp4"
+            type="video/mp4"
+          />
+        </video>
       </div>
     );
   }
 
   if (visual === "testing") {
-    const insights = [
-      ["test-a.png", "Ждали аудио во время разминки", "Повысить приоритет аудио"],
-      ["test-b.png", "Формат казался слишком лёгким", "Яснее объяснять пользу"],
-      ["test-c.png", "Стилистику воспринимали по-разному", "Продолжить проверку"],
-    ];
     return (
-      <div className="process-visual process-visual--testing" aria-hidden="true">
-        {insights.map(([icon, title, caption]) => (
-          <div className="process-insight" key={title}>
-            <img src={`/assets/mrshrimp-process/${icon}`} alt="" />
-            <span>
-              <strong>{title}</strong>
-              <small>{caption}</small>
-            </span>
-          </div>
-        ))}
+      <div className="process-visual process-visual--testing">
+        <article className="process-insight process-insight--audio">
+          <i
+            className="process-insight-icon process-insight-icon--audio"
+            aria-hidden="true"
+          />
+          <span>
+            <strong>Ждали аудио во время разминки</strong>
+            <small>Повысить приоритет аудио</small>
+          </span>
+        </article>
+
+        <article className="process-insight process-insight--format">
+          <i
+            className="process-insight-icon process-insight-icon--format"
+            aria-hidden="true"
+          />
+          <span>
+            <strong>Формат казался слишком лёгким</strong>
+            <small>Яснее объяснять пользу</small>
+          </span>
+        </article>
+
+        <article className="process-insight process-insight--style">
+          <i
+            className="process-insight-icon process-insight-icon--style"
+            aria-hidden="true"
+          />
+          <span>
+            <strong>Стилистику воспринимали по-разному</strong>
+            <small>Продолжить проверку</small>
+          </span>
+        </article>
       </div>
     );
   }
@@ -384,18 +299,22 @@ function ProcessVisual({ visual }: { visual: (typeof processStages)[number]["vis
   if (visual === "development") {
     return (
       <div className="process-visual process-visual--development" aria-hidden="true">
-        <img src="/assets/mrshrimp-process/development-a.png" alt="" />
-        <img src="/assets/mrshrimp-process/development-b.png" alt="" />
+        <img src="/assets/mrshrimp/process/development-a.png" alt="" />
+        <img src="/assets/mrshrimp/process/development-b.png" alt="" />
       </div>
     );
   }
 
   if (visual === "release") {
     return (
-      <div className="process-visual process-visual--release" aria-hidden="true">
-        <img src="/assets/mrshrimp-process/release-device.png" alt="" />
-        <img src="/assets/mrshrimp-process/release-screen.png" alt="" />
-        <img src="/assets/mrshrimp-process/release-frame.png" alt="" />
+      <div className="process-visual process-visual--release">
+        <img
+          src="/assets/mrshrimp/process/release-device.png"
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+          decoding="sync"
+        />
       </div>
     );
   }
@@ -404,7 +323,7 @@ function ProcessVisual({ visual }: { visual: (typeof processStages)[number]["vis
     <div className="process-visual process-visual--analytics" aria-hidden="true">
       {["analytics-a.png", "analytics-b.png", "analytics-c.png", "analytics-d.png"].map(
         (image) => (
-          <img src={`/assets/mrshrimp-process/${image}`} alt="" key={image} />
+          <img src={`/assets/mrshrimp/process/${image}`} alt="" key={image} />
         ),
       )}
     </div>
@@ -412,27 +331,87 @@ function ProcessVisual({ visual }: { visual: (typeof processStages)[number]["vis
 }
 
 function ProcessSlider() {
+  const processSliderRef = useRef<HTMLDivElement>(null);
   const [activeStage, setActiveStage] = useState(0);
   const stage = processStages[activeStage];
 
-  const move = (direction: number) => {
+
+  // PROCESS SCROLL PARALLAX
+  useEffect(() => {
+    const processSlider = processSliderRef.current;
+
+    if (
+      !processSlider ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    let frame = 0;
+
+    const updateParallax = () => {
+      const rect = processSlider.getBoundingClientRect();
+      const sliderCenter = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
+
+      const offset = Math.max(
+        -22,
+        Math.min(
+          22,
+          (viewportCenter - sliderCenter) * 0.06,
+        ),
+      );
+
+      processSlider.style.setProperty(
+        "--process-scroll-y",
+        `${offset.toFixed(2)}px`,
+      );
+    };
+
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updateParallax);
+    };
+
+    updateParallax();
+
+    window.addEventListener("scroll", scheduleUpdate, {
+      passive: true,
+    });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
+  }, []);
+
+  const move = (moveDirection: number) => {
     setActiveStage(
-      (current) => (current + direction + processStages.length) % processStages.length,
+      (current) =>
+        (current + moveDirection + processStages.length) %
+        processStages.length,
     );
+  };
+
+  const selectStage = (index: number) => {
+    if (index === activeStage) return;
+    setActiveStage(index);
   };
 
   return (
     <section className="shrimp-story-section shrimp-process">
       <div className="shrimp-section-title reveal">
-        <p>Процесс</p>
-        <h2 data-cursor="text">
-          Исследования, дизайн, разработка
-          <br />и аналитика — полный цикл продукта
+        <p className="type-section-label">Процесс</p>
+        <h2 className="type-h2">
+          Исследования, дизайн, разработка и аналитика: полный цикл продукта
         </h2>
       </div>
 
       <div
         className="shrimp-process-slider reveal"
+        ref={processSliderRef}
         data-cursor="carousel-right"
         role="region"
         aria-roledescription="карусель"
@@ -456,134 +435,205 @@ function ProcessSlider() {
       >
         <div
           className={`shrimp-process-scene shrimp-process-scene--${stage.visual}`}
-          key={stage.label}
         >
-          <ProcessVisual visual={stage.visual} />
-          <div className="shrimp-process-result">
-            <h3>{stage.title}</h3>
-            <p>{stage.description}</p>
+          <div
+            className="shrimp-process-visual-stack"
+            aria-hidden="true"
+          >
+            {processStages.map((item, index) => {
+              const isActive = index === activeStage;
+
+              return (
+                <motion.div
+                  className="shrimp-process-visual-layer"
+                  key={item.visual}
+                  initial={false}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 10,
+                    scale: isActive ? 1 : 0.992,
+                  }}
+                  transition={{
+                    duration: isActive ? 0.8 : 0.22,
+                    ease: [0.22, 1, 0.36, 1] as const,
+                  }}
+                  style={{
+                    zIndex: isActive ? 2 : 1,
+                  }}
+                >
+                  <ProcessVisual visual={item.visual} />
+                </motion.div>
+              );
+            })}
           </div>
+
+          <motion.div
+            className="shrimp-process-result"
+            key={stage.label}
+            initial={{
+              opacity: 0,
+              y: 10,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1] as const,
+            }}
+            style={{
+              willChange: "opacity, transform",
+            }}
+          >
+            <h3 className="type-text-l">{stage.title}</h3>
+            <p className="type-caption-small">{stage.description}</p>
+          </motion.div>
         </div>
 
-        <div className="shrimp-process-tabs" role="tablist" aria-label="Этапы процесса">
-          {processStages.map((item, index) => (
-            <button
-              className={index === activeStage ? "is-active" : ""}
-              type="button"
-              role="tab"
-              aria-selected={index === activeStage}
-              key={item.label}
-              onClick={() => setActiveStage(index)}
-              data-cursor="link"
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span> {item.label}
-              <span className="shrimp-process-tab-copy">
-                <span className="shrimp-process-tab-copy-inner">
-                  <span className="shrimp-process-tab-description">{item.card}</span>
-                  <span className="shrimp-process-tags">
-                    {item.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
+        <motion.div
+          className="shrimp-process-tabs"
+          role="tablist"
+          aria-label="Этапы процесса"
+          layout
+        >
+          {processStages.map((item, index) => {
+            const isActive = index === activeStage;
+
+            return (
+              <motion.button
+                layout
+                style={{ borderRadius: 24 }}
+                className={isActive ? "is-active" : ""}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                key={item.label}
+                onClick={() => selectStage(index)}
+                data-cursor="link"
+                transition={{
+                  layout: {
+                    duration: 0.48,
+                    ease: [0.22, 1, 0.36, 1] as const,
+                  },
+                }}
+              >
+                <motion.span
+                  className="shrimp-process-tab-head"
+                  layout="position"
+                  transition={{
+                    layout: {
+                      duration: 0.48,
+                      ease: [0.22, 1, 0.36, 1] as const,
+                    },
+                  }}
+                >
+                  <span className="shrimp-process-tab-index">
+                    {String(index + 1).padStart(2, "0")}
                   </span>
-                </span>
-              </span>
-            </button>
-          ))}
-        </div>
+
+                  <span className="shrimp-process-tab-label">
+                    {item.label}
+                  </span>
+                </motion.span>
+
+                <AnimatePresence initial={false} mode="popLayout">
+                  {isActive && (
+                    <motion.span
+                      className="shrimp-process-tab-copy"
+                      key={`copy-${item.label}`}
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: 1,
+                        transition: {
+                          duration: 0.3,
+                          delay: 0.2,
+                          ease: [0.22, 1, 0.36, 1] as const,
+                        },
+                      }}
+                      exit={{
+                        opacity: 0,
+                        transition: {
+                          duration: 0.12,
+                          ease: "easeOut",
+                        },
+                      }}
+                    >
+                      <span className="shrimp-process-tab-copy-inner">
+                        <span className="shrimp-process-tab-description type-caption-small">
+                          {item.card}
+                        </span>
+
+                        <span className="shrimp-process-tags">
+                          {item.tags.map((tag) => (
+                            <span key={tag} className="type-caption-regular text-secondary">{tag}</span>
+                          ))}
+                        </span>
+                      </span>
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            );
+          })}
+        </motion.div>
 
       </div>
     </section>
   );
 }
 
-function CaseCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
+function ResultSection() {
+  const resultStageRef = useRef<HTMLDivElement>(null);
 
+  // RESULT PHONE SCROLL PARALLAX
   useEffect(() => {
-    const cursor = cursorRef.current;
-    const enabled =
-      window.matchMedia("(pointer: fine)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const stage = resultStageRef.current;
 
-    if (!cursor || !enabled) return;
+    if (
+      !stage ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
 
-    let targetX = -100;
-    let targetY = -100;
-    let currentX = -100;
-    let currentY = -100;
     let frame = 0;
-    let mode = "";
 
-    document.documentElement.classList.add("custom-cursor-enabled");
+    const updateParallax = () => {
+      const rect = stage.getBoundingClientRect();
+      const stageCenter = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
 
-    const updateMode = () => {
-      const interactive = document
-        .elementFromPoint(targetX, targetY)
-        ?.closest<HTMLElement>("[data-cursor]");
-      let nextMode = interactive?.dataset.cursor ?? "";
+      const offset = Math.max(
+        -34,
+        Math.min(34, (viewportCenter - stageCenter) * 0.07),
+      );
 
-      if (interactive && nextMode.startsWith("carousel")) {
-        const rect = interactive.getBoundingClientRect();
-        nextMode =
-          targetX < rect.left + rect.width / 2
-            ? "carousel-left"
-            : "carousel-right";
-      }
-
-      if (nextMode !== mode) {
-        mode = nextMode;
-        cursor.dataset.mode = nextMode;
-      }
+      stage.style.setProperty(
+        "--result-phone-y",
+        `${offset.toFixed(2)}px`,
+      );
     };
 
-    const move = (event: PointerEvent) => {
-      targetX = event.clientX;
-      targetY = event.clientY;
-      cursor.classList.add("is-visible");
-      updateMode();
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updateParallax);
     };
 
-    const render = () => {
-      currentX += (targetX - currentX) * 0.17;
-      currentY += (targetY - currentY) * 0.17;
-      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      frame = requestAnimationFrame(render);
-    };
+    updateParallax();
 
-    const leave = () => cursor.classList.remove("is-visible");
-    const press = () => cursor.classList.add("is-pressed");
-    const release = () => cursor.classList.remove("is-pressed");
-
-    window.addEventListener("pointermove", move, { passive: true });
-    window.addEventListener("scroll", updateMode, { passive: true });
-    window.addEventListener("pointerdown", press, { passive: true });
-    window.addEventListener("pointerup", release, { passive: true });
-    document.documentElement.addEventListener("mouseleave", leave);
-    frame = requestAnimationFrame(render);
+    window.addEventListener("scroll", scheduleUpdate, {
+      passive: true,
+    });
+    window.addEventListener("resize", scheduleUpdate);
 
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("scroll", updateMode);
-      window.removeEventListener("pointerdown", press);
-      window.removeEventListener("pointerup", release);
-      document.documentElement.removeEventListener("mouseleave", leave);
-      document.documentElement.classList.remove("custom-cursor-enabled");
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
     };
   }, []);
 
-  return (
-    <div className="custom-cursor" ref={cursorRef} aria-hidden="true">
-      <ArrowIcon direction="left" />
-      <ArrowIcon direction="right" />
-      <span className="case-next-cursor">
-        <img src="/assets/punto-screen.png" alt="" />
-      </span>
-    </div>
-  );
-}
-
-function ResultSection() {
   const metrics = [
     ["31%", "33 из 106", "запустили разминку"],
     ["26%", "28 из 106", "вернулись в другой день"],
@@ -593,31 +643,20 @@ function ResultSection() {
   return (
     <section className="shrimp-story-section shrimp-result">
       <div className="shrimp-section-title reveal">
-        <p>Результат</p>
-        <h2 data-cursor="text">
-          Большинство запущенных разминок
-          <br />
-          доходят до завершения
+        <p className="type-caption type-section-label">Результат</p>
+        <h2 className="type-h2">
+          Пользователи завершают большинство начатых разминок
         </h2>
-        <p className="shrimp-result-subtitle">
-          Зона роста — активация и регулярный возврат
-        </p>
       </div>
 
-      <div className="shrimp-result-stage reveal">
+      <div className="shrimp-result-stage reveal" ref={resultStageRef}>
         <div className="shrimp-result-primary">
-          <strong>73%</strong>
-          <span>201 запуск → 146 завершений</span>
+          <strong className="type-title">73%</strong>
+          <span className="type-caption-regular text-secondary">201 запуск → 146 завершений</span>
         </div>
 
         <div className="shrimp-result-phone" aria-hidden="true">
-          <div className="shrimp-result-screen">
-            <img src="/assets/mrshrimp-result/completion.png" alt="" />
-            <div className="shrimp-result-complete">
-              <strong>Молодец!<br />Разминка закончена</strong>
-              <span>Готово</span>
-            </div>
-          </div>
+          <img src="/assets/mrshrimp/result/results.png" alt="Результат MrShrimp" className="shrimp-result-full" />
         </div>
 
         <div className="shrimp-result-details">
@@ -625,174 +664,81 @@ function ResultSection() {
             {metrics.map(([value, sample, label]) => (
               <div className="shrimp-result-metric" key={value}>
                 <div>
-                  <strong>{value}</strong>
-                  <span>{sample}</span>
+                  <strong className="type-h2">{value}</strong>
+                  <span className="type-caption-regular">{sample}</span>
                 </div>
-                <p>{label}</p>
+                <p className="type-caption-regular">{label}</p>
               </div>
             ))}
           </div>
-          <p className="shrimp-result-note">
-            D1 — 11% · DAU/MAU: 8% → 9%
-            <br />
-            1 мая — 8 июля · 106 реальных пользователей
-          </p>
         </div>
       </div>
     </section>
   );
 }
 
-function NextProject() {
-  return (
-    <a
-      className="shrimp-next-project"
-      href="/#projects"
-      aria-label="Перейти к следующему проекту Punto Pago"
-      data-cursor="next-project"
-    >
-      <span className="shrimp-next-track" aria-hidden="true">
-        <span>Следующий проект →</span>
-        <span>Следующий проект →</span>
-        <span>Следующий проект →</span>
-        <span>Следующий проект →</span>
-      </span>
-      <span className="sr-only">Следующий проект — Punto Pago</span>
-    </a>
-  );
-}
-
-function CaseExperience() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const lenis = new Lenis({
-      autoRaf: true,
-      lerp: 0.075,
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-      anchors: true,
-    });
-
-    return () => lenis.destroy();
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("is-visible");
-        }),
-      { threshold: 0.1 },
-    );
-
-    document
-      .querySelectorAll(".shrimp-case .reveal")
-      .forEach((element) => observer.observe(element));
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <>
-      <CaseCursor />
-      <header className="shrimp-header">
-        <a className="shrimp-brand" href="/" data-cursor="link">
-          Galina Chumak
-        </a>
-        <nav aria-label="Навигация по портфолио">
-          <a href="/#projects" data-cursor="link">
-            Проекты
-          </a>
-          <a href="/#about" data-cursor="link">
-            Обо мне
-          </a>
-        </nav>
-        <button
-          className="theme-switch"
-          type="button"
-          aria-label={theme === "dark" ? "Включить светлую тему" : "Включить тёмную тему"}
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          data-cursor="link"
-        >
-          <span className={`theme-option ${theme === "light" ? "active" : ""}`}>
-            <span className="theme-icon theme-icon--sun" aria-hidden="true" />
-          </span>
-          <span className={`theme-option ${theme === "dark" ? "active" : ""}`}>
-            <span className="theme-icon theme-icon--moon" aria-hidden="true" />
-          </span>
-        </button>
-      </header>
-    </>
-  );
-}
-
 export default function MrShrimpCase() {
   return (
-    <main className="shrimp-case">
-      <CaseExperience />
-
-      <section className="shrimp-cover">
-        <div className="shrimp-cover-copy">
-          <h1 className="reveal reveal-heading" data-cursor="text">
-            <span>MrShrimp</span>
-          </h1>
-          <p className="shrimp-summary reveal">
-            Приложение с короткими разминками для людей, которые много работают за
-            компьютером. Полный цикл создания продукта: от исследования до релиза и
-            аналитики.
-          </p>
-        </div>
-
-        <div className="shrimp-cover-visual reveal" aria-hidden="true">
-          <img src="/assets/mrshrimp-screen.png" alt="" />
-        </div>
-
-        <p className="shrimp-meta reveal">
-          <span>2025–2026 · Wellness · HealthTech</span>
-          <span>Founder &amp; Product Designer</span>
-          <span>iOS · Android · Web · 0→1</span>
-        </p>
-      </section>
+    <CasePageShell
+      className="shrimp-case"
+      nextProject={{
+        href: "/projects/punto",
+        title: "Punto Pago",
+      }}
+    >
+        <CaseHero
+          title="MrShrimp"
+          summary={
+            <>
+              Приложение с короткими разминками для людей, которые много работают за
+              компьютером. Полный цикл создания продукта: от исследования до релиза и
+              аналитики.
+            </>
+          }
+          visual={
+            <CaseProjectVisual
+              variant="mrshrimp"
+              image="/assets/mrshrimp/home/screen.webp"
+            />
+          }
+          meta={[
+            "2025–2026 · Wellness · HealthTech",
+            "Founder & Product Designer",
+            "iOS · Android · 0→1",
+          ]}
+        />
 
       <section className="shrimp-story-section shrimp-context">
-        <div className="shrimp-section-title reveal">
-          <p>Контекст</p>
-          <h2 data-cursor="text">
-            Самостоятельно создала продукт
-            <br />
-            от гипотезы до релиза
-          </h2>
-        </div>
-        <figure className="shrimp-media reveal">
-          <img
-            src="/assets/mrshrimp-context-grid.png"
-            alt="Экраны приложения MrShrimp, интеграция с iPhone и персонаж разминки"
-          />
-        </figure>
+        <CaseSectionHeader label="Контекст">
+          Самостоятельно создала продукт от гипотезы до релиза
+        </CaseSectionHeader>
+        <CaseContextGrid
+          items={[
+            {
+              src: "/assets/mrshrimp/context/01.png",
+              alt: "Приложение MrShrimp на телефоне",
+            },
+            {
+              src: "/assets/mrshrimp/context/02.png",
+              alt: "Телефон с приложением MrShrimp",
+            },
+            {
+              type: "video",
+              src: "https://res.cloudinary.com/dk0kxiahf/video/upload/v1769074258/manki_shoulder_lift_cyjlrl.mp4",
+              alt: "Персонаж выполняет упражнение",
+            },
+          ]}
+        />
       </section>
 
       <section className="shrimp-story-section shrimp-task">
-        <div className="shrimp-section-title reveal">
-          <p>Задача</p>
-          <h2 data-cursor="text">
-            Запустить MVP и проверить, впишутся
-            <br />
-            ли короткие разминки в рабочий день
-          </h2>
-        </div>
-        <figure className="shrimp-media reveal">
-          <img
-            src="/assets/mrshrimp-mvp-collage.png"
-            alt="Ключевые экраны MVP приложения MrShrimp"
-          />
-        </figure>
+        <CaseSectionHeader label="Задача">
+          Запустить MVP и проверить, впишутся ли короткие разминки в рабочий день
+        </CaseSectionHeader>
+        <CaseTaskVisual
+          src="/assets/mrshrimp/task/visual.png"
+          alt="Ключевые экраны MVP приложения MrShrimp"
+        />
       </section>
 
       <ProcessSlider />
@@ -800,15 +746,6 @@ export default function MrShrimpCase() {
       <SolutionSlider />
 
       <ResultSection />
-
-      <NextProject />
-
-      <footer className="shrimp-footer">
-        <p>2026</p>
-        <a href="/#projects" data-cursor="link">
-          Все проекты ↗
-        </a>
-      </footer>
-    </main>
+    </CasePageShell>
   );
 }
