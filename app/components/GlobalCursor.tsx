@@ -11,10 +11,7 @@ function CursorArrow({
     <span
       className={`global-cursor-arrow global-cursor-arrow--${direction}`}
     >
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
           d={
             direction === "left"
@@ -30,6 +27,7 @@ function CursorArrow({
 export default function GlobalCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
+  const previewShellRef = useRef<HTMLSpanElement>(null);
   const previewRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
@@ -43,13 +41,10 @@ export default function GlobalCursor() {
 
     if (!cursor || !enabled) return;
 
-    let targetX = -100;
-    let targetY = -100;
-    let currentX = -100;
-    let currentY = -100;
-    let frame = 0;
-    let currentMode = "";
-    let resetTimer = 0;
+    let pointerX = -100;
+    let pointerY = -100;
+    let currentMode = "__initial__";
+    let resetTimer: number | undefined;
 
     document.documentElement.classList.add(
       "custom-cursor-enabled",
@@ -58,14 +53,24 @@ export default function GlobalCursor() {
     const setMode = (mode: string) => {
       if (mode === currentMode) return;
 
+      const label = labelRef.current;
+      const showLabel =
+        mode === "project" || mode === "video";
+
+      if (label && !showLabel) {
+        label.style.display = "none";
+      }
+
       currentMode = mode;
       cursor.dataset.mode = mode;
 
-      if (labelRef.current) {
-        labelRef.current.textContent =
+      if (label && showLabel) {
+        label.textContent =
           mode === "video"
             ? "Посмотреть"
             : "Подробнее";
+
+        label.style.display = "";
       }
     };
 
@@ -81,21 +86,53 @@ export default function GlobalCursor() {
 
       if (!match || !previewRef.current) return;
 
+      const project = match[1];
+
+      const accentByProject: Record<string, string> = {
+        mrshrimp: "#ff8d28",
+        punto: "#2e2da6",
+        smarthome: "#da2025",
+      };
+
       previewRef.current.src =
-        `/assets/${match[1]}/home/screen.webp`;
+        `/assets/${project}/home/screen.webp`;
+
+      previewShellRef.current?.style.setProperty(
+        "--case-next-accent",
+        accentByProject[project] ?? "#2e2da6",
+      );
     };
 
-    const resolveMode = () => {
-      const target = document
-        .elementFromPoint(targetX, targetY)
-        ?.closest<HTMLElement>("[data-cursor]");
-
+    const resolveMode = (
+      target: HTMLElement | null,
+    ) => {
       let mode = target?.dataset.cursor ?? "";
 
       if (target && mode.startsWith("carousel")) {
         const rect = target.getBoundingClientRect();
+        const hoveredElement = document.elementFromPoint(
+          pointerX,
+          pointerY,
+        ) as HTMLElement | null;
+        const isProcessNavigation = Boolean(
+          hoveredElement?.closest(".shrimp-process-tabs"),
+        );
+        const processResult = target.querySelector<HTMLElement>(
+          ".shrimp-process-result",
+        );
+        const processResultRect =
+          processResult?.getBoundingClientRect();
+        const isProcessTextColumn = Boolean(
+          processResultRect &&
+            pointerX >= processResultRect.left - 24 &&
+            pointerX <= processResultRect.right + 24 &&
+            pointerY >= processResultRect.top - 24 &&
+            pointerY <= processResultRect.bottom + 24,
+        );
 
-        if (
+        if (isProcessNavigation || isProcessTextColumn) {
+          mode = "";
+        } else if (
           target.classList.contains(
             "shrimp-solution-viewport",
           )
@@ -119,13 +156,13 @@ export default function GlobalCursor() {
             mode = "carousel-left";
           } else {
             mode =
-              targetX < rect.left + rect.width / 2
+              pointerX < rect.left + rect.width / 2
                 ? "carousel-left"
                 : "carousel-right";
           }
         } else {
           mode =
-            targetX < rect.left + rect.width / 2
+            pointerX < rect.left + rect.width / 2
               ? "carousel-left"
               : "carousel-right";
         }
@@ -142,38 +179,55 @@ export default function GlobalCursor() {
         mode = "case-next";
       }
 
-      window.clearTimeout(resetTimer);
+      if (resetTimer !== undefined) {
+        window.clearTimeout(resetTimer);
+        resetTimer = undefined;
+      }
 
-      if (
-        currentMode === "project" &&
-        mode === ""
-      ) {
+      if (!mode && currentMode === "project") {
         resetTimer = window.setTimeout(() => {
-          setMode(mode);
-        }, 90);
-
+          resetTimer = undefined;
+          setMode("");
+        }, 140);
         return;
       }
 
       setMode(mode);
     };
 
-    const move = (event: PointerEvent) => {
-      targetX = event.clientX;
-      targetY = event.clientY;
+    const updateCursorTarget = () => {
+      if (document.querySelector(".process-hypotheses-modal")) {
+        const closeTarget = document
+          .elementsFromPoint(pointerX, pointerY)
+          .find((element) => element.closest("[data-cursor='close']"));
+        setMode(closeTarget ? "close" : "");
+        return;
+      }
 
-      cursor.classList.add("is-visible");
-      resolveMode();
+      const directTarget =
+        document
+          .elementsFromPoint(pointerX, pointerY)
+          .map((element) =>
+            element.closest<HTMLElement>("[data-cursor]"),
+          )
+          .find(
+            (element) =>
+              element !== null &&
+              element !== cursor &&
+              !cursor.contains(element),
+          ) ?? null;
+
+      resolveMode(directTarget);
     };
 
-    const render = () => {
-      currentX += (targetX - currentX) * 0.17;
-      currentY += (targetY - currentY) * 0.17;
+    const move = (event: PointerEvent) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
 
+      cursor.classList.add("is-visible");
       cursor.style.transform =
-        `translate3d(${currentX}px, ${currentY}px, 0)`;
-
-      frame = requestAnimationFrame(render);
+        `translate3d(${pointerX}px, ${pointerY}px, 0)`;
+      updateCursorTarget();
     };
 
     const leave = () => {
@@ -196,7 +250,7 @@ export default function GlobalCursor() {
 
     window.addEventListener(
       "scroll",
-      resolveMode,
+      updateCursorTarget,
       { passive: true },
     );
 
@@ -217,11 +271,10 @@ export default function GlobalCursor() {
       leave,
     );
 
-    frame = requestAnimationFrame(render);
-
     return () => {
-      cancelAnimationFrame(frame);
-      window.clearTimeout(resetTimer);
+      if (resetTimer !== undefined) {
+        window.clearTimeout(resetTimer);
+      }
 
       window.removeEventListener(
         "pointermove",
@@ -230,7 +283,7 @@ export default function GlobalCursor() {
 
       window.removeEventListener(
         "scroll",
-        resolveMode,
+        updateCursorTarget,
       );
 
       window.removeEventListener(
@@ -259,6 +312,7 @@ export default function GlobalCursor() {
       className="custom-cursor global-cursor"
       ref={cursorRef}
       aria-hidden="true"
+      style={{ pointerEvents: "none" }}
     >
       <span
         ref={labelRef}
@@ -271,7 +325,10 @@ export default function GlobalCursor() {
       <CursorArrow direction="left" />
       <CursorArrow direction="right" />
 
-      <span className="case-next-cursor">
+      <span
+        className="case-next-cursor"
+        ref={previewShellRef}
+      >
         <img
           ref={previewRef}
           src="/assets/punto/home/screen.webp"

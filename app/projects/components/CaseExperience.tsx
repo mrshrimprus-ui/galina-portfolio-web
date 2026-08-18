@@ -1,30 +1,28 @@
 "use client";
 
-import Lenis from "lenis";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useLayoutEffect } from "react";
 import { useNavMagnet } from "../../hooks/useNavMagnet";
+import { usePersistentTheme } from "../../hooks/usePersistentTheme";
 
 export default function CaseExperience() {
+  const pathname = usePathname();
   useNavMagnet();
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const { theme, setTheme } = usePersistentTheme();
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
+  useLayoutEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
-    const lenis = new Lenis({
-      autoRaf: true,
-      lerp: 0.075,
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-      anchors: true,
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     });
 
-    return () => lenis.destroy();
-  }, []);
+    return () => window.cancelAnimationFrame(frame);
+  }, [pathname]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,11 +35,151 @@ export default function CaseExperience() {
       { threshold: 0.1 },
     );
 
-    document
-      .querySelectorAll(".case-page .reveal")
-      .forEach((element) => observer.observe(element));
+    const observeReveals = () => {
+      document
+        .querySelectorAll(".case-page .reveal:not(.is-visible)")
+        .forEach((element) => observer.observe(element));
+    };
 
-    return () => observer.disconnect();
+    observeReveals();
+
+    const page = document.querySelector(".case-page");
+    const mutationObserver = new MutationObserver(observeReveals);
+
+    if (page) {
+      mutationObserver.observe(page, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    return () => {
+      mutationObserver.disconnect();
+      observer.disconnect();
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    const navigation = document.querySelector<HTMLElement>(
+      ".case-bottom-nav",
+    );
+
+    if (!navigation) return;
+    navigation.classList.remove("is-visible");
+
+    const updateNavigation = () => {
+      navigation.classList.toggle(
+        "is-visible",
+        window.scrollY >= 80,
+      );
+    };
+
+    updateNavigation();
+    window.addEventListener("scroll", updateNavigation, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", updateNavigation);
+    };
+  }, []);
+
+  useEffect(() => {
+    const nextProject = document.querySelector<HTMLElement>(
+      ".case-bottom-nav-next",
+    );
+
+    if (!nextProject) return;
+
+    const updateFillOrigin = (event: PointerEvent) => {
+      const rect = nextProject.getBoundingClientRect();
+
+      nextProject.style.setProperty(
+        "--liquid-x",
+        `${event.clientX - rect.left}px`,
+      );
+      nextProject.style.setProperty(
+        "--liquid-y",
+        `${event.clientY - rect.top}px`,
+      );
+    };
+
+    nextProject.addEventListener("pointermove", updateFillOrigin);
+
+    return () => {
+      nextProject.removeEventListener(
+        "pointermove",
+        updateFillOrigin,
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    const resultVisuals = [
+      {
+        element: document.querySelector<HTMLElement>(
+          ".mrshrimp-case .shrimp-result-stage",
+        ),
+        property: "--result-phone-y",
+      },
+      {
+        element: document.querySelector<HTMLElement>(
+          ".punto-case .punto-result__visual",
+        ),
+        property: "--punto-result-scroll-y",
+      },
+      {
+        element: document.querySelector<HTMLElement>(
+          ".smarthome-case .smarthome-result__visual",
+        ),
+        property: "--smarthome-result-scroll-y",
+      },
+    ].filter(
+      (item): item is { element: HTMLElement; property: string } =>
+        item.element !== null,
+    );
+
+    if (resultVisuals.length === 0) return;
+
+    let frame = 0;
+    let current = 0;
+
+    const render = () => {
+      if (reducedMotion.matches) {
+        resultVisuals.forEach(({ element, property }) => {
+          element.style.setProperty(property, "0px");
+        });
+      } else {
+        const reference = resultVisuals[0].element.getBoundingClientRect();
+        const viewportCenter = window.innerHeight / 2;
+        const visualCenter = reference.top + reference.height / 2;
+        const target = Math.max(
+          -52,
+          Math.min(52, (viewportCenter - visualCenter) * 0.105),
+        );
+
+        current += (target - current) * 0.085;
+
+        resultVisuals.forEach(({ element, property }) => {
+          element.style.setProperty(property, `${current.toFixed(2)}px`);
+        });
+      }
+
+      frame = window.requestAnimationFrame(render);
+    };
+
+    frame = window.requestAnimationFrame(render);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      resultVisuals.forEach(({ element, property }) => {
+        element.style.removeProperty(property);
+      });
+    };
   }, []);
 
   return (
@@ -51,7 +189,7 @@ export default function CaseExperience() {
       </a>
 
       <nav aria-label="Навигация по портфолио">
-        <a href="/#projects" data-cursor="nav">Проекты</a>
+        <a href="/#projects" aria-current="page" data-cursor="nav">Проекты</a>
         <a href="/about" data-cursor="nav">Обо мне</a>
       </nav>
 

@@ -13,11 +13,12 @@ export function useNavMagnet() {
     const elements = Array.from(
       document.querySelectorAll<HTMLElement>(
         [
-          'a[data-cursor="nav"]',
+          '[data-cursor="nav"]',
           ".theme-switch",
           ".site-header .brand",
           ".case-header .shrimp-brand",
           ".shrimp-header .shrimp-brand",
+          ".case-store-link",
         ].join(", "),
       ),
     );

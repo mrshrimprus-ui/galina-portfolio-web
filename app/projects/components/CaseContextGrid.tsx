@@ -25,54 +25,53 @@ export default function CaseContextGrid({
 
   useEffect(() => {
     const grid = gridRef.current;
-
-    if (
-      !grid ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
+    if (!grid || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const cards = Array.from(
       grid.querySelectorAll<HTMLElement>(".shrimp-context-card"),
     );
-
     let frame = 0;
+    const currentOffsets = cards.map(() => 0);
+    const targetOffsets = cards.map(() => 0);
 
-    const updateParallax = () => {
-      const viewportCenter = window.innerHeight / 2;
-
-      cards.forEach((card) => {
+    const updateTargets = () => {
+      cards.forEach((card, index) => {
         const rect = card.getBoundingClientRect();
-        const cardCenter = rect.top + rect.height / 2;
-
-        const offset = Math.max(
-          -26,
-          Math.min(
-            26,
-            (viewportCenter - cardCenter) * 0.075,
-          ),
-        );
-
-        card.style.setProperty(
-          "--context-scroll-y",
-          `${offset}px`,
+        const depth = index === 0 ? 0.13 : index === 1 ? 0.105 : 0.14;
+        const limit = index === 1 ? 34 : 56;
+        targetOffsets[index] = Math.max(
+          -limit,
+          Math.min(limit, (window.innerHeight / 2 - (rect.top + rect.height / 2)) * depth),
         );
       });
     };
 
-    const scheduleUpdate = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(updateParallax);
+    const renderParallax = () => {
+      let moving = false;
+      cards.forEach((card, index) => {
+        const difference = targetOffsets[index] - currentOffsets[index];
+        currentOffsets[index] += difference * 0.12;
+        card.style.setProperty(
+          "--context-scroll-y",
+          `${currentOffsets[index].toFixed(2)}px`,
+        );
+        if (Math.abs(difference) > 0.05) moving = true;
+      });
+      frame = moving ? requestAnimationFrame(renderParallax) : 0;
     };
 
-    updateParallax();
+    const scheduleUpdate = () => {
+      updateTargets();
+      if (!frame) frame = requestAnimationFrame(renderParallax);
+    };
 
-    window.addEventListener("scroll", scheduleUpdate, {
-      passive: true,
+    updateTargets();
+    targetOffsets.forEach((offset, index) => {
+      currentOffsets[index] = offset;
+      cards[index].style.setProperty("--context-scroll-y", `${offset.toFixed(2)}px`);
     });
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
-
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", scheduleUpdate);
@@ -81,10 +80,7 @@ export default function CaseContextGrid({
   }, []);
 
   return (
-    <div
-      ref={gridRef}
-      className="shrimp-context-grid reveal"
-    >
+    <div ref={gridRef} className="shrimp-context-grid reveal">
       {items.map((item, index) => (
         <div
           key={item.src}
@@ -105,12 +101,17 @@ export default function CaseContextGrid({
               muted
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
               disablePictureInPicture
               aria-label={item.alt}
             />
           ) : (
-            <img src={item.src} alt={item.alt} />
+            <img
+              src={item.src}
+              alt={item.alt}
+              loading="lazy"
+              decoding="async"
+            />
           )}
         </div>
       ))}

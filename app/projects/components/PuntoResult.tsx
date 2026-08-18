@@ -1,89 +1,14 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-
 export default function PuntoResult() {
-  const visualRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const visual = visualRef.current;
-
-    if (
-      !visual ||
-      window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches
-    ) {
-      return;
-    }
-
-    let frame = 0;
-
-    const updateParallax = () => {
-      const rect = visual.getBoundingClientRect();
-      const visualCenter =
-        rect.top + rect.height / 2;
-      const viewportCenter =
-        window.innerHeight / 2;
-
-      const offset = Math.max(
-        -46,
-        Math.min(
-          46,
-          (viewportCenter - visualCenter) * 0.09,
-        ),
-      );
-
-      visual.style.setProperty(
-        "--punto-result-scroll-y",
-        `${offset.toFixed(2)}px`,
-      );
-    };
-
-    const scheduleUpdate = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(
-        updateParallax,
-      );
-    };
-
-    updateParallax();
-
-    window.addEventListener(
-      "scroll",
-      scheduleUpdate,
-      { passive: true },
-    );
-
-    window.addEventListener(
-      "resize",
-      scheduleUpdate,
-    );
-
-    return () => {
-      cancelAnimationFrame(frame);
-
-      window.removeEventListener(
-        "scroll",
-        scheduleUpdate,
-      );
-
-      window.removeEventListener(
-        "resize",
-        scheduleUpdate,
-      );
-    };
-  }, []);
-
   return (
     <div className="punto-result reveal">
       <div
-        ref={visualRef}
         className="punto-result__visual"
       >
         <img
-          src="/assets/punto/result/result.png"
+          src="/assets/punto/result/result.webp"
           alt="Punto Pago в 2022 и 2026 году"
+          loading="lazy"
+          decoding="async"
         />
 
         <span className="punto-result__years">
@@ -106,7 +31,7 @@ export default function PuntoResult() {
       <p className="punto-result__summary type-text">
         Все ключевые направления были реализованы:
         маркетплейс, административная система и банковские
-        функции. Спустя 4 года основная логика сценариев
+        функции. Спустя 4&nbsp;года основная логика сценариев
         сохранилась, а продукт продолжил развиваться на её
         основе.
       </p>

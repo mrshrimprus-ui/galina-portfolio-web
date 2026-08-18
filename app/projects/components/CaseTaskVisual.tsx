@@ -11,49 +11,42 @@ export default function CaseTaskVisual({
   src,
   alt,
 }: CaseTaskVisualProps) {
-  const mediaRef = useRef<HTMLElement>(null);
+  const visualRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const media = mediaRef.current;
-
-    if (
-      !media ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
+    const visual = visualRef.current;
+    if (!visual || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let frame = 0;
+    let current = 0;
+    let target = 0;
 
-    const updateParallax = () => {
-      const rect = media.getBoundingClientRect();
-      const mediaCenter = rect.top + rect.height / 2;
-      const viewportCenter = window.innerHeight / 2;
-
-      const offset = Math.max(
-        -44,
-        Math.min(
-          44,
-          (viewportCenter - mediaCenter) * 0.1,
-        ),
+    const updateTarget = () => {
+      const rect = visual.getBoundingClientRect();
+      target = Math.max(
+        -52,
+        Math.min(52, (window.innerHeight / 2 - (rect.top + rect.height / 2)) * 0.11),
       );
+    };
 
-      media.style.setProperty(
-        "--mvp-scroll-y",
-        `${offset}px`,
-      );
+    const renderParallax = () => {
+      const difference = target - current;
+      current += difference * 0.12;
+      visual.style.setProperty("--mvp-scroll-y", `${current.toFixed(2)}px`);
+      frame = Math.abs(difference) > 0.05
+        ? requestAnimationFrame(renderParallax)
+        : 0;
     };
 
     const scheduleUpdate = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(updateParallax);
+      updateTarget();
+      if (!frame) frame = requestAnimationFrame(renderParallax);
     };
 
-    updateParallax();
-
-    window.addEventListener("scroll", scheduleUpdate, {
-      passive: true,
-    });
+    updateTarget();
+    current = target;
+    visual.style.setProperty("--mvp-scroll-y", `${current.toFixed(2)}px`);
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
 
     return () => {
@@ -64,11 +57,8 @@ export default function CaseTaskVisual({
   }, []);
 
   return (
-    <figure
-      ref={mediaRef}
-      className="shrimp-mvp-media case-task-visual reveal"
-    >
-      <img src={src} alt={alt} />
+    <figure ref={visualRef} className="shrimp-mvp-media case-task-visual reveal">
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
     </figure>
   );
 }

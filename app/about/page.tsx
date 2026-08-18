@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavMagnet } from "../hooks/useNavMagnet";
+import { usePersistentTheme } from "../hooks/usePersistentTheme";
+import CaseArtifactLink from "../projects/components/CaseArtifactLink";
+import InteractiveTitle from "../components/InteractiveTitle";
 export default function AboutPage() {
   useNavMagnet();
 
@@ -28,11 +31,7 @@ export default function AboutPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
+  const { theme, setTheme } = usePersistentTheme();
 
   return (
     <main className="about-page">
@@ -73,11 +72,14 @@ export default function AboutPage() {
       </header>
 
       <section className="about-content">
-        <h1 className="about-title type-h1 reveal">Обо мне</h1>
+        <InteractiveTitle
+          text="Обо мне"
+          className="about-title type-h1 reveal"
+        />
 
         <div className="about-copy">
           <p className="about-lead type-text-xl reveal">
-            Я Галина, продуктовый дизайнер с 9+ годами опыта. Проектирую
+            Я — Галина, продуктовый дизайнер с 9+ годами опыта. Проектирую
             мобильные и веб-продукты для стартапов и небольших команд.
           </p>
 
@@ -103,7 +105,14 @@ export default function AboutPage() {
             galina.done@mail.ru
           </a>
           <a href="https://t.me/galina_done" target="_blank" rel="noreferrer" data-cursor="nav">telegram</a>
-          <a href="https://www.linkedin.com/in/галина-чумак-977951270" target="_blank" rel="noreferrer" data-cursor="nav">linkedin</a>
+          <a href="https://www.linkedin.com/in/галина-чумак-977951270" target="_blank" rel="noreferrer" data-cursor="nav">LinkedIn</a>
+
+          <CaseArtifactLink
+            href="https://drive.google.com/file/d/1ho40Lo-m_XTKQEZ73E2uDVyfBf6LDIcX/view?usp=sharing"
+            className="about-cv-link"
+          >
+            Скачать CV
+          </CaseArtifactLink>
         </div>
       </section>
     </main>

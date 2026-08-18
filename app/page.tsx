@@ -1,8 +1,8 @@
 "use client";
 
-import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
 import { useNavMagnet } from "./hooks/useNavMagnet";
+import { usePersistentTheme } from "./hooks/usePersistentTheme";
 const projects = [
   {
     slug: "mrshrimp",
@@ -11,6 +11,7 @@ const projects = [
       "Приложение с короткими разминками: полный цикл от исследования и проектирования до релиза и аналитики.",
     meta: ["2025–2026 · Wellness · HealthTech", "Founder & Product Designer", "iOS · Android · 0→1"],
     screen: "/assets/mrshrimp/home/screen.webp",
+    mobileScreen: "/assets/mrshrimp/home/screen.webp",
   },
   {
     slug: "punto",
@@ -19,6 +20,7 @@ const projects = [
       "Развитие коммерческого финтех-продукта: кошелёк, маркетплейс, банковские сервисы и web-админка.",
     meta: ["2021–2022 · Team project", "B2C · B2B · FinTech · Marketplace", "iOS · Android · Web-admin"],
     screen: "/assets/punto/home/screen.webp",
+    mobileScreen: "/assets/punto/home/screen.webp",
   },
   {
     slug: "smarthome",
@@ -27,40 +29,102 @@ const projects = [
       "Интеграция нового IoT-устройства в систему умного дома: от документации до реализации.",
     meta: ["2024–2025 · Team project", "B2C · IoT · Smart Home", "iOS · Android"],
     screen: "/assets/smarthome/home/screen.webp",
+    mobileScreen: "/assets/smarthome/home/screen.webp",
   },
 ];
 
+const heroTitleLines = ["Senior Product", "Designer"];
+
 function ProjectCard({ project, index }: { project: (typeof projects)[number]; index: number }) {
   const cardRef = useRef<HTMLElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const magnetFrameRef = useRef(0);
+  const magnetCurrentRef = useRef({ x: 0, y: 0 });
+  const magnetTargetRef = useRef({ x: 0, y: 0 });
+  const [imageReady, setImageReady] = useState(false);
+
+  useEffect(() => {
+    const image = imageRef.current;
+    if (!image?.complete) return;
+
+    let cancelled = false;
+    const showImage = () => {
+      if (!cancelled) setImageReady(true);
+    };
+
+    image.decode().then(showImage).catch(showImage);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => cancelAnimationFrame(magnetFrameRef.current);
+  }, []);
 
   useEffect(() => {
     const card = cardRef.current;
-    if (!card || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (
+      !card ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 560px)").matches
+    ) return;
 
     let frame = 0;
-    const updateScrollParallax = () => {
+    const updateParallax = () => {
       const rect = card.getBoundingClientRect();
-      const cardCenter = rect.top + rect.height / 2;
-      const viewportCenter = window.innerHeight / 2;
-      const offset = Math.max(-58, Math.min(58, (viewportCenter - cardCenter) * 0.105));
-      card.style.setProperty("--scroll-lag", `${offset}px`);
+      const offset = Math.max(
+        -10,
+        Math.min(22, (window.innerHeight / 2 - (rect.top + rect.height / 2)) * 0.08),
+      );
+      card.style.setProperty("--project-art-scroll-y", `${offset.toFixed(2)}px`);
     };
-
     const scheduleUpdate = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(updateScrollParallax);
+      frame = requestAnimationFrame(updateParallax);
     };
 
-    updateScrollParallax();
+    updateParallax();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
-
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
     };
   }, []);
+
+  const animateMagnet = () => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const current = magnetCurrentRef.current;
+    const target = magnetTargetRef.current;
+    current.x += (target.x - current.x) * 0.1;
+    current.y += (target.y - current.y) * 0.1;
+
+    card.style.setProperty("--pointer-x", `${current.x.toFixed(2)}px`);
+    card.style.setProperty("--pointer-y", `${current.y.toFixed(2)}px`);
+
+    if (
+      Math.abs(target.x - current.x) > 0.05 ||
+      Math.abs(target.y - current.y) > 0.05
+    ) {
+      magnetFrameRef.current = requestAnimationFrame(animateMagnet);
+    } else {
+      current.x = target.x;
+      current.y = target.y;
+      card.style.setProperty("--pointer-x", `${target.x}px`);
+      card.style.setProperty("--pointer-y", `${target.y}px`);
+      magnetFrameRef.current = 0;
+    }
+  };
+
+  const scheduleMagnet = () => {
+    if (magnetFrameRef.current) return;
+    magnetFrameRef.current = requestAnimationFrame(animateMagnet);
+  };
 
   const moveImage = (event: React.PointerEvent<HTMLElement>) => {
     if (
@@ -71,13 +135,15 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
     const rect = cardRef.current.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    cardRef.current.style.setProperty("--pointer-x", `${x * 36}px`);
-    cardRef.current.style.setProperty("--pointer-y", `${y * 26}px`);
+    magnetTargetRef.current.x = x * 56;
+    magnetTargetRef.current.y = y * 36;
+    scheduleMagnet();
   };
 
   const resetImage = () => {
-    cardRef.current?.style.setProperty("--pointer-x", "0px");
-    cardRef.current?.style.setProperty("--pointer-y", "0px");
+    magnetTargetRef.current.x = 0;
+    magnetTargetRef.current.y = 0;
+    scheduleMagnet();
   };
 
   return (
@@ -86,11 +152,11 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
         index === 0 ? "is-visible" : "reveal"
       }`}
       ref={cardRef}
-      style={{ "--delay": `${index * 80}ms` } as React.CSSProperties}
-      onPointerMove={moveImage}
-      onPointerLeave={resetImage}
+      style={{ "--delay": `${index * 35}ms` } as React.CSSProperties}
       aria-labelledby={`${project.slug}-title`}
       data-cursor="project"
+      onPointerMove={moveImage}
+      onPointerLeave={resetImage}
     >
       <a
         className="project-link"
@@ -103,11 +169,32 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
       </div>
 
       <div className="project-visual" aria-hidden="true">
-        <img
-          className="project-art"
-          src={project.screen}
-          alt=""
-        />
+        <picture className="project-picture">
+          <source
+            media="(max-width: 560px)"
+            srcSet={project.mobileScreen}
+          />
+          <img
+            ref={imageRef}
+            className="project-art"
+            src={project.screen}
+            alt=""
+            loading={index === 0 ? "eager" : "lazy"}
+            fetchPriority={index === 0 ? "high" : "auto"}
+            decoding="async"
+            onLoad={(event) => {
+              const image = event.currentTarget;
+              image
+                .decode()
+                .catch(() => undefined)
+                .finally(() => setImageReady(true));
+            }}
+            style={{
+              opacity: imageReady ? 1 : 0,
+              transition: "opacity 180ms ease",
+            }}
+          />
+        </picture>
       </div>
 
       <p className="project-meta type-caption-regular">
@@ -121,148 +208,107 @@ function ProjectCard({ project, index }: { project: (typeof projects)[number]; i
 
 export default function Home() {
   useNavMagnet();
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const lenis = new Lenis({
-      autoRaf: true,
-      lerp: 0.075,
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-      anchors: true,
-    });
-
-    return () => lenis.destroy();
-  }, []);
-
-  // HOME SCROLL DEPTH START
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const title = document.querySelector<HTMLElement>(".hero h1");
-    const description =
-      document.querySelector<HTMLElement>(".hero-description");
-
-    const cards = Array.from(
-      document.querySelectorAll<HTMLElement>(".project-card"),
-    );
-
-    let frame = 0;
-
-    const clamp = (
-      value: number,
-      minimum: number,
-      maximum: number,
-    ) => Math.max(minimum, Math.min(maximum, value));
-
-    const updateParallax = () => {
-      const viewportCenter = window.innerHeight / 2;
-
-      if (title) {
-        const rect = title.getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-
-        title.style.setProperty(
-          "--hero-title-scroll-y",
-          `${clamp((viewportCenter - center) * 0.055, -26, 26)}px`,
-        );
-      }
-
-      if (description) {
-        const rect = description.getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-
-        description.style.setProperty(
-          "--hero-description-scroll-y",
-          `${clamp((viewportCenter - center) * 0.035, -16, 16)}px`,
-        );
-      }
-
-      cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-
-        const cardOffset = clamp(
-          (viewportCenter - center) * 0.018,
-          -10,
-          10,
-        );
-
-        const copyOffset = clamp(
-          (viewportCenter - center) * 0.04,
-          -20,
-          20,
-        );
-
-        const metaOffset = clamp(
-          (viewportCenter - center) * 0.026,
-          -14,
-          14,
-        );
-
-        card.style.setProperty(
-          "--project-card-scroll-y",
-          `${cardOffset}px`,
-        );
-
-        card.querySelector<HTMLElement>(".project-copy")
-          ?.style.setProperty(
-            "--project-copy-scroll-y",
-            `${copyOffset}px`,
-          );
-
-        card.querySelector<HTMLElement>(".project-meta")
-          ?.style.setProperty(
-            "--project-meta-scroll-y",
-            `${metaOffset}px`,
-          );
-      });
-    };
-
-    const scheduleUpdate = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(updateParallax);
-    };
-
-    updateParallax();
-
-    window.addEventListener("scroll", scheduleUpdate, {
-      passive: true,
-    });
-    window.addEventListener("resize", scheduleUpdate);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
-    };
-  }, []);
-  // HOME SCROLL DEPTH END
+  const { theme, setTheme } = usePersistentTheme();
+  const heroGlyphsRef = useRef<
+    Array<{ element: HTMLElement; x: number; y: number }>
+  >([]);
 
 useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
-      { threshold: 0.05 },
+      (entries) =>
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        }),
+      {
+        threshold: 0.01,
+        rootMargin: "0px 0px 35% 0px",
+      },
     );
-    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+
+    document
+      .querySelectorAll(".reveal")
+      .forEach((element) => observer.observe(element));
+
     return () => observer.disconnect();
   }, []);
+
+  const measureHeroTitle = (title: HTMLHeadingElement) => {
+    const titleRect = title.getBoundingClientRect();
+
+    heroGlyphsRef.current = Array.from(
+      title.querySelectorAll<HTMLElement>(".hero-title-glyph"),
+    ).map((element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        element,
+        x: rect.left + rect.width / 2 - titleRect.left,
+        y: rect.top + rect.height / 2 - titleRect.top,
+      };
+    });
+  };
+
+  const distortHeroTitle = (event: React.PointerEvent<HTMLHeadingElement>) => {
+    if (
+      !window.matchMedia("(pointer: fine)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) return;
+
+    const title = event.currentTarget;
+    if (heroGlyphsRef.current.length === 0) measureHeroTitle(title);
+
+    const titleRect = title.getBoundingClientRect();
+    const pointerX = event.clientX - titleRect.left;
+    const pointerY = event.clientY - titleRect.top;
+    const radius = 150;
+
+    title.classList.add("is-distorting");
+
+    heroGlyphsRef.current.forEach(({ element: glyph, x, y }) => {
+      const dx = x - pointerX;
+      const dy = y - pointerY;
+      const distance = Math.hypot(dx, dy);
+      const linearInfluence = Math.max(0, 1 - distance / radius);
+      const influence =
+        linearInfluence * linearInfluence * (3 - 2 * linearInfluence);
+
+      if (influence === 0) {
+        glyph.style.transform = "";
+        return;
+      }
+
+      const directionX = dx / Math.max(distance, 1);
+      const directionY = dy / Math.max(distance, 1);
+      const translateX = directionX * 7 * influence;
+      const translateY = directionY * 5 * influence;
+      const scaleX = 1 + 0.12 * influence;
+      const scaleY = 1 - 0.045 * influence;
+      const skew = -directionY * 5 * influence;
+      const rotate = directionX * directionY * 2.4 * influence;
+
+      glyph.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scaleX}, ${scaleY}) skewX(${skew}deg) rotate(${rotate}deg)`;
+    });
+  };
+
+  const resetHeroTitle = (event: React.PointerEvent<HTMLHeadingElement>) => {
+    event.currentTarget.classList.remove("is-distorting");
+    event.currentTarget
+      .querySelectorAll<HTMLElement>(".hero-title-glyph")
+      .forEach((glyph) => {
+        glyph.style.transform = "";
+      });
+  };
 
   return (
     <>
       <main>
-      <header className="site-header text-normal shared-container">
+      <header className="site-header text-normal">
         <a className="brand text-logo" href="#top" aria-label="Galina Chumak — наверх" data-cursor="link">
           Galina Chumak
         </a>
         <nav aria-label="Основная навигация">
-          <a href="#projects" data-cursor="nav">Проекты</a>
+          <a href="#projects" aria-current="page" data-cursor="nav">Проекты</a>
           <a href="/about" data-cursor="nav">Обо мне</a>
         </nav>
         <button
@@ -282,13 +328,29 @@ useEffect(() => {
       </header>
 
       <section className="hero" id="top">
-        <h1 className="type-title reveal reveal-heading">
-          <span>Senior Product</span>
-          <span>Designer</span>
+        <h1
+          className="type-title reveal reveal-heading hero-title-glass"
+          aria-label="Senior Product Designer"
+          onPointerEnter={(event) => measureHeroTitle(event.currentTarget)}
+          onPointerMove={distortHeroTitle}
+          onPointerLeave={resetHeroTitle}
+        >
+          {heroTitleLines.map((line) => (
+            <span key={line} aria-hidden="true">
+              {Array.from(line).map((character, index) => (
+                <span className="hero-title-glyph" key={`${character}-${index}`}>
+                  {character === " " ? "\u00A0" : character}
+                </span>
+              ))}
+            </span>
+          ))}
         </h1>
-        <p className="hero-description type-caption text-secondary reveal" style={{ "--delay": "120ms" } as React.CSSProperties}>
-          9+ лет создаю продукты с нуля и развиваю мобильные и веб-сервисы для B2C и B2B.
-        </p>
+        <div className="hero-description text-secondary reveal" style={{ "--delay": "120ms" } as React.CSSProperties}>
+          <p>9+ лет · Mobile / Web · B2C / B2B</p>
+          <p>
+            Запускаю продукты с нуля и новые направления внутри систем — от своего приложения до fintech- и B2B-платформ с ролями и правами доступа.
+          </p>
+        </div>
       </section>
 
       <section className="projects" id="projects" aria-label="Избранные проекты">

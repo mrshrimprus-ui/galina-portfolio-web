@@ -6,7 +6,39 @@ import SmartHomeResult from "../components/SmartHomeResult";
 import CaseProcessSlider from "../components/CaseProcessSlider";
 import CaseVideoPreview from "../components/CaseVideoPreview";
 import CaseSolutionSlider from "../components/CaseSolutionSlider";
+import CaseHighlightsSlider from "../components/CaseHighlightsSlider";
 
+
+const smartHomeHighlightSlides = [
+  {
+    label: "Приоритет режимов",
+    image: "/assets/smarthome/highlights/priority.webp",
+    alt: "Уровни представления режимов термоголовки",
+    description:
+      "Определила, какие режимы должны быть доступны сразу, какие состояния показывать в превью устройства, а какие настройки можно оставить глубже.",
+  },
+  {
+    label: "Совместимость режимов",
+    image: "/assets/smarthome/highlights/compatibility.webp",
+    alt: "Состояния и совместимость режимов термоголовки",
+    description:
+      "С командой разобрали, какие режимы могут работать вместе, какие блокируют друг друга и какие действия доступны в каждом состоянии.",
+  },
+  {
+    label: "Максимальный обогрев",
+    image: "/assets/smarthome/highlights/max-heat.webp",
+    alt: "Сценарий максимального обогрева",
+    description:
+      "Максимальный обогрев работает ограниченное время и временно блокирует часть управления. В интерфейсе показала запуск, активное состояние и возврат к предыдущему режиму.",
+  },
+  {
+    label: "Открытое окно",
+    image: "/assets/smarthome/highlights/open-window.webp",
+    alt: "Сценарий режима Открытое окно",
+    description:
+      "Функция находится в настройках, но её активное состояние влияет на всё управление устройством — поэтому отдельно продумала, как сообщать об этом и возвращать пользователя к доступным действиям.",
+  },
+] as const;
 
 /* SMART HOME PROCESS STAGES START */
 const smartHomeProcessStages = [
@@ -21,7 +53,7 @@ const smartHomeProcessStages = [
     visual: (
       <img
         className="smarthome-process-image"
-        src="/assets/smarthome/process/01.png"
+        src="/assets/smarthome/process/01.webp"
         alt="Терморегулятор EKF на радиаторе"
       />
     ),
@@ -37,7 +69,7 @@ const smartHomeProcessStages = [
     visual: (
       <img
         className="smarthome-process-image smarthome-process-image--second"
-        src="/assets/smarthome/process/02-screens.png"
+        src="/assets/smarthome/process/02-screens.webp"
         alt="Экраны управления терморегулятором"
       />
     ),
@@ -53,7 +85,7 @@ const smartHomeProcessStages = [
     visual: (
       <div className="smarthome-process-video-center">
         <CaseVideoPreview
-          src="https://res.cloudinary.com/dk0kxiahf/video/upload/v1772540608/manki_tilts_vlyozz.mp4"
+          src="https://res.cloudinary.com/dk0kxiahf/video/upload/v1785692907/smart_home_cnklur.mov"
           title="Сценарии и состояния терморегулятора"
         />
       </div>
@@ -70,7 +102,7 @@ const smartHomeProcessStages = [
     visual: (
       <img
         className="smarthome-process-image"
-        src="/assets/smarthome/process/03-screens.png"
+        src="/assets/smarthome/process/03-screens.webp"
         alt="Проверенные состояния терморегулятора"
       />
     ),
@@ -88,7 +120,7 @@ const smartHomeSolutionSlides = [
     background:
       "/assets/smarthome/solution/smarthome-solution-01-bg.png",
     picture:
-      "/assets/smarthome/solution/smarthome-solution-01-pic.png",
+      "/assets/smarthome/solution/smarthome-solution-01-pic.webp",
   },
   {
     title: "Расписание и автоматизация",
@@ -98,7 +130,7 @@ const smartHomeSolutionSlides = [
     background:
       "/assets/smarthome/solution/smarthome-solution-02-bg.png",
     picture:
-      "/assets/smarthome/solution/smarthome-solution-02-pic.png",
+      "/assets/smarthome/solution/smarthome-solution-02-pic.webp",
   },
   {
     title: "Подключение устройства",
@@ -108,7 +140,7 @@ const smartHomeSolutionSlides = [
     background:
       "/assets/smarthome/solution/smarthome-solution-03-bg.png",
     picture:
-      "/assets/smarthome/solution/smarthome-solution-03-pic.png",
+      "/assets/smarthome/solution/smarthome-solution-03-pic.webp",
   },
   {
     title: "Настройки устройства",
@@ -118,7 +150,7 @@ const smartHomeSolutionSlides = [
     background:
       "/assets/smarthome/solution/smarthome-solution-04-bg.png",
     picture:
-      "/assets/smarthome/solution/smarthome-solution-04-pic.png",
+      "/assets/smarthome/solution/smarthome-solution-04-pic.webp",
   },
   {
     title: "Состояния и ограничения",
@@ -128,7 +160,7 @@ const smartHomeSolutionSlides = [
     background:
       "/assets/smarthome/solution/smarthome-solution-05-bg.png",
     picture:
-      "/assets/smarthome/solution/smarthome-solution-05-pic.png",
+      "/assets/smarthome/solution/smarthome-solution-05-pic.webp",
   },
 ] as const;
 /* SMART HOME SOLUTION SLIDES END */
@@ -142,13 +174,13 @@ export default function SmartHomeCase() {
         title: "MrShrimp",
       }}
       hero={{
-        title: "EKF Smart Home",
+        title: "Smart Home",
         summary:
           "Приложение для управления устройствами умного дома. Интеграция нового устройства в существующую систему: от документации до реализации.",
         visual: (
           <CaseProjectVisual
             variant="smarthome"
-            image="/assets/smarthome/hero/main.png"
+            image="/assets/smarthome/hero/main-clean.webp"
           />
         ),
         meta: [
@@ -162,7 +194,7 @@ export default function SmartHomeCase() {
         title: (
           <>
             Приложение для управления
-            <br />
+            <br />{" "}
             устройствами умного дома
           </>
         ),
@@ -171,37 +203,34 @@ export default function SmartHomeCase() {
           <CaseContextGrid
             items={[
               {
-                src: "/assets/smarthome/context/01.png",
+                src: "/assets/smarthome/context/01-normalized.webp",
                 alt: "Приложение EKF Smart Home",
               },
               {
-                src: "/assets/smarthome/context/02.png",
+                src: "/assets/smarthome/context/02-normalized.webp",
                 alt: "Устройства EKF Smart Home",
               },
               {
-                src: "/assets/smarthome/context/03.png",
+                src: "/assets/smarthome/context/03.webp",
                 alt: "Интерфейс EKF Smart Home",
               },
             ]}
           />
 
           <p className="smarthome-context-description type-text">
-            До моего подключения продукт уже был перенесён на собственную разработку и частично реализован. Я присоединилась на этапе обновления дизайна: перерабатывала существующие экраны, дорабатывала отдельные сценарии и проектировала взаимодействие с новыми устройствами.
+            До моего подключения продукт уже был перенесён на собственную разработку и частично реализован.
+            <br />
+            Я присоединилась на этапе обновления дизайна: перерабатывала существующие экраны, дорабатывала отдельные сценарии и проектировала взаимодействие с новыми устройствами.
           </p>
               </>
         ),
       }}
       task={{
         label: "Задача",
-        title: (
-          <>
-            Добавить новое устройство в существующую систему Smart Home —
-            терморегулятор для радиатора
-          </>
-        ),
+        title: "Добавить новое устройство в приложение: терморегулятор для радиатора",
         content: (
           <CaseTaskVisual
-            src="/assets/smarthome/task/visual.png"
+            src="/assets/smarthome/task/visual.webp"
             alt="Сценарии терморегулятора EKF Smart Home"
           />
         ),
@@ -215,17 +244,34 @@ export default function SmartHomeCase() {
         ),
         content: (
           <CaseProcessSlider
+            mobileCompact
             stages={smartHomeProcessStages}
             ariaLabel="Этапы работы над терморегулятором"
           />
         ),
       }}
+      highlights={{
+        label: "Хайлайты",
+        title:
+          "Режимы, состояния и ограничения: как сложилась логика управления",
+        content: (
+          <CaseHighlightsSlider
+            slides={smartHomeHighlightSlides}
+            ariaLabel="Хайлайты EKF Smart Home"
+          />
+        ),
+      }}
       solution={{
         label: "Решение",
-        title:
-          "Новое устройство стало частью единой системы Smart Home",
+        title: (
+          <>
+            Новое устройство стало частью единой системы{" "}
+            <span className="keep-together">Smart Home</span>
+          </>
+        ),
         content: (
           <CaseSolutionSlider
+            mobileCards
             slides={smartHomeSolutionSlides}
             ariaLabel="Ключевые решения EKF Smart Home"
           />
@@ -234,11 +280,9 @@ export default function SmartHomeCase() {
       result={{
         label: "Результат",
         title: (
-          <>
-            Устройство реализовали
-            <br />
-            в EKF Smart Home
-          </>
+          <span data-no-typography>
+            Спроектированные сценарии согласовали с{"\u00A0"}командой и{"\u00A0"}реализовали в{"\u00A0"}приложении
+          </span>
         ),
         content: <SmartHomeResult />,
       }}

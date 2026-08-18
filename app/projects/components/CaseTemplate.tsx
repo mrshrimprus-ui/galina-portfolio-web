@@ -16,15 +16,18 @@ type CaseTemplateProps = {
     href: string;
     title: string;
   };
+  beforeNextProject?: ReactNode;
   hero: {
     title: ReactNode;
     summary: ReactNode;
     visual: ReactNode;
     meta: ReactNode[];
+    actions?: ReactNode;
   };
   context: CaseSectionData;
   task: CaseSectionData;
   process: CaseSectionData;
+  highlights?: CaseSectionData;
   solution: CaseSectionData;
   result: CaseSectionData;
 };
@@ -33,6 +36,7 @@ type SectionKind =
   | "context"
   | "task"
   | "process"
+  | "highlights"
   | "solution"
   | "result";
 
@@ -90,10 +94,12 @@ function CaseTemplateSection({
 export default function CaseTemplate({
   className,
   nextProject,
+  beforeNextProject,
   hero,
   context,
   task,
   process,
+  highlights,
   solution,
   result,
 }: CaseTemplateProps) {
@@ -101,17 +107,22 @@ export default function CaseTemplate({
     <CasePageShell
       className={className}
       nextProject={nextProject}
+      beforeNextProject={beforeNextProject}
     >
       <CaseHero
         title={hero.title}
         summary={hero.summary}
         visual={hero.visual}
         meta={hero.meta}
+        actions={hero.actions}
       />
 
       <CaseTemplateSection kind="context" section={context} />
       <CaseTemplateSection kind="task" section={task} />
       <CaseTemplateSection kind="process" section={process} />
+      {highlights && (
+        <CaseTemplateSection kind="highlights" section={highlights} />
+      )}
       <CaseTemplateSection kind="solution" section={solution} />
       <CaseTemplateSection kind="result" section={result} />
     </CasePageShell>

@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import CaseVideoPreview from "./CaseVideoPreview";
@@ -21,6 +20,7 @@ type CaseSolutionSliderProps = {
   slides: readonly CaseSolutionSlide[];
   ariaLabel: string;
   renderVisual?: (visual: string) => ReactNode;
+  mobileCards?: boolean;
 };
 
 function CaseSolutionAssetVisual({
@@ -40,39 +40,22 @@ function CaseSolutionAssetVisual({
       className="solution-visual solution-visual--asset"
       aria-hidden="true"
     >
-      <motion.div
+      <div
         className="solution-visual__background-reveal"
-        initial={{ scale: 1.1 }}
-        animate={{ scale: 1 }}
-        transition={{
-          duration: 1,
-          ease: [0.22, 1, 0.36, 1],
-        }}
       >
         <img
           className="solution-visual__background"
           src={background}
           alt=""
           draggable={false}
+          loading="lazy"
+          decoding="async"
         />
-      </motion.div>
+      </div>
 
       {picture && (
-        <motion.div
+        <div
           className="solution-visual__picture-reveal"
-          initial={{
-            opacity: 0,
-            y: 48,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.85,
-            delay: 0.08,
-            ease: [0.22, 1, 0.36, 1],
-          }}
         >
           <div className="solution-visual__picture-wrap">
             <img
@@ -80,9 +63,11 @@ function CaseSolutionAssetVisual({
               src={picture}
               alt=""
               draggable={false}
+              loading="lazy"
+              decoding="async"
             />
           </div>
-        </motion.div>
+        </div>
       )}
 
       {video && (
@@ -99,6 +84,7 @@ export default function CaseSolutionSlider({
   slides,
   ariaLabel,
   renderVisual,
+  mobileCards = false,
 }: CaseSolutionSliderProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const sliderRootRef = useRef<HTMLDivElement>(null);
@@ -188,150 +174,199 @@ export default function CaseSolutionSlider({
   if (!active) return null;
 
   return (
-    <div
-      className="shrimp-solution-single reveal"
-      ref={sliderRootRef}
-      role="region"
-      aria-roledescription="слайдер"
-      aria-label={ariaLabel}
-      tabIndex={0}
-      onMouseDown={(event) => {
-        event.preventDefault();
-      }}
-      data-cursor="carousel-right"
-      onKeyDown={(event) => {
-        if (event.key === "ArrowLeft") {
-          goTo(activeSlide - 1);
-        }
+    <>
+      <div
+        className="shrimp-solution-single case-solution-desktop reveal"
+        ref={sliderRootRef}
+        role="region"
+        aria-roledescription="слайдер"
+        aria-label={ariaLabel}
+        tabIndex={0}
+        onMouseDown={(event) => {
+          event.preventDefault();
+        }}
+        data-cursor="carousel-right"
+        onKeyDown={(event) => {
+          if (event.key === "ArrowLeft") {
+            goTo(activeSlide - 1);
+          }
 
-        if (event.key === "ArrowRight") {
-          goTo(activeSlide + 1);
-        }
-      }}
-      onPointerMove={(event) => {
-        const target = event.target as HTMLElement;
+          if (event.key === "ArrowRight") {
+            goTo(activeSlide + 1);
+          }
+        }}
+        onPointerMove={(event) => {
+          const target = event.target as HTMLElement;
 
-        if (
-          target.closest(
-            ".case-video-preview, .case-video-modal",
-          )
-        ) {
-          return;
-        }
+          if (
+            target.closest(
+              ".case-video-preview, .case-video-modal",
+            )
+          ) {
+            return;
+          }
 
-        const rect =
-          event.currentTarget.getBoundingClientRect();
+          const rect =
+            event.currentTarget.getBoundingClientRect();
 
-        event.currentTarget.dataset.cursor =
-          event.clientX <
-          rect.left + rect.width / 2
-            ? "carousel-left"
-            : "carousel-right";
-      }}
-      onClick={(event) => {
-        const target = event.target as HTMLElement;
+          event.currentTarget.dataset.cursor =
+            event.clientX <
+            rect.left + rect.width / 2
+              ? "carousel-left"
+              : "carousel-right";
+        }}
+        onClick={(event) => {
+          const target = event.target as HTMLElement;
 
-        if (
-          target.closest(
-            ".case-video-preview, .case-video-modal",
-          )
-        ) {
-          return;
-        }
+          if (
+            target.closest(
+              ".case-video-preview, .case-video-modal",
+            )
+          ) {
+            return;
+          }
 
-        const rect =
-          event.currentTarget.getBoundingClientRect();
+          const rect =
+            event.currentTarget.getBoundingClientRect();
 
-        goTo(
-          event.clientX <
-          rect.left + rect.width / 2
-            ? activeSlide - 1
-            : activeSlide + 1,
-        );
-      }}
-    >
-      <AnimatePresence
-        mode="wait"
-        initial={false}
+          goTo(
+            event.clientX <
+            rect.left + rect.width / 2
+              ? activeSlide - 1
+              : activeSlide + 1,
+          );
+        }}
       >
-        <motion.article
-          className={[
-            "solution-single__panel",
-            "solution-slide",
-            `solution-slide--${active.visual}`,
-            "is-active",
-          ].join(" ")}
-          key={`${activeSlide}-${active.visual}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            duration: 0.3,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          <div className="solution-single__copy">
-            <motion.div
-              className="solution-single__copy-motion"
-              initial={{
-                opacity: 0,
-                y: 10,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.8,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <div className="solution-single__heading">
-                <span className="solution-single__counter type-caption-small">
-                  <span>{activeSlide + 1}</span>
+          <article
+            className={[
+              "solution-single__panel",
+              "solution-slide",
+              `solution-slide--${active.visual}`,
+              "is-active",
+            ].join(" ")}
+            key={`${activeSlide}-${active.visual}`}
+          >
+            <div className="solution-single__copy">
+              <div
+                className="solution-single__copy-motion"
+              >
+                <div className="solution-single__heading">
+                  <span className="solution-single__counter type-caption-small">
+                    <span>{activeSlide + 1}</span>
 
-                  <span className="solution-single__counter-divider">
-                    /
+                    <span className="solution-single__counter-divider">
+                      /
+                    </span>
+
+                    <span>{slides.length}</span>
                   </span>
 
-                  <span>{slides.length}</span>
-                </span>
+                  <h3 className="type-h4">
+                    {active.title}
+                  </h3>
+                </div>
 
-                <h3 className="type-text-l">
-                  {active.title}
-                </h3>
+                <p className="type-caption solution-slide__description">
+                  {active.description}
+                </p>
               </div>
+            </div>
 
-              <p className="type-caption-regular">
-                {active.description}
-              </p>
-            </motion.div>
+            {renderVisual ? (
+              renderVisual(active.visual)
+            ) : active.background ? (
+              <CaseSolutionAssetVisual
+                background={active.background}
+                picture={active.picture}
+                video={active.video}
+              />
+            ) : (
+              <div
+                className="solution-visual solution-visual--empty"
+                aria-hidden="true"
+              />
+            )}
+          </article>
+
+        <p
+          className="sr-only"
+          aria-live="polite"
+        >
+          {activeSlide + 1} из {slides.length}:{" "}
+          {active.title}
+        </p>
+      </div>
+
+      {mobileCards && (
+        <div
+          className="case-solution-mobile reveal"
+          role="region"
+          aria-roledescription="слайдер"
+          aria-label={`${ariaLabel}: мобильная версия`}
+        >
+          <div className="case-solution-mobile__track">
+            {slides.map((slide, index) => (
+              <article
+                className="case-solution-mobile__slide"
+                key={`mobile-${index}-${slide.visual}`}
+              >
+                <div className="case-solution-mobile__card">
+                  <div className="case-solution-mobile__visual">
+                    {renderVisual ? (
+                      renderVisual(slide.visual)
+                    ) : slide.background ? (
+                      <>
+                        <img
+                          className="case-solution-mobile__background"
+                          src={slide.background}
+                          alt=""
+                          draggable={false}
+                        />
+
+                        {slide.picture && (
+                          <img
+                            className="case-solution-mobile__picture"
+                            src={slide.picture}
+                            alt=""
+                            draggable={false}
+                          />
+                        )}
+
+                        {slide.video && (
+                          <CaseVideoPreview
+                            src={slide.video.src}
+                            title={slide.video.title}
+                          />
+                        )}
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="case-solution-mobile__copy">
+                  <div className="solution-single__heading">
+                    <span className="solution-single__counter type-caption-small">
+                      <span>{index + 1}</span>
+                      <span className="solution-single__counter-divider">
+                        /
+                      </span>
+                      <span>{slides.length}</span>
+                    </span>
+
+                    <h3 className="type-h4">
+                      {slide.title}
+                    </h3>
+                  </div>
+
+                  <p className="type-caption solution-slide__description">
+                    {slide.description}
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
-
-          {renderVisual ? (
-            renderVisual(active.visual)
-          ) : active.background ? (
-            <CaseSolutionAssetVisual
-              background={active.background}
-              picture={active.picture}
-              video={active.video}
-            />
-          ) : (
-            <div
-              className="solution-visual solution-visual--empty"
-              aria-hidden="true"
-            />
-          )}
-        </motion.article>
-      </AnimatePresence>
-
-      <p
-        className="sr-only"
-        aria-live="polite"
-      >
-        {activeSlide + 1} из {slides.length}:{" "}
-        {active.title}
-      </p>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
