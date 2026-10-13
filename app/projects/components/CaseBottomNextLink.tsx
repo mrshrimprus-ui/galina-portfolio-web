@@ -2,8 +2,13 @@
 
 import type {
   CSSProperties,
+  MouseEvent as ReactMouseEvent,
   PointerEvent as ReactPointerEvent,
 } from "react";
+import {
+  PROJECT_TRANSITIONS,
+  requestProjectPageTransition,
+} from "../../components/ProjectPageTransition";
 
 type CaseBottomNextLinkProps = {
   href: string;
@@ -31,6 +36,22 @@ export default function CaseBottomNextLink({
     );
   };
 
+  const openNextProject = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) return;
+
+    const transition = PROJECT_TRANSITIONS[href];
+    if (!transition) return;
+
+    event.preventDefault();
+    requestProjectPageTransition(transition);
+  };
+
   return (
     <a
       className="case-bottom-nav-next"
@@ -38,9 +59,7 @@ export default function CaseBottomNextLink({
       data-cursor="link"
       onPointerEnter={updateLiquidOrigin}
       onPointerMove={updateLiquidOrigin}
-      onClick={(event) => {
-        event.currentTarget.classList.add("is-navigating");
-      }}
+      onClick={openNextProject}
       style={
         {
           "--next-project-accent": accent,

@@ -9,6 +9,7 @@ type CaseArtifactLinkProps = {
   className?: string;
   onClick?: () => void;
   magnetic?: boolean;
+  icon?: "external" | "chevron-down" | "chevron-up";
 };
 
 export default function CaseArtifactLink({
@@ -17,6 +18,7 @@ export default function CaseArtifactLink({
   className = "",
   onClick,
   magnetic = true,
+  icon = "external",
 }: CaseArtifactLinkProps) {
   const linkRef = useRef<HTMLElement>(null);
 
@@ -87,11 +89,26 @@ export default function CaseArtifactLink({
     };
   }, []);
 
+  const iconPath =
+    icon === "chevron-down"
+      ? "M7.5 9.5 12 14l4.5-4.5"
+      : icon === "chevron-up"
+        ? "M7.5 14.5 12 10l4.5 4.5"
+        : "M7 17 17 7M9 7h8v8";
+
   const content = (
     <>
       <span>{children}</span>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 17 17 7M9 7h8v8" />
+      <svg
+        className={
+          icon === "external"
+            ? undefined
+            : "case-artifact-link__icon--chevron"
+        }
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d={iconPath} />
       </svg>
     </>
   );

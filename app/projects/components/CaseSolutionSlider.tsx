@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import CaseVideoPreview from "./CaseVideoPreview";
@@ -40,8 +41,20 @@ function CaseSolutionAssetVisual({
       className="solution-visual solution-visual--asset"
       aria-hidden="true"
     >
-      <div
+      <motion.div
         className="solution-visual__background-reveal"
+        initial={{
+          opacity: 0.72,
+          scale: 1.035,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          duration: 0.75,
+          ease: [0.22, 1, 0.36, 1],
+        }}
       >
         <img
           className="solution-visual__background"
@@ -51,11 +64,24 @@ function CaseSolutionAssetVisual({
           loading="lazy"
           decoding="async"
         />
-      </div>
+      </motion.div>
 
       {picture && (
-        <div
+        <motion.div
           className="solution-visual__picture-reveal"
+          initial={{
+            opacity: 0,
+            y: 18,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.7,
+            delay: 0.08,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           <div className="solution-visual__picture-wrap">
             <img
@@ -67,7 +93,7 @@ function CaseSolutionAssetVisual({
               decoding="async"
             />
           </div>
-        </div>
+        </motion.div>
       )}
 
       {video && (
@@ -90,6 +116,28 @@ export default function CaseSolutionSlider({
   const sliderRootRef = useRef<HTMLDivElement>(null);
 
   const active = slides[activeSlide];
+
+  useEffect(() => {
+    const sources = slides.flatMap((slide) =>
+      [slide.background, slide.picture].filter(
+        (source): source is string => Boolean(source),
+      ),
+    );
+    const preloaders = sources.map((source) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = source;
+      image.decode().catch(() => undefined);
+      return image;
+    });
+
+    return () => {
+      preloaders.forEach((image) => {
+        image.onload = null;
+        image.onerror = null;
+      });
+    };
+  }, [slides]);
 
   const goTo = (requestedIndex: number) => {
     const total = slides.length;
@@ -116,6 +164,11 @@ export default function CaseSolutionSlider({
     let frame = 0;
 
     const updateParallax = () => {
+      if (window.matchMedia("(max-width: 1200px)").matches) {
+        slider.style.setProperty("--solution-scroll-y", "0px");
+        return;
+      }
+
       const rect = slider.getBoundingClientRect();
       const sliderCenter =
         rect.top + rect.height / 2;
@@ -198,40 +251,28 @@ export default function CaseSolutionSlider({
         onPointerMove={(event) => {
           const target = event.target as HTMLElement;
 
-          if (
-            target.closest(
-              ".case-video-preview, .case-video-modal",
-            )
-          ) {
+          if (target.closest(".case-video-preview, .case-video-modal")) {
             return;
           }
 
-          const rect =
-            event.currentTarget.getBoundingClientRect();
+          const rect = event.currentTarget.getBoundingClientRect();
 
           event.currentTarget.dataset.cursor =
-            event.clientX <
-            rect.left + rect.width / 2
+            event.clientX < rect.left + rect.width / 2
               ? "carousel-left"
               : "carousel-right";
         }}
         onClick={(event) => {
           const target = event.target as HTMLElement;
 
-          if (
-            target.closest(
-              ".case-video-preview, .case-video-modal",
-            )
-          ) {
+          if (target.closest(".case-video-preview, .case-video-modal")) {
             return;
           }
 
-          const rect =
-            event.currentTarget.getBoundingClientRect();
+          const rect = event.currentTarget.getBoundingClientRect();
 
           goTo(
-            event.clientX <
-            rect.left + rect.width / 2
+            event.clientX < rect.left + rect.width / 2
               ? activeSlide - 1
               : activeSlide + 1,
           );

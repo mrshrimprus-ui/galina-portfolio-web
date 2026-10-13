@@ -3,13 +3,15 @@
 import { useEffect, useRef } from "react";
 
 type CaseContextItem = {
-  type?: "image" | "video";
+  type?: "image" | "video" | "youtube";
   src: string;
   alt: string;
 };
 
 type CaseContextGridProps = {
   items: [CaseContextItem, CaseContextItem, CaseContextItem];
+  parallax?: boolean;
+  priority?: boolean;
 };
 
 const cardClasses = [
@@ -20,25 +22,50 @@ const cardClasses = [
 
 export default function CaseContextGrid({
   items,
+  parallax = true,
+  priority = false,
 }: CaseContextGridProps) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const mediaKey = items.map((item) => item.src).join("|");
+  const mediaTypes = items.map((item) => item.type ?? "image").join("|");
 
   useEffect(() => {
     const grid = gridRef.current;
-    if (!grid || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!grid) return;
 
     const cards = Array.from(
       grid.querySelectorAll<HTMLElement>(".shrimp-context-card"),
     );
+    const types = mediaTypes.split("|");
+
+    if (!parallax || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cards.forEach((card) => card.style.removeProperty("--context-scroll-y"));
+      return;
+    }
     let frame = 0;
     const currentOffsets = cards.map(() => 0);
     const targetOffsets = cards.map(() => 0);
 
     const updateTargets = () => {
       cards.forEach((card, index) => {
+        if (types[index] === "video" || types[index] === "youtube") {
+          targetOffsets[index] = 0;
+          return;
+        }
+
         const rect = card.getBoundingClientRect();
-        const depth = index === 0 ? 0.13 : index === 1 ? 0.105 : 0.14;
-        const limit = index === 1 ? 34 : 56;
+        const compactMrShrimpIcon =
+          index === 1 &&
+          Boolean(grid.closest(".mrshrimp-case")) &&
+          window.matchMedia("(max-width: 700px)").matches;
+        const depth = compactMrShrimpIcon
+          ? 0.04
+          : index === 0
+            ? 0.13
+            : index === 1
+              ? 0.105
+              : 0.14;
+        const limit = compactMrShrimpIcon ? 12 : index === 1 ? 34 : 56;
         targetOffsets[index] = Math.max(
           -limit,
           Math.min(limit, (window.innerHeight / 2 - (rect.top + rect.height / 2)) * depth),
@@ -49,6 +76,12 @@ export default function CaseContextGrid({
     const renderParallax = () => {
       let moving = false;
       cards.forEach((card, index) => {
+        if (types[index] === "video" || types[index] === "youtube") {
+          currentOffsets[index] = 0;
+          card.style.removeProperty("--context-scroll-y");
+          return;
+        }
+
         const difference = targetOffsets[index] - currentOffsets[index];
         currentOffsets[index] += difference * 0.12;
         card.style.setProperty(
@@ -67,6 +100,11 @@ export default function CaseContextGrid({
 
     updateTargets();
     targetOffsets.forEach((offset, index) => {
+      if (types[index] === "video" || types[index] === "youtube") {
+        cards[index].style.removeProperty("--context-scroll-y");
+        return;
+      }
+
       currentOffsets[index] = offset;
       cards[index].style.setProperty("--context-scroll-y", `${offset.toFixed(2)}px`);
     });
@@ -77,7 +115,7 @@ export default function CaseContextGrid({
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
     };
-  }, []);
+  }, [mediaKey, mediaTypes, parallax]);
 
   return (
     <div ref={gridRef} className="shrimp-context-grid reveal">
@@ -87,21 +125,30 @@ export default function CaseContextGrid({
           className={[
             "shrimp-context-card",
             cardClasses[index],
-            index === 2 && item.type !== "video"
+            index === 2 && item.type !== "video" && item.type !== "youtube"
               ? "shrimp-context-card--image-contain"
               : "",
           ]
             .filter(Boolean)
             .join(" ")}
         >
-          {item.type === "video" ? (
+          {item.type === "youtube" ? (
+            <iframe
+              className="shrimp-context-youtube"
+              src={item.src}
+              title={item.alt}
+              allow="autoplay; encrypted-media"
+              referrerPolicy="strict-origin-when-cross-origin"
+              tabIndex={-1}
+            />
+          ) : item.type === "video" ? (
             <video
               src={item.src}
               autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               disablePictureInPicture
               aria-label={item.alt}
             />
@@ -109,7 +156,8 @@ export default function CaseContextGrid({
             <img
               src={item.src}
               alt={item.alt}
-              loading="lazy"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
               decoding="async"
             />
           )}

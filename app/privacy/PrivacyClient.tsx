@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import CookieSettingsButton from "../components/CookieSettingsButton";
 import { useNavMagnet } from "../hooks/useNavMagnet";
 import { usePersistentTheme } from "../hooks/usePersistentTheme";
 import styles from "./privacy.module.css";
@@ -48,16 +47,6 @@ export default function PrivacyClient() {
           Galina Chumak
         </a>
 
-        <nav aria-label="Основная навигация">
-          <a href="/#projects" data-cursor="nav">
-            Проекты
-          </a>
-
-          <a href="/about" data-cursor="nav">
-            Обо мне
-          </a>
-        </nav>
-
         <button
           className="theme-switch"
           type="button"
@@ -67,9 +56,7 @@ export default function PrivacyClient() {
               : "Включить тёмную тему"
           }
           onClick={() =>
-            setTheme(
-              theme === "dark" ? "light" : "dark",
-            )
+            setTheme(theme === "dark" ? "light" : "dark")
           }
           data-cursor="link"
         >
@@ -95,6 +82,16 @@ export default function PrivacyClient() {
             />
           </span>
         </button>
+
+        <nav className="header-contact-nav" aria-label="Связаться">
+          <a
+            className="header-contact"
+            href="/about"
+            data-cursor="nav"
+          >
+            Связаться
+          </a>
+        </nav>
       </header>
 
       <section className={styles.layout}>
@@ -102,9 +99,7 @@ export default function PrivacyClient() {
           <h1
             className={`${styles.title} type-h1 reveal`}
           >
-            Политика
-            <br />
-            конфиденциальности
+            Политика конфиденциальности
           </h1>
         </div>
 
@@ -116,7 +111,7 @@ export default function PrivacyClient() {
             </p>
 
             <p className={`${styles.updated} text-normal`}>
-              Обновлено 4 августа 2026 года
+              Обновлено 28 августа 2026 года
             </p>
           </div>
 
@@ -149,8 +144,8 @@ export default function PrivacyClient() {
                 </p>
 
                 <p>
-                  После согласия посетителя подключается
-                  Яндекс Метрика. Она может получать
+                  Для анализа посещаемости используется
+                  Яндекс Метрика. Сервис может получать
                   техническую информацию о посещении: адрес
                   страницы, источник перехода, действия на
                   сайте, тип устройства, браузер,
@@ -162,7 +157,7 @@ export default function PrivacyClient() {
             </section>
 
             <section className="reveal">
-              <h2>Для чего нужна аналитика</h2>
+              <h2>Для чего используется аналитика</h2>
 
               <div className={styles.sectionBody}>
                 <p>
@@ -176,48 +171,64 @@ export default function PrivacyClient() {
             </section>
 
             <section className="reveal">
-              <h2>Согласие</h2>
+              <h2>Файлы cookie</h2>
 
               <div className={styles.sectionBody}>
                 <p>
-                  Яндекс Метрика не загружается до нажатия
-                  кнопки «Разрешить» в уведомлении о cookie.
-                  При отказе данные с помощью Метрики не
-                  собираются.
+                  На сайте используются файлы cookie, в том
+                  числе аналитические cookie Яндекс Метрики.
                 </p>
 
                 <p>
-                  Выбор сохраняется в локальном хранилище
-                  браузера. Его можно изменить в любое
-                  время.
+                  Они помогают собирать статистику посещений
+                  и взаимодействия с сайтом. Cookie не
+                  используются мной для установления личности
+                  посетителя.
                 </p>
 
-                <CookieSettingsButton
-                  className={styles.settingsButton}
-                />
+                <p>
+                  Пользователь может ограничить или отключить
+                  использование cookie, а также удалить
+                  сохранённые cookie в настройках своего
+                  браузера.
+                </p>
+
+                <p>
+                  Инструкции по управлению cookie доступны в
+                  настройках и справочных материалах
+                  используемого браузера.
+                </p>
               </div>
             </section>
 
             <section className="reveal">
-              <h2>Передача данных</h2>
+              <h2>Яндекс Метрика</h2>
 
               <div className={styles.sectionBody}>
                 <p>
-                  При согласии технические данные
-                  передаются сервису Яндекс Метрика и
-                  обрабатываются в соответствии с правилами
-                  и политикой конфиденциальности Яндекса.
+                  Сайт использует Яндекс Метрику, включая
+                  функцию «Вебвизор», для анализа посещаемости
+                  и взаимодействия с сайтом. Метрика может
+                  собирать информацию об активности на сайте,
+                  файлы cookie, данные об устройстве и
+                  записывать сессии посещений. Запретить сбор
+                  данных и запись сессий можно с помощью
+                  расширения «Блокировщик Яндекс.Метрики».
                 </p>
 
                 <p>
+                  Технические данные обрабатываются Яндексом в
+                  соответствии с его правилами
+                  {" и\u00A0"}
                   <a
                     href="https://yandex.ru/legal/confidential/"
                     target="_blank"
                     rel="noreferrer"
                     data-cursor="link"
                   >
-                    Политика конфиденциальности Яндекса
+                    политикой конфиденциальности
                   </a>
+                  .
                 </p>
               </div>
             </section>
@@ -228,15 +239,13 @@ export default function PrivacyClient() {
               <div className={styles.sectionBody}>
                 <p>
                   По вопросам, связанным с этой политикой и
-                  обработкой данных, можно написать в
-                  Telegram:{" "}
+                  обработкой данных, можно написать
+                  {" на\u00A0"}
                   <a
-                    href="https://t.me/galina_done"
-                    target="_blank"
-                    rel="noreferrer"
+                    href="mailto:galina.done@mail.ru"
                     data-cursor="link"
                   >
-                    @galina_done
+                    galina.done@mail.ru
                   </a>
                   .
                 </p>
@@ -249,7 +258,7 @@ export default function PrivacyClient() {
               <div className={styles.sectionBody}>
                 <p>
                   Политика может обновляться при изменении
-                  состава сервисов или способов обработки
+                  используемых сервисов или способов обработки
                   данных. Актуальная версия всегда
                   размещается на этой странице.
                 </p>

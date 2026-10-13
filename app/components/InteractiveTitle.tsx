@@ -96,12 +96,19 @@ export default function InteractiveTitle({
       onPointerLeave={reset}
     >
       <span aria-hidden="true">
-        {Array.from(text).map((character, index) => (
-          <span
-            className="hero-title-glyph"
-            key={`${character}-${index}`}
-          >
-            {character === " " ? "\u00A0" : character}
+        {text.split(" ").map((word, wordIndex, words) => (
+          <span key={`${word}-${wordIndex}`}>
+            <span className="hero-title-word">
+              {Array.from(word).map((character, characterIndex) => (
+                <span
+                  className="hero-title-glyph"
+                  key={`${character}-${characterIndex}`}
+                >
+                  {character}
+                </span>
+              ))}
+            </span>
+            {wordIndex < words.length - 1 ? " " : null}
           </span>
         ))}
       </span>

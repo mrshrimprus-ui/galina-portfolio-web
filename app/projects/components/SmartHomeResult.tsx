@@ -6,7 +6,7 @@ export default function SmartHomeResult() {
       >
         <img
           src="/assets/smarthome/result/result.webp"
-          alt="Термоголовка EKF Smart Home и экран приложения"
+          alt="Термоголовка EKF Connect Home и экран приложения"
           loading="lazy"
           decoding="async"
         />

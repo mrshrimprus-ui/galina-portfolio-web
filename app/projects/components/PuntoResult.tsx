@@ -1,3 +1,5 @@
+import CaseStoreButtons from "./CaseStoreButtons";
+
 export default function PuntoResult() {
   return (
     <div className="punto-result reveal">
@@ -29,12 +31,15 @@ export default function PuntoResult() {
       </div>
 
       <p className="punto-result__summary type-text">
-        Все ключевые направления были реализованы:
-        маркетплейс, административная система и банковские
-        функции. Спустя 4&nbsp;года основная логика сценариев
-        сохранилась, а продукт продолжил развиваться на её
-        основе.
+        Спроектированные сценарии были реализованы и спустя четыре года
+        сохранились в основе продукта. Punto Pago продолжил развиваться, а
+        маркетплейс стал одним из его направлений.
       </p>
+
+      <CaseStoreButtons
+        appStoreUrl="https://apps.apple.com/app/punto-pago/id1415876448"
+        googlePlayUrl="https://play.google.com/store/apps/details?id=com.puntopago.puntopagoapp"
+      />
     </div>
   );
 }

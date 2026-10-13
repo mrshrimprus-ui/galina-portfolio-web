@@ -1,5 +1,11 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useLayoutEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+
 import InteractiveTitle from "../../components/InteractiveTitle";
+import MagneticTags from "../../components/MagneticTags";
 
 type CaseHeroProps = {
   title: ReactNode;
@@ -18,36 +24,84 @@ export default function CaseHero({
   actions,
   className = "",
 }: CaseHeroProps) {
+  const pathname = usePathname();
+  const [visiblePath, setVisiblePath] = useState("");
+
+  const visible = visiblePath === pathname;
+
+  useLayoutEffect(() => {
+    let secondFrame = 0;
+
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        setVisiblePath(pathname);
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+    };
+  }, [pathname]);
+
+  const [, domainRow, platformRow] = meta;
+
+  const splitMeta = (value: ReactNode) =>
+    typeof value === "string"
+      ? value
+          .split("·")
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : [];
+
+  const tags = [
+    ...splitMeta(domainRow),
+    ...splitMeta(platformRow),
+  ];
+
+  const reveal = visible ? "reveal is-visible" : "reveal";
+
   return (
-    <section className={`case-hero shrimp-cover ${className}`.trim()}>
-      <div className="shrimp-cover-copy">
+    <section
+      key={pathname}
+      className={["case-intro", className].filter(Boolean).join(" ")}
+    >
+      <div className="case-intro__copy">
+        <MagneticTags
+          items={tags}
+          separator="·"
+          className={`case-intro__tags ${reveal}`}
+        />
+
         {typeof title === "string" ? (
           <InteractiveTitle
             text={title}
-            className="type-h1 reveal reveal-heading"
+            className={`case-intro__title type-h1 reveal reveal-heading${
+              visible ? " is-visible" : ""
+            }`}
           />
         ) : (
-          <h1 className="type-h1 reveal reveal-heading">
+          <h1
+            className={`case-intro__title type-h1 reveal reveal-heading${
+              visible ? " is-visible" : ""
+            }`}
+          >
             <span>{title}</span>
           </h1>
         )}
 
-        <p className="shrimp-summary text-normal reveal">
+        <p className={`case-intro__summary type-description ${reveal}`}>
           {summary}
         </p>
 
-        <p className="shrimp-meta reveal text-normal">
-          {meta.map((item, index) => (
-            <span key={index}>{item}</span>
-          ))}
-        </p>
-
-        <div className="case-hero-actions">
-          {actions}
-        </div>
+        {actions && (
+          <div className={`case-intro__actions ${reveal}`}>
+            {actions}
+          </div>
+        )}
       </div>
 
-      <div className="case-cover-frame">
+      <div className={`case-intro__visual ${reveal}`}>
         {visual}
       </div>
     </section>

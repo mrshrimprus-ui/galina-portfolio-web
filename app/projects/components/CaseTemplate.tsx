@@ -28,8 +28,8 @@ type CaseTemplateProps = {
   task: CaseSectionData;
   process: CaseSectionData;
   highlights?: CaseSectionData;
-  solution: CaseSectionData;
-  result: CaseSectionData;
+  solution?: CaseSectionData;
+  result?: CaseSectionData;
 };
 
 type SectionKind =
@@ -123,8 +123,10 @@ export default function CaseTemplate({
       {highlights && (
         <CaseTemplateSection kind="highlights" section={highlights} />
       )}
-      <CaseTemplateSection kind="solution" section={solution} />
-      <CaseTemplateSection kind="result" section={result} />
+      {solution && (
+        <CaseTemplateSection kind="solution" section={solution} />
+      )}
+      {result && <CaseTemplateSection kind="result" section={result} />}
     </CasePageShell>
   );
 }

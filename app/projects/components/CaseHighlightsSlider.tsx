@@ -15,16 +15,24 @@ type HighlightSlide = {
 type CaseHighlightsSliderProps = {
   slides: readonly HighlightSlide[];
   ariaLabel: string;
+  desktopHover?: boolean;
 };
 
 export default function CaseHighlightsSlider({
   slides,
   ariaLabel,
+  desktopHover = true,
 }: CaseHighlightsSliderProps) {
   const [activeSlide, setActiveSlide] = useState(0);
   const slide = slides[activeSlide];
   const tabsRef = useRef<HTMLDivElement>(null);
   const visualRef = useRef<HTMLDivElement>(null);
+  const [pillStyle, setPillStyle] = useState({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+  });
   const dragRef = useRef<{
     pointerId: number;
     startX: number;
@@ -33,33 +41,71 @@ export default function CaseHighlightsSlider({
   } | null>(null);
 
   useEffect(() => {
-    if (!window.matchMedia("(max-width: 900px)").matches) return;
+    const preloaders = slides.map((item) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = item.image;
+      image.decode().catch(() => undefined);
+      return image;
+    });
 
-    const tabs = tabsRef.current;
-    const activeTab = tabs?.children[
-      activeSlide
-    ] as HTMLElement | undefined;
-
-    if (!tabs || !activeTab) return;
-
-    const safeEdge = 16;
-    const tabLeft = activeTab.offsetLeft;
-    const tabRight = tabLeft + activeTab.offsetWidth;
-    const visibleLeft = tabs.scrollLeft + safeEdge;
-    const visibleRight =
-      tabs.scrollLeft + tabs.clientWidth - safeEdge;
-
-    if (tabLeft < visibleLeft) {
-      tabs.scrollTo({
-        left: Math.max(0, tabLeft - safeEdge),
-        behavior: "smooth",
+    return () => {
+      preloaders.forEach((image) => {
+        image.onload = null;
+        image.onerror = null;
       });
-    } else if (tabRight > visibleRight) {
-      tabs.scrollTo({
-        left: tabRight - tabs.clientWidth + safeEdge,
-        behavior: "smooth",
+    };
+  }, [slides]);
+
+  useEffect(() => {
+    const updatePill = () => {
+      const tabs = tabsRef.current;
+      const button = tabs?.children[
+        activeSlide + 1
+      ] as HTMLElement | undefined;
+
+      if (!tabs || !button) return;
+
+      setPillStyle({
+        left: button.offsetLeft,
+        top: button.offsetTop,
+        width: button.offsetWidth,
+        height: button.offsetHeight,
       });
-    }
+
+      if (window.matchMedia("(max-width: 900px)").matches) {
+        const safeEdge = 16;
+        const tabLeft = button.offsetLeft;
+        const tabRight = tabLeft + button.offsetWidth;
+        const visibleLeft = tabs.scrollLeft + safeEdge;
+        const visibleRight =
+          tabs.scrollLeft + tabs.clientWidth - safeEdge;
+
+        if (tabLeft < visibleLeft) {
+          tabs.scrollTo({
+            left: Math.max(0, tabLeft - safeEdge),
+            behavior: "smooth",
+          });
+        } else if (tabRight > visibleRight) {
+          tabs.scrollTo({
+            left:
+              tabRight -
+              tabs.clientWidth +
+              safeEdge,
+            behavior: "smooth",
+          });
+        }
+      }
+    };
+
+    const frame = requestAnimationFrame(updatePill);
+
+    window.addEventListener("resize", updatePill);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", updatePill);
+    };
   }, [activeSlide]);
 
   useEffect(() => {
@@ -99,16 +145,75 @@ export default function CaseHighlightsSlider({
         if (event.key === "ArrowLeft") move(-1);
         if (event.key === "ArrowRight") move(1);
       }}
+      style={{ touchAction: "pan-y pinch-zoom" }}
+      onPointerDown={(event) => {
+        if (!window.matchMedia("(max-width: 900px)").matches) return;
+        if (event.pointerType === "mouse") return;
+
+        if (
+          (event.target as HTMLElement).closest(
+            ".case-highlights-tabs, button, a",
+          )
+        ) {
+          swipeStartRef.current = null;
+          return;
+        }
+
+        swipeStartRef.current = {
+          x: event.clientX,
+          y: event.clientY,
+        };
+
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }}
+      onPointerUp={(event) => {
+        if (!window.matchMedia("(max-width: 900px)").matches) return;
+
+        const start = swipeStartRef.current;
+        swipeStartRef.current = null;
+
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+
+        if (!start) return;
+
+        const deltaX = event.clientX - start.x;
+        const deltaY = event.clientY - start.y;
+
+        if (
+          Math.abs(deltaX) >= 40 &&
+          Math.abs(deltaX) > Math.abs(deltaY) * 1.15
+        ) {
+          move(deltaX < 0 ? 1 : -1);
+        }
+      }}
+      onPointerCancel={(event) => {
+        swipeStartRef.current = null;
+
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+      }}
     >
       <div className="case-highlights-tabs" ref={tabsRef}>
+        <div
+          className="case-highlights-tabs__pill"
+          style={{
+            left: pillStyle.left,
+            top: pillStyle.top,
+            width: pillStyle.width,
+            height: pillStyle.height,
+          }}
+        />
+
         {slides.map((item, index) => (
           <button
             key={item.label}
             type="button"
             className={index === activeSlide ? "is-active" : ""}
             data-cursor="link"
-            onPointerEnter={() => setActiveSlide(index)}
-            onFocus={() => setActiveSlide(index)}
+            onClick={() => setActiveSlide(index)}
           >
             {item.label}
           </button>
@@ -126,7 +231,6 @@ export default function CaseHighlightsSlider({
             ? ` ${slide.visualClassName}`
             : ""
         }`}
-        data-cursor={slide.scrollX ? undefined : "carousel-right"}
         onPointerDown={(event) => {
           if (
             !slide.scrollX ||
@@ -153,28 +257,15 @@ export default function CaseHighlightsSlider({
         onPointerMove={(event) => {
           const drag = dragRef.current;
 
-          if (slide.scrollX && drag?.pointerId === event.pointerId) {
+          if (
+            slide.scrollX &&
+            drag?.pointerId === event.pointerId
+          ) {
             drag.scroller.scrollLeft =
               drag.startScrollLeft - (event.clientX - drag.startX);
+
             event.preventDefault();
-            return;
           }
-
-          if (
-            slide.scrollX ||
-            window.matchMedia("(max-width: 900px)")
-              .matches
-          )
-            return;
-
-          const rect =
-            event.currentTarget.getBoundingClientRect();
-
-          event.currentTarget.dataset.cursor =
-            event.clientX <
-            rect.left + rect.width / 2
-              ? "carousel-left"
-              : "carousel-right";
         }}
         onPointerUp={(event) => {
           if (dragRef.current?.pointerId !== event.pointerId) return;
@@ -192,64 +283,7 @@ export default function CaseHighlightsSlider({
           dragRef.current = null;
           event.currentTarget.classList.remove("is-dragging");
         }}
-        onClick={(event) => {
-          if (
-            slide.scrollX ||
-            window.matchMedia("(max-width: 900px)")
-              .matches
-          )
-            return;
 
-          const rect =
-            event.currentTarget.getBoundingClientRect();
-
-          move(
-            event.clientX <
-              rect.left + rect.width / 2
-              ? -1
-              : 1,
-          );
-        }}
-        onTouchStart={(event) => {
-          const touch = event.touches[0];
-
-          swipeStartRef.current = {
-            x: touch.clientX,
-            y: touch.clientY,
-          };
-        }}
-        onTouchEnd={(event) => {
-          if (
-            slide.scrollX ||
-            event.currentTarget.scrollWidth >
-              event.currentTarget.clientWidth + 1
-          ) {
-            swipeStartRef.current = null;
-            return;
-          }
-
-          const start = swipeStartRef.current;
-          swipeStartRef.current = null;
-
-          if (!start) return;
-
-          const touch = event.changedTouches[0];
-          const deltaX =
-            touch.clientX - start.x;
-          const deltaY =
-            touch.clientY - start.y;
-
-          if (
-            Math.abs(deltaX) >
-              Math.abs(deltaY) * 1.2 &&
-            Math.abs(deltaX) >= 48
-          ) {
-            move(deltaX < 0 ? 1 : -1);
-          }
-        }}
-        onTouchCancel={() => {
-          swipeStartRef.current = null;
-        }}
       >
         <AnimatePresence mode="wait" initial={false}>
           {slide.scrollX ? (

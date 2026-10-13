@@ -5,11 +5,13 @@ import { useEffect, useRef } from "react";
 type CaseTaskVisualProps = {
   src: string;
   alt: string;
+  priority?: boolean;
 };
 
 export default function CaseTaskVisual({
   src,
   alt,
+  priority = false,
 }: CaseTaskVisualProps) {
   const visualRef = useRef<HTMLElement>(null);
 
@@ -22,6 +24,13 @@ export default function CaseTaskVisual({
     let target = 0;
 
     const updateTarget = () => {
+      if (window.matchMedia("(max-width: 1200px)").matches) {
+        target = 0;
+        current = 0;
+        visual.style.setProperty("--mvp-scroll-y", "0px");
+        return;
+      }
+
       const rect = visual.getBoundingClientRect();
       target = Math.max(
         -52,
@@ -58,7 +67,13 @@ export default function CaseTaskVisual({
 
   return (
     <figure ref={visualRef} className="shrimp-mvp-media case-task-visual reveal">
-      <img src={src} alt={alt} loading="lazy" decoding="async" />
+      <img
+        src={src}
+        alt={alt}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
+        decoding="async"
+      />
     </figure>
   );
 }

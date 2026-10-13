@@ -5,6 +5,7 @@ import RussianTypography from "./components/RussianTypography";
 import GlobalCursor from "./components/GlobalCursor";
 import YandexMetrika from "./components/YandexMetrika";
 import CookieConsent from "./components/CookieConsent";
+import ProjectPageTransition from "./components/ProjectPageTransition";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://galinachumak.ru"),
@@ -55,6 +56,7 @@ export default function RootLayout({
         <RussianTypography />
         <YandexMetrika />
         {children}
+        <ProjectPageTransition />
         <SiteFooter />
         <CookieConsent />
 

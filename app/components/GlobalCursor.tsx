@@ -15,8 +15,8 @@ function CursorArrow({
         <path
           d={
             direction === "left"
-              ? "M15 5l-7 7 7 7"
-              : "M9 5l7 7-7 7"
+              ? "M20 12H5M11 6l-6 6 6 6"
+              : "M4 12h15M13 6l6 6-6 6"
           }
         />
       </svg>
@@ -27,8 +27,8 @@ function CursorArrow({
 export default function GlobalCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
-  const previewShellRef = useRef<HTMLSpanElement>(null);
-  const previewRef = useRef<HTMLImageElement>(null);
+  const nextPreviewRef = useRef<HTMLSpanElement>(null);
+  const nextPreviewImageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -54,8 +54,7 @@ export default function GlobalCursor() {
       if (mode === currentMode) return;
 
       const label = labelRef.current;
-      const showLabel =
-        mode === "project" || mode === "video";
+      const showLabel = false;
 
       if (label && !showLabel) {
         label.style.display = "none";
@@ -74,32 +73,25 @@ export default function GlobalCursor() {
       }
     };
 
-    const updatePreview = (target: HTMLElement) => {
-      const anchor =
-        target.closest<HTMLAnchorElement>("a[href]") ??
-        target.querySelector<HTMLAnchorElement>("a[href]");
-
-      const href = anchor?.getAttribute("href") ?? "";
-      const match = href.match(
+    const updateNextPreview = (target: HTMLElement) => {
+      const anchor = target.closest<HTMLAnchorElement>("a[href]");
+      const project = anchor?.getAttribute("href")?.match(
         /\/projects\/([^/?#]+)/,
-      );
+      )?.[1];
 
-      if (!match || !previewRef.current) return;
+      if (!project || !nextPreviewImageRef.current) return;
 
-      const project = match[1];
-
-      const accentByProject: Record<string, string> = {
+      const accents: Record<string, string> = {
         mrshrimp: "#ff8d28",
         punto: "#2e2da6",
         smarthome: "#da2025",
       };
 
-      previewRef.current.src =
+      nextPreviewImageRef.current.src =
         `/assets/${project}/home/screen.webp`;
-
-      previewShellRef.current?.style.setProperty(
-        "--case-next-accent",
-        accentByProject[project] ?? "#2e2da6",
+      nextPreviewRef.current?.style.setProperty(
+        "--next-preview-color",
+        accents[project] ?? "#2e2da6",
       );
     };
 
@@ -168,28 +160,14 @@ export default function GlobalCursor() {
         }
       }
 
-      if (
-        target &&
-        (
-          mode.includes("next") ||
-          target.className.includes("next-project")
-        )
-      ) {
-        updatePreview(target);
-        mode = "case-next";
+      if (target && mode.includes("next")) {
+        updateNextPreview(target);
+        mode = "next-preview";
       }
 
       if (resetTimer !== undefined) {
         window.clearTimeout(resetTimer);
         resetTimer = undefined;
-      }
-
-      if (!mode && currentMode === "project") {
-        resetTimer = window.setTimeout(() => {
-          resetTimer = undefined;
-          setMode("");
-        }, 140);
-        return;
       }
 
       setMode(mode);
@@ -271,6 +249,7 @@ export default function GlobalCursor() {
       leave,
     );
 
+
     return () => {
       if (resetTimer !== undefined) {
         window.clearTimeout(resetTimer);
@@ -301,6 +280,7 @@ export default function GlobalCursor() {
         leave,
       );
 
+
       document.documentElement.classList.remove(
         "custom-cursor-enabled",
       );
@@ -326,11 +306,26 @@ export default function GlobalCursor() {
       <CursorArrow direction="right" />
 
       <span
-        className="case-next-cursor"
-        ref={previewShellRef}
+        className="global-cursor-arrow global-cursor-arrow--project"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 24 24">
+          <path d="M7.5 16.5 16.5 7.5M10 7.5h6.5V14" />
+        </svg>
+      </span>
+
+      <span className="global-cursor-play" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 6.7C9.2 6.2 8.2 6.8 8.2 7.8V16.2C8.2 17.2 9.2 17.8 10 17.3L17 13.1C17.8 12.6 17.8 11.4 17 10.9L10 6.7Z" />
+        </svg>
+      </span>
+
+      <span
+        className="next-project-pointer"
+        ref={nextPreviewRef}
       >
         <img
-          ref={previewRef}
+          ref={nextPreviewImageRef}
           src="/assets/punto/home/screen.webp"
           alt=""
         />

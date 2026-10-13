@@ -4,8 +4,6 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 const COUNTER_ID = 111298116;
-const CONSENT_KEY = "galina-portfolio-analytics-consent";
-const CONSENT_EVENT = "analytics-consent-changed";
 
 type YmFunction = ((...args: unknown[]) => void) & {
   a?: unknown[][];
@@ -41,6 +39,7 @@ function initializeMetrika() {
 
   window.ym?.(COUNTER_ID, "init", {
     clickmap: true,
+    webvisor: true,
     accurateTrackBounce: true,
     trackLinks: true,
   });
@@ -52,33 +51,16 @@ export default function YandexMetrika() {
   const previousUrl = useRef<string | null>(null);
 
   useEffect(() => {
-    const startMetrika = () => {
-      const consent = localStorage.getItem(CONSENT_KEY);
+    if (initialized.current) return;
 
-      if (consent !== "accepted" || initialized.current) {
-        return;
-      }
+    initializeMetrika();
 
-      initializeMetrika();
-      initialized.current = true;
-      previousUrl.current = window.location.href;
-    };
-
-    startMetrika();
-    window.addEventListener(CONSENT_EVENT, startMetrika);
-
-    return () => {
-      window.removeEventListener(CONSENT_EVENT, startMetrika);
-    };
+    initialized.current = true;
+    previousUrl.current = window.location.href;
   }, []);
 
   useEffect(() => {
-    if (
-      !initialized.current ||
-      localStorage.getItem(CONSENT_KEY) !== "accepted"
-    ) {
-      return;
-    }
+    if (!initialized.current) return;
 
     const currentUrl = window.location.href;
 

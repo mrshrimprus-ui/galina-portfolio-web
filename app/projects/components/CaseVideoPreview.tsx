@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type CaseVideoPreviewProps = {
   src: string;
@@ -13,7 +14,18 @@ export default function CaseVideoPreview({
   title,
 }: CaseVideoPreviewProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdaptive, setIsAdaptive] = useState(false);
   const previewRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1200px)");
+    const update = () => setIsAdaptive(media.matches);
+
+    update();
+    media.addEventListener("change", update);
+
+    return () => media.removeEventListener("change", update);
+  }, []);
 
 
   useEffect(() => {
@@ -31,6 +43,11 @@ export default function CaseVideoPreview({
     let frame = 0;
 
     const updateParallax = () => {
+      if (window.matchMedia("(max-width: 1200px)").matches) {
+        preview.style.setProperty("--video-scroll-y", "0px");
+        return;
+      }
+
       const rect = preview.getBoundingClientRect();
       const previewCenter =
         rect.top + rect.height / 2;
@@ -108,6 +125,90 @@ export default function CaseVideoPreview({
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen || !isAdaptive) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isAdaptive, isOpen]);
+
+  const modal = (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className={`case-video-modal${
+            isAdaptive ? " case-video-modal--viewport" : ""
+          }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label={title}
+          data-cursor="video-modal"
+          onKeyDown={(event) => {
+            event.stopPropagation();
+          }}
+          onMouseDown={(event) => {
+            event.stopPropagation();
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
+          <motion.div
+            className="case-video-modal__player"
+            initial={{
+              opacity: 0,
+              scale: 0.97,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.98,
+            }}
+            transition={{
+              duration: 0.45,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <video
+              src={src}
+              controls
+              autoPlay
+              playsInline
+              preload="metadata"
+              aria-label={title}
+            />
+          </motion.div>
+
+          <button
+            className="case-video-modal__close"
+            type="button"
+            aria-label="Закрыть видео"
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsOpen(false);
+            }}
+          >
+            <span aria-hidden="true" />
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
   return (
     <>
       <button
@@ -124,6 +225,8 @@ export default function CaseVideoPreview({
           setIsOpen(true);
         }}
       >
+        <span className="case-media-loader" aria-hidden="true" />
+
         <video
           src={src}
           autoPlay
@@ -132,6 +235,11 @@ export default function CaseVideoPreview({
           playsInline
           preload="metadata"
           aria-hidden="true"
+          onLoadedData={(event) => {
+            event.currentTarget
+              .closest(".case-video-preview")
+              ?.classList.add("is-media-loaded");
+          }}
         />
 
         <span
@@ -140,74 +248,7 @@ export default function CaseVideoPreview({
         />
       </button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="case-video-modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 0.3,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            role="dialog"
-            aria-modal="true"
-            aria-label={title}
-            data-cursor="video-modal"
-            onKeyDown={(event) => {
-              event.stopPropagation();
-            }}
-            onMouseDown={(event) => {
-              event.stopPropagation();
-            }}
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
-          >
-            <motion.div
-              className="case-video-modal__player"
-              initial={{
-                opacity: 0,
-                scale: 0.97,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.98,
-              }}
-              transition={{
-                duration: 0.45,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <video
-                src={src}
-                controls
-                autoPlay
-                playsInline
-                preload="metadata"
-                aria-label={title}
-              />
-            </motion.div>
-
-            <button
-              className="case-video-modal__close"
-              type="button"
-              aria-label="Закрыть видео"
-              onClick={(event) => {
-                event.stopPropagation();
-                setIsOpen(false);
-              }}
-            >
-              <span aria-hidden="true" />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isAdaptive ? createPortal(modal, document.body) : modal}
     </>
   );
 }

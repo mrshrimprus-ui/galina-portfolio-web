@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import CaseExperience from "./CaseExperience";
+import CaseBottomNavDock from "./CaseBottomNavDock";
 import CaseNextProject from "./CaseNextProject";
 import CaseBottomNextLink from "./CaseBottomNextLink";
 type CasePageShellProps = {
@@ -32,6 +33,7 @@ export default function CasePageShell({
       <main className={`case-page ${className}`.trim()}>
         {cursor}
         <CaseExperience />
+        <CaseBottomNavDock />
 
         <div className="case-content shrimp-content">
           {children}
@@ -49,7 +51,7 @@ export default function CasePageShell({
             aria-label="Навигация по проектам"
           >
             <a href="/#projects" data-cursor="nav">
-              Все проекты
+              Проекты
             </a>
 
             <a href="/about" data-cursor="nav">

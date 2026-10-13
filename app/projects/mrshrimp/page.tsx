@@ -17,12 +17,18 @@ import CaseStoreButtons from "../components/CaseStoreButtons";
 const processStages = [
   {
     label: "Исследование",
-    title: "Поведенческие персоны",
-    description:
-      "Осознанный здоровист — заботится о здоровье и профилактике. Поддерживающий активность — хочет сохранять физическую форму.",
+    title: "Что мешает разминаться",
+    description: (
+      <span className="research-barriers-list">
+        <span>Трудно вспомнить о себе</span>
+        <span>Лень и усталость</span>
+        <span>Сложно выбрать, что делать</span>
+        <span>Однообразие упражнений</span>
+      </span>
+    ),
     card:
-      "Провела 6 глубинных интервью и выделила 2 поведенческие персоны с разными драйверами и барьерами. На основе выводов собрала CJM основного сценария и общий User Flow.",
-    tags: ["Интерьвю", "Персоны", "CJM", "User Flow"],
+      "Провела 6 глубинных интервью, чтобы понять, при каких условиях разминки могут встроиться в повседневный день, а что этому мешает. По различиям в мотивации и поведении выделила 2 поведенческие персоны.",
+    tags: ["Интервью", "Персоны", "CJM", "User Flow"],
     visual: "research",
   },
   {
@@ -31,8 +37,8 @@ const processStages = [
     description:
       "Снизить барьер к разминкам: помочь человеку легче начать, завершить разминку и захотеть вернуться снова.",
     card:
-      "На основе глубинных интервью сформулировала гипотезы для первого релиза и определила, по каким метрикам буду их проверять.",
-    tags: ["Гипотезы", "Метрики", "Критерии успеха"],
+      "Сопоставила выводы интервью с анализом конкурентов и собрала основной сценарий продукта. Решения сформулировала как гипотезы и привязала к метрикам.",
+    tags: ["Конкуренты", "CJM", "User Flow", "Метрики"],
     visual: "hypotheses",
   },
   {
@@ -62,7 +68,7 @@ const processStages = [
       "Собрала приложение во FlutterFlow и проверяла решения сразу в работающем продукте, а не только в макетах.",
     card:
       "Собрала приложение во FlutterFlow: реализовала основные сценарии, состояния и бизнес-логику, подключила Firebase, аналитику, авторизацию и уведомления. Подготовила сборки для iOS и Android.",
-    tags: ["FlutterFlow", "Firebase", "GA4", "iOS · Android"],
+    tags: ["FlutterFlow", "Firebase", "GA4", "Mobile App"],
     visual: "development",
   },
   {
@@ -98,41 +104,63 @@ const processStages = [
 
 const solutionSlides = [
   {
-    title: "Старт в один тап",
+    title: "Снизила барьер до первой разминки",
     description:
-      "Без регистрации и обязательного онбординга — можно сразу начать.",
+      "Убрала обязательную регистрацию и онбординг — пользователь может начать в один тап.",
     visual: "start",
+    background:
+      "/assets/mrshrimp/solution/mrshrimp-solution-01-bg.webp",
+    picture:
+      "/assets/mrshrimp/solution/mrshrimp-solution-01-pic.webp",
   },
   {
-    title: "Подстроить под себя",
+    title: "Подстроила разминку под ситуацию",
     description:
-      "Перед стартом можно выбрать длительность, формат и тренера — под ситуацию и настроение.",
+      "Можно начать сразу или выбрать длительность, формат и тренера под своё время и настроение.",
     visual: "setup",
+    background:
+      "/assets/mrshrimp/solution/mrshrimp-solution-02-bg.webp",
+    picture:
+      "/assets/mrshrimp/solution/mrshrimp-solution-02-pic.webp",
   },
   {
-    title: "Каждый запуск — новый комплекс",
+    title: "Разнообразила повторные запуски",
     description:
-      "При каждом запуске приложение собирает новый комплекс из библиотеки упражнений.",
+      "Каждый раз приложение собирает новый комплекс из библиотеки упражнений, чтобы разминки меньше повторялись.",
     visual: "workout",
+    background:
+      "/assets/mrshrimp/solution/mrshrimp-solution-03-bg.webp",
+    picture:
+      "/assets/mrshrimp/solution/mrshrimp-solution-03-pic.webp",
   },
   {
-    title: "Ощущение результата",
+    title: "Закрепила ощущение результата",
     description:
-      "После разминки пользователь получает похвалу, видит прогресс и может открыть награду.",
+      "После разминки пользователь получает похвалу, видит прогресс и открывает награды — завершённое действие становится заметным.",
     visual: "result",
+    background:
+      "/assets/mrshrimp/solution/mrshrimp-solution-04-bg.webp",
+    picture:
+      "/assets/mrshrimp/solution/mrshrimp-solution-04-pic.webp",
   },
   {
-    title: "Видеть регулярность",
+    title: "Перевела разминки в регулярность",
     description:
-      "Дни в движении, календарь, уровни и челленджи превращают отдельные разминки в заметный прогресс.",
+      "Дни в движении, календарь, уровни и челленджи показывают накопленный прогресс и создают повод возвращаться.",
     visual: "progress",
+    background:
+      "/assets/mrshrimp/solution/mrshrimp-solution-05-bg.webp",
+    picture:
+      "/assets/mrshrimp/solution/mrshrimp-solution-05-pic.webp",
   },
 ] as const;
 
 function SolutionVisual({
   visual,
+  mobile = false,
 }: {
   visual: (typeof solutionSlides)[number]["visual"];
+  mobile?: boolean;
 }) {
   const numberByVisual: Record<
     (typeof solutionSlides)[number]["visual"],
@@ -146,9 +174,17 @@ function SolutionVisual({
   };
 
   const number = numberByVisual[visual];
+  const mobileSuffix = mobile ? "-mobile" : "";
 
+  const pictureSrc =
+    visual === "progress"
+      ? `/assets/mrshrimp/solution/mrshrimp-solution-05-progress${mobileSuffix}.webp`
+      : `/assets/mrshrimp/solution/mrshrimp-solution-${number}-pic${mobileSuffix}.webp`;
   return (
-    <div className="solution-visual solution-visual--asset" aria-hidden="true">
+    <div
+      className={`solution-visual solution-visual--asset solution-visual--${visual}`}
+      aria-hidden="true"
+    >
       <motion.div
         className="solution-visual__background-reveal"
         initial={false}
@@ -160,10 +196,11 @@ function SolutionVisual({
       >
         <img
           className="solution-visual__background"
-          src={`/assets/mrshrimp/solution/mrshrimp-solution-${number}-bg.webp`}
+          src={`/assets/mrshrimp/solution/mrshrimp-solution-${number}-bg${mobileSuffix}.webp`}
           alt=""
           draggable={false}
           loading="lazy"
+          decoding="async"
         />
       </motion.div>
 
@@ -180,10 +217,11 @@ function SolutionVisual({
         <div className="solution-visual__picture-wrap">
           <img
             className="solution-visual__picture"
-            src={`/assets/mrshrimp/solution/mrshrimp-solution-${number}-pic.webp`}
+            src={pictureSrc}
             alt=""
             draggable={false}
-          loading="lazy"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       </motion.div>
@@ -206,7 +244,10 @@ function MobileSolutionSlider() {
             key={slide.visual}
           >
             <div className="shrimp-solution-mobile-card">
-              <SolutionVisual visual={slide.visual} />
+              <SolutionVisual
+                visual={slide.visual}
+                mobile
+              />
             </div>
 
             <div className="shrimp-solution-mobile-copy">
@@ -230,6 +271,34 @@ function MobileSolutionSlider() {
 }
 
 function SolutionSlider() {
+  useEffect(() => {
+    const mobileSuffix = window.matchMedia("(max-width: 820px)").matches
+      ? "-mobile"
+      : "";
+    const preloaders: HTMLImageElement[] = [];
+
+    solutionSlides.forEach((_, index) => {
+      const number = String(index + 1).padStart(2, "0");
+
+      ["bg", "pic"].forEach((layer) => {
+        const image = new Image();
+        image.decoding = "async";
+        const versionSuffix = "";
+        image.src =
+          `/assets/mrshrimp/solution/mrshrimp-solution-${number}-${layer}${mobileSuffix}${versionSuffix}.webp`;
+        image.decode().catch(() => undefined);
+        preloaders.push(image);
+      });
+    });
+
+    return () => {
+      preloaders.forEach((image) => {
+        image.onload = null;
+        image.onerror = null;
+      });
+    };
+  }, []);
+
   return (
     <section className="shrimp-story-section shrimp-solution">
       <div className="shrimp-section-title reveal">
@@ -238,29 +307,15 @@ function SolutionSlider() {
         </p>
 
         <h2 className="type-h2">
-          Быстрая разминка
-          <br />
-          без лишних усилий
+          Быстрая разминка{" "}
+          <span className="mrshrimp-accent">без лишних усилий</span>
         </h2>
-
-        <div className="shrimp-solution-intro type-text">
-
-          <p className="type-caption">Начать → Размяться → Увидеть результат → Вернуться</p>
-        </div>
       </div>
 
       <div className="shrimp-solution-desktop-slider">
         <CaseSolutionSlider
           slides={solutionSlides}
           ariaLabel="Ключевые решения приложения"
-          renderVisual={(visual) => (
-            <SolutionVisual
-              visual={
-                visual as
-                  (typeof solutionSlides)[number]["visual"]
-              }
-            />
-          )}
         />
       </div>
 
@@ -284,33 +339,42 @@ function ArrowIcon({ direction }: { direction: "left" | "right" }) {
 const releaseHypotheses = [
   {
     title: "H1 · Легко начать",
-    barrier: "Барьер из интервью: сложно прерваться во время работы и переключиться на разминку.",
-    hypothesis: "Гипотеза: если сократить путь до разминки до одного основного действия, то не менее 30% новых пользователей начнут первую разминку.",
-    check: "Проверка: доля первых стартов. Критерий — ≥30%.",
+    barrier:
+      "Барьеры из интервью: усталость и лень, перегрузка опциями.",
+    hypothesis:
+      "Гипотеза: если убрать лишние действия перед первой разминкой и оставить один понятный старт с готовым сетом, доля новых пользователей, которые начнут первую разминку, будет не ниже 30%.",
+    check:
+      "Проверка: доля новых пользователей, начавших первую разминку.",
+    criterion: "Критерий: ≥30%.",
   },
   {
     title: "H2 · Короткий формат",
-    barrier: "Барьер из интервью: на тренировку сложно выделить отдельное время в течение рабочего дня.",
-    hypothesis: "Гипотеза: если разминка занимает несколько минут, то не менее 55% запущенных разминок будут завершаться.",
-    check: "Проверка: completion rate. Критерий — ≥55%.",
+    barrier:
+      "Барьеры из интервью: экономия времени, усталость и лень.",
+    hypothesis:
+      "Гипотеза: если разминка занимает 2–3 минуты, доля завершённых разминок среди начатых будет не ниже 55%.",
+    check: "Проверка: completion rate.",
+    criterion: "Критерий: ≥55%.",
   },
   {
-    title: "H3 · Без ощущения фитнеса",
-    barrier: "Барьер из интервью: спорт может восприниматься как дисциплина и ещё одна обязанность.",
-    hypothesis: "Гипотеза: если упражнения ведут персонажи, а подача остаётся лёгкой и с юмором, продукт будет меньше ассоциироваться с фитнесом и обязательной тренировкой.",
-    check: "Проверка: качественная обратная связь на пользовательских тестах.",
+    title: "H3 · Разнообразие",
+    barrier:
+      "Барьеры из интервью: однообразие, раздражение от подачи.",
+    hypothesis:
+      "Гипотеза: если дать несколько тренеров и вариантов разминок, пользователи с повторными запусками будут использовать разные варианты, а не оставаться в одном сценарии.",
+    check:
+      "Проверка: доля пользователей с 2+ запусками, использовавших больше одного тренера или варианта разминки.",
+    criterion: "Критерий: ≥50%.",
   },
   {
-    title: "H4 · Персонализация",
-    barrier: "Барьер из интервью: у пользователей разные предпочтения к формату разминки, и один сценарий подходит не всем.",
-    hypothesis: "Гипотеза: если дать пользователю возможность настраивать разминку под себя, то не менее 50% пользователей с повторными запусками будут использовать разные варианты хотя бы одного параметра — тренера, формата, длительности или музыки.",
-    check: "Проверка: доля пользователей с 2+ запусками, которые использовали больше одного варианта хотя бы одного параметра. Критерий — ≥50%.",
-  },
-  {
-    title: "H5 · Видимый прогресс",
-    barrier: "Барьер из интервью: эффект коротких разминок сложно заметить после одного занятия.",
-    hypothesis: "Гипотеза: если показывать прогресс через дни в движении, серии и достижения, пользователи будут возвращаться к разминкам в разные дни.",
-    check: "Проверка: длина серии активных дней. Критерий — медиана >4 дней.",
+    title: "H4 · Видимый прогресс",
+    barrier:
+      "Мотиваторы из интервью: чувство контроля, маленькие победы, ритуал.",
+    hypothesis:
+      "Гипотеза: если после разминки показывать накопленный прогресс и серии дней в движении, пользователи будут возвращаться к разминкам в разные дни.",
+    check:
+      "Проверка: длина серии активных дней / повторные дни с разминкой.",
+    criterion: "Критерий: медианная серия >4 дней.",
   },
 ] as const;
 
@@ -374,9 +438,7 @@ function HypothesesModal({ onClose }: { onClose: () => void }) {
       <div className="process-hypotheses-modal__scroll" data-lenis-prevent>
         <div className="process-hypotheses-modal__content">
           <h3>Гипотезы первого релиза</h3>
-          <p className="process-hypotheses-modal__intro">
-            На основе барьеров из глубинных интервью сформулировала гипотезы и определила критерии их проверки.
-          </p>
+          
           <div className="process-hypotheses-modal__list">
             {releaseHypotheses.map((item) => (
               <article key={item.title}>
@@ -384,6 +446,7 @@ function HypothesesModal({ onClose }: { onClose: () => void }) {
                 <p>{item.barrier}</p>
                 <p>{item.hypothesis}</p>
                 <p>{item.check}</p>
+                <p>{item.criterion}</p>
               </article>
             ))}
           </div>
@@ -455,19 +518,92 @@ function AnalyticsModal({ onClose }: { onClose: () => void }) {
       <div className="process-hypotheses-modal__scroll" data-lenis-prevent>
         <div className="process-hypotheses-modal__content">
           <h3>Аналитика по гипотезам</h3>
-          <p className="process-hypotheses-modal__intro">
-            После релиза я сравнила первые данные использования приложения с критериями, которые заложила в продуктовые гипотезы.
-          </p>
-          <p className="process-analytics-modal__note">
-            <strong>Данные за 1 июня — 8 августа 2026.</strong> За этот период приложение увидел 81 новый пользователь. Выборка пока небольшая, поэтому результаты рассматриваю как первые сигналы для дальнейшего исследования, а не как подтверждение или опровержение гипотез.
-          </p>
+
+          <div className="process-analytics-modal__lead">
+            <p>
+              После релиза сравнила первые данные использования приложения
+              с критериями, которые заложила в гипотезы. Данные за 1 июня —
+              8 августа 2026, 81 новый пользователь. Выборка пока небольшая,
+              поэтому рассматриваю результаты как первые сигналы
+              для дальнейших итераций.
+            </p>
+          </div>
 
           <div className="process-hypotheses-modal__list process-analytics-modal__list">
-            <article><h4>H1 · Легко начать</h4><p><strong>Критерий:</strong> ≥30% новых пользователей начнут первую разминку.</p><p><strong>Сейчас: 32% · 26 из 81</strong></p><p><strong>Вывод:</strong> значение немного выше заданного порога, но до первой разминки всё ещё не доходит большинство новых пользователей. Сам сценарий старта требует дополнительного исследования: проблема может быть как в качестве трафика, так и в барьерах до первой разминки.</p></article>
-            <article><h4>H2 · Короткий формат</h4><p><strong>Критерий:</strong> ≥55% запущенных разминок будут завершены.</p><p><strong>Сейчас: 68% · 146 из 215</strong></p><p><strong>Вывод:</strong> после старта большинство пользователей доходят до конца. Короткий формат не выглядит выраженным барьером для завершения, хотя около трети запусков всё ещё прерываются.</p></article>
-            <article><h4>H3 · Без ощущения фитнеса</h4><p><strong>Критерий:</strong> пользователи воспринимают продукт как лёгкий перерыв, а не как обязательную тренировку.</p><p><strong>Сейчас:</strong> после релиза отдельно не исследовала.</p><p><strong>Вывод:</strong> продуктовых событий недостаточно для проверки восприятия. Для этой гипотезы нужна качественная проверка — интервью или пользовательские тесты.</p></article>
-            <article><h4>H4 · Персонализация</h4><p><strong>Критерий:</strong> ≥50% пользователей с повторными запусками используют больше одного варианта хотя бы одного параметра — тренера, формата, длительности или музыки.</p><p><strong>Сейчас: 80% · 16 из 20</strong></p><p className="process-analytics-modal__breakdown">Тренеры — <strong>75%</strong><br />Формат — <strong>25%</strong><br />Длительность — <strong>25%</strong><br />Музыка — <strong>10%</strong></p><p><strong>Вывод:</strong> персонализация используется неравномерно. Наиболее востребован выбор тренера; формат и длительность меняют значительно реже, музыку — почти не меняют. Это может быть сигналом, что разные настройки имеют для пользователей разную ценность.</p></article>
-            <article><h4>H5 · Видимый прогресс</h4><p><strong>Критерий:</strong> медианная серия активных дней &gt;4.</p><p><strong>Сейчас:</strong> медианное количество активных дней — <strong>2</strong>, D7 retention — <strong>17% · 3 из 18</strong>.</p><p><strong>Вывод:</strong> текущие данные показывают слабую регулярность и возвращаемость. При этом пока нельзя связать это именно с механикой прогресса — для оценки её влияния нужна отдельная проверка.</p></article>
+
+            <article>
+              <h4>H1 · Легко начать</h4>
+
+              <p>
+                Критерий: ≥30% новых пользователей начнут первую разминку.
+              </p>
+
+              <p className="process-analytics-card__result">
+                Результат: <strong>32% · 26 из 81</strong>
+              </p>
+
+              <p>
+                Критерий достигнут, но до первой разминки всё ещё не доходит
+                большинство новых пользователей. Старт остаётся зоной
+                для дальнейшего исследования.
+              </p>
+            </article>
+
+            <article>
+              <h4>H2 · Короткий формат</h4>
+
+              <p>
+                Критерий: ≥55% начатых разминок будут завершены.
+              </p>
+
+              <p className="process-analytics-card__result">
+                Результат: <strong>68% · 146 из 215</strong>
+              </p>
+
+              <p>
+                Критерий достигнут. После старта большинство пользователей
+                доходят до конца, поэтому формат 2–3 минуты не выглядит
+                выраженным барьером для завершения.
+              </p>
+            </article>
+
+            <article>
+              <h4>H3 · Разнообразие</h4>
+
+              <p>
+                Критерий: ≥50% пользователей с повторными запусками используют
+                больше одного варианта хотя бы одного параметра.
+              </p>
+
+              <p className="process-analytics-card__result">
+                Результат: <strong>80% · 16 из 20</strong>
+              </p>
+
+              <p>
+                Критерий достигнут. Чаще всего пользователи меняют тренера;
+                формат и длительность — реже, музыку почти не меняют.
+                Значит, ценность разных настроек неодинакова.
+              </p>
+            </article>
+
+            <article>
+              <h4>H4 · Видимый прогресс</h4>
+
+              <p>
+                Критерий: медианная серия активных дней &gt;4.
+              </p>
+
+              <p className="process-analytics-card__result">
+                Результат: <strong>2 активных дня · D7 — 17%</strong>
+              </p>
+
+              <p>
+                Критерий не достигнут. Пользователи редко возвращаются
+                в разные дни. Пока нет оснований считать прогресс и стрики
+                достаточным поводом для регулярных разминок.
+              </p>
+            </article>
+
           </div>
         </div>
       </div>
@@ -482,7 +618,6 @@ function HypothesesVisual({ onOpen }: { onOpen: () => void }) {
       <button
         className="process-hypotheses-sheet"
         type="button"
-        data-cursor="video"
         aria-label="Посмотреть гипотезы первого релиза"
         onPointerDown={(event) => event.stopPropagation()}
         onClick={(event) => {
@@ -503,13 +638,140 @@ function HypothesesVisual({ onOpen }: { onOpen: () => void }) {
   );
 }
 
+function ResearchPersonaPoints() {
+  return (
+    <div className="persona-accordion-layer">
+      <button
+        type="button"
+        className="persona-accordion persona-accordion--one"
+        aria-label="Персона 1"
+      >
+        <span className="persona-accordion__head">
+          <span
+            className="persona-accordion__emoji persona-accordion__emoji--green"
+            aria-hidden="true"
+          >
+            🌿
+          </span>
+          <span>Персона 1</span>
+        </span>
+
+        <span className="persona-accordion__reveal">
+          <span className="persona-accordion__inner">
+            <span className="persona-accordion__title">
+              Осознанный здоровист
+            </span>
+
+            <span className="persona-accordion__description">
+              Контроль здоровья. «Сделать, чтобы потом не было больно»
+            </span>
+
+            <span className="persona-accordion__section">Мотиваторы</span>
+
+            <span className="persona-accordion__list">
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Здоровье и профилактика
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Чувство контроля
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Быстрый эффект
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Ритуал
+              </span>
+            </span>
+
+            <span className="persona-accordion__section">Барьеры</span>
+
+            <span className="persona-accordion__list">
+              <span className="persona-accordion__item persona-accordion__item--bad">
+                Экономия времени
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--bad">
+                Раздражение от давления
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--bad">
+                Однообразие
+              </span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+      <button
+        type="button"
+        className="persona-accordion persona-accordion--two"
+        aria-label="Персона 2"
+      >
+        <span className="persona-accordion__head">
+          <span
+            className="persona-accordion__emoji persona-accordion__emoji--orange"
+            aria-hidden="true"
+          >
+            🏋️‍♂️
+          </span>
+          <span>Персона 2</span>
+        </span>
+
+        <span className="persona-accordion__reveal">
+          <span className="persona-accordion__inner">
+            <span className="persona-accordion__title">
+              Поддерживающий активность
+            </span>
+
+            <span className="persona-accordion__description">
+              Скорее про физическую форму, чем про здоровье. «Надо подвигаться, чтобы не расползаться»
+            </span>
+
+            <span className="persona-accordion__section">Мотиваторы</span>
+
+            <span className="persona-accordion__list">
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Самочувствие и энергия
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Не надо думать
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Маленькие победы
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--good">
+                Легко начать
+              </span>
+            </span>
+
+            <span className="persona-accordion__section">Барьеры</span>
+
+            <span className="persona-accordion__list">
+              <span className="persona-accordion__item persona-accordion__item--bad">
+                Усталость и лень
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--bad">
+                Перегрузка опциями
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--bad">
+                Раздражение от подачи
+              </span>
+              <span className="persona-accordion__item persona-accordion__item--bad">
+                Нет быстрого эффекта
+              </span>
+            </span>
+          </span>
+        </span>
+      </button>
+    </div>
+  );
+}
+
 function ProcessVisual({ visual, onOpenHypotheses }: { visual: (typeof processStages)[number]["visual"]; onOpenHypotheses: () => void }) {
   if (visual === "research") {
     return (
-      <div className="process-visual process-visual--research" aria-hidden="true">
-        <img src="/assets/mrshrimp/process/research-back.png" alt="" />
-        <img src="/assets/mrshrimp/process/research-front.png" alt="" />
-      </div>
+      <div
+        className="process-visual process-visual--research"
+        aria-hidden="true"
+      />
     );
   }
 
@@ -530,7 +792,7 @@ function ProcessVisual({ visual, onOpenHypotheses }: { visual: (typeof processSt
           aria-hidden="true"
         >
           <source
-            src="https://res.cloudinary.com/dk0kxiahf/video/upload/f_mp4,vc_h264,q_auto/v1786387052/exercose_1_aosgeu.mp4"
+            src="/videos/trainers-shoulders-v3.mp4"
             type="video/mp4"
           />
         </video>
@@ -668,24 +930,30 @@ function ProcessStageAction({
 }) {
   if (visual === "research") {
     return (
-      <CaseArtifactLink href="https://s.craft.me/cNWvHkIlDkF2UD">
-        Подробнее об исследовании
+      <CaseArtifactLink href="https://docs.craft.do/editor/d/311076ed-1cae-cb94-285f-c1e5545e8f4f/9FA26FD7-AA16-49E7-B852-8C6A596C4AEE/b/C4BE5A4A-7CE3-43B2-B4FF-890A95D7E4B3/%F0%9F%8E%99%EF%B8%8F-%D0%93%D0%BB%D1%83%D0%B1%D0%B8%D0%BD%D0%BD%D0%BE%D0%B5-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B2%D1%8C%D1%8E?s=KFgNNSP9mw6bYCgXBCjwrofLefhA1QC9GrvXRQpX1skJ">
+        Анализ интервью
       </CaseArtifactLink>
     );
   }
 
   if (visual === "hypotheses") {
     return (
-      <CaseArtifactLink onClick={onOpenHypotheses}>
-        Ознакомиться с гипотезами
-      </CaseArtifactLink>
+      <span style={{ display: "flex", gap: "8px", flexWrap: "nowrap", alignItems: "center" }}>
+        <CaseArtifactLink onClick={onOpenHypotheses}>
+          Гипотезы
+        </CaseArtifactLink>
+
+        <CaseArtifactLink href="https://www.figma.com/design/K1j2v48cZIXz1S4hHzCNRt/%F0%9F%A6%90--%D0%97%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D1%8B%D0%B5-%D1%81%D0%BF%D0%B8%D0%BD%D1%8B-%D0%B8-%D1%88%D0%B5%D0%B8-c-%D0%B2%D0%B0%D1%80%D0%B8%D0%B0%D0%BD%D1%82%D0%B0%D0%BC%D0%B8?node-id=43-228">
+          Сценарии
+        </CaseArtifactLink>
+      </span>
     );
   }
 
   if (visual === "design") {
     return (
       <CaseArtifactLink href="https://www.figma.com/design/K1j2v48cZIXz1S4hHzCNRt/%F0%9F%A6%90--%D0%97%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D1%8C%D0%B5-%D1%81%D0%BF%D0%B8%D0%BD%D1%8B-%D0%B8-%D1%88%D0%B5%D0%B8-c-%D0%B2%D0%B0%D1%80%D0%B8%D0%B0%D0%BD%D1%82%D0%B0%D0%BC%D0%B8?node-id=71-1659">
-        Посмотреть макеты
+        Макеты
       </CaseArtifactLink>
     );
   }
@@ -693,7 +961,7 @@ function ProcessStageAction({
   if (visual === "testing") {
     return (
       <CaseArtifactLink href="https://www.figma.com/design/K1j2v48cZIXz1S4hHzCNRt/%F0%9F%A6%90--%D0%97%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D1%8C%D0%B5-%D1%81%D0%BF%D0%B8%D0%BD%D1%8B-%D0%B8-%D1%88%D0%B5%D0%B8-c-%D0%B2%D0%B0%D1%80%D0%B8%D0%B0%D0%BD%D1%82%D0%B0%D0%BC%D0%B8?node-id=71-1660">
-        Подробнее о тестировании
+        Выводы по тестированию
       </CaseArtifactLink>
     );
   }
@@ -714,7 +982,7 @@ function ProcessStageAction({
   if (visual === "analytics") {
     return (
       <CaseArtifactLink onClick={onOpenAnalytics}>
-        Посмотреть выводы по гипотезам
+        Выводы по гипотезам
       </CaseArtifactLink>
     );
   }
@@ -729,28 +997,28 @@ const highlightSlides = [
     image: "/assets/mrshrimp/highlights/main.webp",
     alt: "Три итерации главного экрана MrShrimp",
     description:
-      "После интервью собрала экран вокруг быстрого старта. На UX-тестах стало понятно, что настройка важна, а выбор тренера считывается неочевидно — поэтому вынесла настройку в MVP и пересобрала главный экран.",
+      "После интервью сделала быстрый старт основным сценарием. На UX-тестах стало понятно, что настройка важна, а выбор тренера считывается неочевидно — добавила настройку в MVP и пересобрала экран.",
   },
   {
     label: "Политика",
     image: "/assets/mrshrimp/highlights/policy.webp",
     alt: "Итерации экрана согласия перед первой разминкой",
     description:
-      "Хотела сделать обязательный экран менее формальным и добавила видео. На тестах оно создавало лишнюю неопределённость, поэтому убрала его и оставила один понятный сценарий.",
+      "Добавила видео, чтобы сделать обязательный экран менее формальным. На тестах оно создавало лишнюю неопределённость — убрала его и оставила один понятный сценарий.",
   },
   {
     label: "Дни в движении",
-    image: "/assets/mrshrimp/highlights/streak.webp",
+    image: "/assets/mrshrimp/highlights/stats.webp",
     alt: "Итерации механики Дни в движении",
     description:
-      "Сначала сделала мягкий стрик с допустимым перерывом в неделю. На тестах такой прогресс не воспринимался как достижение — сократила перерыв до 2 дней и добавила цели на 21/40/60 дней.",
+      "Сначала допустила перерыв до недели. На тестах такой прогресс не воспринимался как достижение — сократила перерыв до 2 дней и добавила цели 21/40/60.",
   },
   {
     label: "Статистика",
-    image: "/assets/mrshrimp/highlights/stats.webp",
+    image: "/assets/mrshrimp/highlights/streak.webp",
     alt: "Итерации статистики и уровней",
     description:
-      "Статистика и награды сначала были разделены по нескольким экранам. Объединила прогресс в одном месте, чтобы текущий и следующий уровень были видны сразу.",
+      "Убрала лишний переход между статистикой и наградами — на больших телефонах до переключателя было неудобно тянуться. Объединила весь прогресс на одном экране.",
   },
 ] as const;
 
@@ -804,19 +1072,47 @@ function HighlightsSlider() {
     };
   }, [activeSlide]);
 
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      highlightsVisualRef.current?.scrollTo({
-        left: 0,
-        behavior: "auto",
-      });
+  const alignHighlightsVisual = () => {
+    const visual = highlightsVisualRef.current;
+    if (!visual) return;
+
+    const isTablet = window.matchMedia(
+      "(min-width: 821px) and (max-width: 900px)",
+    ).matches;
+
+    visual.scrollTo({
+      left: isTablet
+        ? Math.max(0, (visual.scrollWidth - visual.clientWidth) / 2)
+        : 0,
+      behavior: "auto",
     });
+  };
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(alignHighlightsVisual);
 
     return () => cancelAnimationFrame(frame);
   }, [activeSlide]);
 
   const slide = highlightSlides[activeSlide];
   const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    const preloaders = highlightSlides.map((item) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = item.image;
+      image.decode().catch(() => undefined);
+      return image;
+    });
+
+    return () => {
+      preloaders.forEach((image) => {
+        image.onload = null;
+        image.onerror = null;
+      });
+    };
+  }, []);
 
   const move = (direction: number) => {
     setActiveSlide(
@@ -829,7 +1125,12 @@ function HighlightsSlider() {
   return (
     <section className="shrimp-story-section shrimp-highlights">
       <CaseSectionHeader label="Хайлайты">
-        От первых гипотез к MVP — через интервью, UX-тесты и пересмотр приоритетов
+        <>
+          <span style={{ display: "block" }}>Что меняла после</span>
+          <span style={{ display: "block" }}>
+            <span className="mrshrimp-accent">интервью и тестов</span>
+          </span>
+        </>
       </CaseSectionHeader>
 
       <div
@@ -841,6 +1142,56 @@ function HighlightsSlider() {
         onKeyDown={(event) => {
           if (event.key === "ArrowLeft") move(-1);
           if (event.key === "ArrowRight") move(1);
+        }}
+        style={{ touchAction: "pan-y pinch-zoom" }}
+        onPointerDown={(event) => {
+          if (!window.matchMedia("(max-width: 900px)").matches) return;
+          if (event.pointerType === "mouse") return;
+
+          if (
+            (event.target as HTMLElement).closest(
+              ".shrimp-highlights-tabs, button, a",
+            )
+          ) {
+            swipeStartRef.current = null;
+            return;
+          }
+
+          swipeStartRef.current = {
+            x: event.clientX,
+            y: event.clientY,
+          };
+
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }}
+        onPointerUp={(event) => {
+          if (!window.matchMedia("(max-width: 900px)").matches) return;
+
+          const start = swipeStartRef.current;
+          swipeStartRef.current = null;
+
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
+
+          if (!start) return;
+
+          const deltaX = event.clientX - start.x;
+          const deltaY = event.clientY - start.y;
+
+          if (
+            Math.abs(deltaX) >= 40 &&
+            Math.abs(deltaX) > Math.abs(deltaY) * 1.15
+          ) {
+            move(deltaX < 0 ? 1 : -1);
+          }
+        }}
+        onPointerCancel={(event) => {
+          swipeStartRef.current = null;
+
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
         }}
       >
         <div className="shrimp-highlights-tabs" ref={tabsRef}>
@@ -858,8 +1209,7 @@ function HighlightsSlider() {
               type="button"
               className={index === activeSlide ? "is-active" : ""}
               data-cursor="link"
-              onPointerEnter={() => setActiveSlide(index)}
-              onFocus={() => setActiveSlide(index)}
+              onClick={() => setActiveSlide(index)}
             >
               {item.label}
             </button>
@@ -869,61 +1219,7 @@ function HighlightsSlider() {
         <div
           ref={highlightsVisualRef}
           className="shrimp-highlights-visual"
-          data-cursor="carousel-right"
-          onPointerMove={(event) => {
-            if (window.matchMedia("(max-width: 900px)").matches) return;
 
-            const rect = event.currentTarget.getBoundingClientRect();
-
-            event.currentTarget.dataset.cursor =
-              event.clientX < rect.left + rect.width / 2
-                ? "carousel-left"
-                : "carousel-right";
-          }}
-          onClick={(event) => {
-            if (window.matchMedia("(max-width: 900px)").matches) return;
-
-            const rect = event.currentTarget.getBoundingClientRect();
-
-            move(
-              event.clientX < rect.left + rect.width / 2
-                ? -1
-                : 1
-            );
-          }}
-          onTouchStart={(event) => {
-            const touch = event.touches[0];
-            swipeStartRef.current = {
-              x: touch.clientX,
-              y: touch.clientY,
-            };
-          }}
-          onTouchEnd={(event) => {
-            const start = swipeStartRef.current;
-            swipeStartRef.current = null;
-            if (!start) return;
-
-            if (
-              event.currentTarget.scrollWidth >
-              event.currentTarget.clientWidth + 1
-            ) {
-              return;
-            }
-
-            const touch = event.changedTouches[0];
-            const deltaX = touch.clientX - start.x;
-            const deltaY = touch.clientY - start.y;
-
-            if (
-              Math.abs(deltaX) > Math.abs(deltaY) * 1.2 &&
-              Math.abs(deltaX) >= 48
-            ) {
-              move(deltaX < 0 ? 1 : -1);
-            }
-          }}
-          onTouchCancel={() => {
-            swipeStartRef.current = null;
-          }}
         >
           <div className="shrimp-highlights-visual__track">
             <AnimatePresence mode="wait" initial={false}>
@@ -931,14 +1227,10 @@ function HighlightsSlider() {
                 key={slide.image}
                 src={slide.image}
                 alt={slide.alt}
+                draggable={false}
                 onLoad={() => {
-                  const visual = highlightsVisualRef.current;
-                  if (!visual) return;
-
-                  visual.scrollLeft = 0;
-                  requestAnimationFrame(() => {
-                    visual.scrollLeft = 0;
-                  });
+                  alignHighlightsVisual();
+                  requestAnimationFrame(alignHighlightsVisual);
                 }}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -986,46 +1278,32 @@ function ProcessSlider() {
     y: number;
   } | null>(null);
 
+  const processTabsRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+    if (!window.matchMedia("(max-width: 1200px)").matches) return;
 
-    let frame = 0;
-    let current = 0;
+    const tabs = processTabsRef.current;
+    if (!tabs) return;
 
-    const renderParallax = () => {
-      const rect = slider.getBoundingClientRect();
-      const target = Math.max(
-        -38,
-        Math.min(38, (window.innerHeight / 2 - (rect.top + rect.height / 2)) * 0.085),
-      );
-      current += (target - current) * 0.11;
+    const frame = requestAnimationFrame(() => {
+      const buttons = tabs.querySelectorAll<HTMLElement>('button[role="tab"]');
+      const activeButton = buttons[activeStage];
 
-      const activeLayer = slider.querySelector<HTMLElement>(
-        '.shrimp-process-visual-layer[aria-hidden="false"]',
-      );
-      activeLayer
-        ?.querySelector<HTMLElement>(".process-visual")
-        ?.style.setProperty(
-          "translate",
-          `0 ${current.toFixed(2)}px`,
-          "important",
-        );
+      if (!activeButton) return;
 
-      slider
-        .querySelector<HTMLElement>(".shrimp-process-result")
-        ?.style.setProperty(
-          "translate",
-          `0 ${(-current * 0.35).toFixed(2)}px`,
-          "important",
-        );
+      const targetLeft =
+        activeButton.offsetLeft -
+        (tabs.clientWidth - activeButton.offsetWidth) / 2;
 
-      frame = requestAnimationFrame(renderParallax);
-    };
+      tabs.scrollTo({
+        left: Math.max(0, targetLeft),
+        behavior: "smooth",
+      });
+    });
 
-    frame = requestAnimationFrame(renderParallax);
     return () => cancelAnimationFrame(frame);
-  }, []);
+  }, [activeStage]);
 
   const move = (moveDirection: number) => {
     setActiveStage(
@@ -1049,7 +1327,13 @@ function ProcessSlider() {
       <div className="shrimp-section-title reveal">
         <p className="type-section-label">Процесс</p>
         <h2 className="type-h2">
-          Исследования, дизайн, разработка и аналитика: полный цикл продукта
+          <span style={{ display: "block" }}>От исследования</span>
+          <span
+            style={{ display: "block" }}
+            className="mrshrimp-accent"
+          >
+            до первых пользователей
+          </span>
         </h2>
 
       </div>
@@ -1057,7 +1341,7 @@ function ProcessSlider() {
       <div
         ref={sliderRef}
         className="shrimp-process-slider reveal"
-        data-cursor="carousel-right"
+        data-cursor=""
         role="region"
         aria-roledescription="карусель"
         aria-label="Этапы процесса"
@@ -1066,21 +1350,54 @@ function ProcessSlider() {
           if (event.key === "ArrowLeft") move(-1);
           if (event.key === "ArrowRight") move(1);
         }}
-        onPointerMove={(event) => {
-          if (
-            event.currentTarget.querySelector(
-              ".process-hypotheses-modal",
-            )
-          ) return;
-          if (window.matchMedia("(max-width: 1200px)").matches) return;
+        onPointerDown={(event) => {
+          if (!window.matchMedia("(max-width: 1200px)").matches) return;
+          if (event.pointerType === "mouse") return;
+
           if (
             (event.target as HTMLElement).closest(
-              "button, a, .shrimp-process-result, .shrimp-process-mobile-detail",
+              ".shrimp-process-tabs, button, a, .process-hypotheses-modal, .case-video-modal",
             )
-          ) return;
-          const rect = event.currentTarget.getBoundingClientRect();
-          event.currentTarget.dataset.cursor =
-            event.clientX < rect.left + rect.width / 2 ? "carousel-left" : "carousel-right";
+          ) {
+            processSwipeStartRef.current = null;
+            return;
+          }
+
+          processSwipeStartRef.current = {
+            x: event.clientX,
+            y: event.clientY,
+          };
+
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }}
+        onPointerUp={(event) => {
+          if (!window.matchMedia("(max-width: 1200px)").matches) return;
+
+          const start = processSwipeStartRef.current;
+          processSwipeStartRef.current = null;
+
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
+
+          if (!start) return;
+
+          const deltaX = event.clientX - start.x;
+          const deltaY = event.clientY - start.y;
+
+          if (
+            Math.abs(deltaX) >= 40 &&
+            Math.abs(deltaX) > Math.abs(deltaY) * 1.15
+          ) {
+            move(deltaX < 0 ? 1 : -1);
+          }
+        }}
+        onPointerCancel={(event) => {
+          processSwipeStartRef.current = null;
+
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
         }}
         onClick={(event) => {
           if (
@@ -1103,55 +1420,6 @@ function ProcessSlider() {
         >
           <div
             className="shrimp-process-visual-stack"
-            onTouchStart={(event) => {
-              if (
-                !window.matchMedia(
-                  "(max-width: 1200px)",
-                ).matches
-              ) {
-                return;
-              }
-
-              const touch = event.touches[0];
-
-              processSwipeStartRef.current = {
-                x: touch.clientX,
-                y: touch.clientY,
-              };
-            }}
-            onTouchEnd={(event) => {
-              const start =
-                processSwipeStartRef.current;
-
-              processSwipeStartRef.current = null;
-
-              if (!start) return;
-
-              const touch =
-                event.changedTouches[0];
-
-              const deltaX =
-                touch.clientX - start.x;
-              const deltaY =
-                touch.clientY - start.y;
-
-              const isHorizontal =
-                Math.abs(deltaX) >
-                Math.abs(deltaY) * 1.2;
-
-              const passedThreshold =
-                Math.abs(deltaX) >= 48;
-
-              if (
-                isHorizontal &&
-                passedThreshold
-              ) {
-                move(deltaX < 0 ? 1 : -1);
-              }
-            }}
-            onTouchCancel={() => {
-              processSwipeStartRef.current = null;
-            }}
           >
             {processStages.map((item, index) => {
               const isActive = index === activeStage;
@@ -1225,6 +1493,8 @@ function ProcessSlider() {
           </motion.div>
         </div>
 
+        {stage.visual === "research" && <ResearchPersonaPoints />}
+
         <motion.div
           className="shrimp-process-mobile-detail"
           data-cursor=""
@@ -1240,14 +1510,6 @@ function ProcessSlider() {
             {stage.card}
           </p>
 
-          <div className="shrimp-process-action shrimp-process-action--mobile">
-            <ProcessStageAction
-              visual={stage.visual}
-              onOpenHypotheses={() => setHypothesesOpen(true)}
-              onOpenAnalytics={openAnalytics}
-            />
-          </div>
-
           <div className="shrimp-process-tags shrimp-process-title-tags">
             {stage.tags.map((tag) => (
               <span
@@ -1259,9 +1521,18 @@ function ProcessSlider() {
             ))}
           </div>
 
+          <div className="shrimp-process-action shrimp-process-action--mobile">
+            <ProcessStageAction
+              visual={stage.visual}
+              onOpenHypotheses={() => setHypothesesOpen(true)}
+              onOpenAnalytics={openAnalytics}
+            />
+          </div>
+
         </motion.div>
 
         <motion.div
+          ref={processTabsRef}
           className="shrimp-process-tabs"
           role="tablist"
           aria-label="Этапы процесса"
@@ -1280,7 +1551,14 @@ function ProcessSlider() {
                 aria-selected={isActive}
                 key={item.label}
                 onClick={() => selectStage(index)}
-                onPointerEnter={() => selectStage(index)}
+                onPointerEnter={(event) => {
+                  if (
+                    event.pointerType === "mouse" &&
+                    window.matchMedia("(min-width: 1201px)").matches
+                  ) {
+                    selectStage(index);
+                  }
+                }}
                 onFocus={() => selectStage(index)}
                 data-cursor="link"
                 transition={{
@@ -1369,15 +1647,15 @@ function ResultSection() {
   const metrics = [
     [
       "32%",
-      "26 из 81 новых пользователей начали первую разминку",
+      <>26 из 81 новых пользователей<br />начали первую разминку</>,
     ],
     [
       "70%",
-      "14 из 20 пользователей вернулись к разминкам в другой день",
+      <>14 из 20 пользователей вернулись<br />к разминкам в другой день</>,
     ],
     [
       "17%",
-      "3 из 18 пользователей вернулись на 7-й день после первой разминки",
+      <>3 из 18 пользователей вернулись<br />на 7-й день после первой разминки</>,
     ],
   ];
 
@@ -1386,15 +1664,18 @@ function ResultSection() {
       <div className="shrimp-section-title reveal">
         <p className="type-caption type-section-label">Результат</p>
         <h2 className="type-h2">
-          Проверила, как пользователи проходят разминки и возвращаются
-        </h2>
+      <span style={{ display: "block" }}>Выпустила MVP:</span>
+      <span style={{ display: "block" }}>
+        первые <span className="mrshrimp-accent">метрики</span>
+      </span>
+    </h2>
       </div>
 
       <div className="shrimp-result-stage reveal">
         <div className="shrimp-result-primary">
           <strong className="type-title">68%</strong>
           <span className="type-caption-regular text-secondary">
-            146 из 215 запущенных разминок завершены
+            146 из 215 запущенных<br />разминок завершены
           </span>
         </div>
 
@@ -1421,22 +1702,42 @@ function ResultSection() {
         <div className="shrimp-result-mobile-grid">
           <div className="shrimp-result-mobile-metric">
             <strong>68%</strong>
-            <span>146 из 215 запущенных<br />разминок завершены</span>
+            <span className="shrimp-result-metric-label--wide">
+              146 из 215 запущенных<br />разминок завершены
+            </span>
+            <span className="shrimp-result-metric-label--mobile">
+              146 из 215 разминок<br />завершены
+            </span>
           </div>
 
           <div className="shrimp-result-mobile-metric">
             <strong>32%</strong>
-            <span>26 из 81 новых пользователей<br />начали первую разминку</span>
+            <span className="shrimp-result-metric-label--wide">
+              26 из 81 новых пользователей<br />начали первую разминку
+            </span>
+            <span className="shrimp-result-metric-label--mobile">
+              26 из 81 начали<br />первую разминку
+            </span>
           </div>
 
           <div className="shrimp-result-mobile-metric">
             <strong>70%</strong>
-            <span>14 из 20 пользователей вернулись<br />к разминкам в другой день</span>
+            <span className="shrimp-result-metric-label--wide">
+              14 из 20 пользователей вернулись<br />к разминкам в другой день
+            </span>
+            <span className="shrimp-result-metric-label--mobile">
+              14 из 20 вернулись<br />на 2-й день
+            </span>
           </div>
 
           <div className="shrimp-result-mobile-metric">
             <strong>17%</strong>
-            <span>3 из 18 пользователей вернулись<br />на 7-й день после первой разминки</span>
+            <span className="shrimp-result-metric-label--wide">
+              3 из 18 пользователей вернулись<br />на 7-й день после первой разминки
+            </span>
+            <span className="shrimp-result-metric-label--mobile">
+              3 из 18 вернулись<br />на 7-й день
+            </span>
           </div>
         </div>
 
@@ -1457,41 +1758,127 @@ function ResultSection() {
         </p>
       </div>
 
-      <div className="shrimp-result-conclusion reveal">
+      <div
+        className={`shrimp-result-conclusion reveal${analyticsOpen ? " is-expanded" : ""}`}
+      >
         <article>
-          <svg className="shrimp-result-conclusion__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="10" r="4" /><path d="M4.5 24c.8-4.4 3-6.5 6.5-6.5s5.7 2.1 6.5 6.5M19 12h8m-3-3 3 3-3 3" /></svg>
-          <h3>Привлечение и первый старт — основная проблема</h3>
-          <p>За два месяца пришёл 81 новый пользователь, но только 32% дошли до первой разминки. Пока непонятно, проблема в качестве трафика или сценарии старта.</p>
+          <svg className="shrimp-result-conclusion__icon shrimp-result-icon--start" viewBox="0 0 40 40" aria-hidden="true">
+            <path className="result-start__outer" d="M20 6.5L34 31H6L20 6.5Z" />
+            <path className="result-start__inner" d="M20 14L27 27H13L20 14Z" />
+          </svg>
+          <h3>Главный барьер —<br />первый старт</h3>
+          <p>До первой разминки доходят 32% новых пользователей — нужно понять, где возникает барьер до старта.</p>
         </article>
         <article>
-          <svg className="shrimp-result-conclusion__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11" /><path d="m10.5 16 3.7 3.7 7.7-8" /></svg>
-          <h3>Начатую разминку чаще заканчивают</h3>
-          <p>68% запусков доходят до завершения. Значит, сам формат разминки выглядит менее проблемным, чем переход от первого знакомства с продуктом к началу занятия.</p>
+          <svg className="shrimp-result-conclusion__icon shrimp-result-icon--finish" viewBox="0 0 40 40" aria-hidden="true">
+            <circle className="result-finish__outer" cx="20" cy="20" r="12" />
+            <circle className="result-finish__inner" cx="20" cy="20" r="5" />
+          </svg>
+          <h3>Если начали —<br />чаще заканчивают</h3>
+          <p>68% запущенных разминок завершают — после старта сценарий работает заметно лучше.</p>
         </article>
         <article>
-          <svg className="shrimp-result-conclusion__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M25 12a10 10 0 1 0 .2 7M25 6v6h-6" /><path d="M16 10v6l4 2.5" /></svg>
-          <h3>Устойчивой регулярности пока нет</h3>
-          <p>Пользователи возвращаются к разминкам, но медианное количество активных дней — 2. На текущей выборке пока нельзя говорить об устойчивом регулярном использовании.</p>
+          <svg className="shrimp-result-conclusion__icon shrimp-result-icon--diamonds" viewBox="0 0 40 40" aria-hidden="true">
+            <rect className="result-diamonds__outer" x="9" y="9" width="22" height="22" rx="7" />
+            <rect className="result-diamonds__inner" x="14" y="14" width="12" height="12" rx="4" />
+          </svg>
+          <h3>Повторный интерес<br />есть</h3>
+          <p>70% возвращаются в другой день, но D7 — 17%: о регулярном использовании говорить пока рано.</p>
         </article>
 
-        <div className="shrimp-result-conclusion__action">
+        <div className="shrimp-result-conclusion__toggle-wrap">
           <CaseArtifactLink
-            onClick={() => setAnalyticsOpen(true)}
+            className="shrimp-result-conclusion__toggle-button"
+            icon={analyticsOpen ? "chevron-up" : "chevron-down"}
+            onClick={() => setAnalyticsOpen((value) => !value)}
           >
-            Посмотреть выводы по гипотезам
+            {analyticsOpen ? "Свернуть" : "Выводы по гипотезам"}
           </CaseArtifactLink>
         </div>
 
-        {analyticsOpen && (
-          <AnalyticsModal onClose={() => setAnalyticsOpen(false)} />
-        )}
+        <div className="shrimp-result-hypotheses">
+          <div className="shrimp-result-hypotheses__inner">
+            <div className="shrimp-result-hypotheses__grid">
+
+              <article>
+                <h4>H1 · Легко начать</h4>
+
+                <p>
+                  Критерий: ≥30% новых пользователей начнут первую разминку.
+                </p>
+
+                <p className="shrimp-result-hypothesis__result">
+                  Результат: <strong>32% · 26 из 81</strong>
+                </p>
+
+                <p>
+                  Критерий достигнут, но до первой разминки всё ещё не доходит
+                  большинство новых пользователей. Старт остаётся зоной
+                  для дальнейшего исследования.
+                </p>
+              </article>
+
+              <article>
+                <h4>H2 · Короткий формат</h4>
+
+                <p>
+                  Критерий: ≥55% начатых разминок будут завершены.
+                </p>
+
+                <p className="shrimp-result-hypothesis__result">
+                  Результат: <strong>68% · 146 из 215</strong>
+                </p>
+
+                <p>
+                  Критерий достигнут. Большинство начатых разминок завершаются,
+                  поэтому длительность 2–3 минуты подходит для основного сценария.
+                </p>
+              </article>
+
+              <article>
+                <h4>H3 · Разнообразие</h4>
+
+                <p>
+                  Критерий: ≥50% пользователей с повторными запусками используют
+                  больше одного варианта хотя бы одного параметра.
+                </p>
+
+                <p className="shrimp-result-hypothesis__result">
+                  Результат: <strong>80% · 16 из 20</strong>
+                </p>
+
+                <p>
+                  Критерий достигнут. Чаще всего пользователи меняют тренера;
+                  формат и длительность — реже, музыку почти не меняют.
+                  Ценность разных настроек неодинакова.
+                </p>
+              </article>
+
+              <article>
+                <h4>H4 · Видимый прогресс</h4>
+
+                <p>
+                  Критерий: медианная серия активных дней &gt;4.
+                </p>
+
+                <p className="shrimp-result-hypothesis__result">
+                  Результат: <strong>2 активных дня · D7 — 17%</strong>
+                </p>
+
+                <p>
+                  Критерий не достигнут. Пользователи редко возвращаются
+                  в разные дни. Пока нет оснований считать прогресс и стрики
+                  достаточным поводом для регулярных разминок.
+                </p>
+              </article>
+
+            </div>
+          </div>
+        </div>
       </div>
 
       <p className="shrimp-result-final-note reveal">
-        Прошла полный цикл от исследования и дизайна до разработки, релиза и
-        аналитики. AI использовала и как рабочий инструмент, и как партнёра для обсуждения продуктовых
-        решений, гипотез и анализа данных. С его помощью смогла закрыть задачи за пределами основной экспертизы:
-        разработку, контент, вёрстку сайта и дашборда.
+        В итоге собрала и выпустила продукт самостоятельно. AI использовала на всём пути: от исследований и продуктовых решений до разработки и аналитики. Он помог закрыть задачи, которые раньше были за пределами моей основной экспертизы.
       </p>
     </section>
   );
@@ -1517,9 +1904,8 @@ export default function MrShrimpCase() {
           title="MrShrimp"
           summary={
             <>
-              Приложение с короткими разминками для людей, которые много работают за
-              компьютером. Полный цикл создания продукта: от исследования до релиза и
-              аналитики.
+              С нуля создала и выпустила приложение с короткими разминками для тех,
+              кто много сидит
             </>
           }
           actions={
@@ -1532,20 +1918,30 @@ export default function MrShrimpCase() {
             <CaseProjectVisual
               variant="mrshrimp"
               image="/assets/mrshrimp/hero/main-clean.webp"
+              tabletImage="/assets/mrshrimp/hero/main-clean.webp"
+              mobileImage="/assets/mrshrimp/hero/main-clean.webp"
             />
           }
           meta={[
-            "2025–2026 · Wellness · HealthTech",
-            "Founder & Product Designer",
-            "iOS · Android · 0→1",
+            "2025–2026 · Founder & Product Designer",
+            "B2C · 0→1 · Wellness",
+            "Mobile App",
           ]}
         />
 
       <section className="shrimp-story-section shrimp-context">
         <CaseSectionHeader label="Контекст">
-          Самостоятельно создала продукт от гипотезы до релиза
-        </CaseSectionHeader>
+        <>
+          
+          <span style={{ display: "block" }}>Решила сделать</span>
+          <span className="mrshrimp-accent" style={{ display: "block" }}>
+            собственный продукт
+          </span>
+        
+        </>
+      </CaseSectionHeader>
         <CaseContextGrid
+          priority
           items={[
             {
               src: "/assets/mrshrimp/context/01-normalized.webp",
@@ -1557,18 +1953,33 @@ export default function MrShrimpCase() {
             },
             {
               type: "video",
-              src: "https://res.cloudinary.com/dk0kxiahf/video/upload/v1769074258/manki_shoulder_lift_cyjlrl.mp4",
-              alt: "Персонаж выполняет упражнение",
+              src: "/videos/trainers-shoulders-v3.mp4",
+              alt: "Обезьянка выполняет упражнение",
             },
           ]}
         />
-      </section>
+      
+      <p className="mrshrimp-context-description">
+        Определила требования к нише: конкретная задача, ограниченный объём первой версии, минимум инфраструктуры — чтобы самостоятельно запустить MVP. Хотела выбрать полезную и близкую мне тему. Так пришла к идее коротких разминок во время работы.
+      </p>
+    </section>
 
       <section className="shrimp-story-section shrimp-task">
         <CaseSectionHeader label="Задача">
-          Запустить MVP и проверить, впишутся ли короткие разминки в рабочий день
-        </CaseSectionHeader>
+        <>
+          <span className="mrshrimp-task-title-desktop">
+            Спроектировать и <span className="mrshrimp-accent">выпустить</span>
+          </span>
+          <span className="mrshrimp-task-title-desktop">приложение с разминками</span>
+          <span className="mrshrimp-task-title-adaptive">Спроектировать</span>
+          <span className="mrshrimp-task-title-adaptive">
+            и <span className="mrshrimp-accent">выпустить</span> приложение
+          </span>
+          <span className="mrshrimp-task-title-adaptive">с разминками</span>
+        </>
+      </CaseSectionHeader>
         <CaseTaskVisual
+          priority
           src="/assets/mrshrimp/task/visual.webp"
           alt="Ключевые экраны MVP приложения MrShrimp"
         />

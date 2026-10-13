@@ -24,36 +24,93 @@ export default function CaseExperience() {
     return () => window.cancelAnimationFrame(frame);
   }, [pathname]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    document.documentElement.classList.remove("is-project-transitioning");
+
+    const pageSelector =
+      pathname === "/projects/mrshrimp"
+        ? ".mrshrimp-case"
+        : pathname === "/projects/punto"
+          ? ".punto-case"
+          : pathname === "/projects/industry"
+            ? ".industry-case"
+            : ".case-page";
+
+    let heroFrame1 = 0;
+    let heroFrame2 = 0;
+    let heroStarted = false;
+
+    const revealHero = () => {
+      if (heroStarted) return;
+
+      const heroElements = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          `${pageSelector} .case-intro .reveal`,
+        ),
+      );
+
+      // При SPA-переходе новый кейс может появиться чуть позже pathname.
+      if (heroElements.length === 0) return;
+
+      heroStarted = true;
+
+      heroElements.forEach((element) => {
+        element.classList.remove("is-visible");
+      });
+
+      // Фиксируем стартовое состояние до запуска transition.
+      void heroElements[0].offsetHeight;
+
+      heroFrame1 = window.requestAnimationFrame(() => {
+        heroFrame2 = window.requestAnimationFrame(() => {
+          heroElements.forEach((element) => {
+            element.classList.add("is-visible");
+          });
+        });
+      });
+    };
+
     const observer = new IntersectionObserver(
       (entries) =>
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
           }
         }),
       { threshold: 0.1 },
     );
 
-    const observeReveals = () => {
+    const observeContent = () => {
+      // Hero сюда специально НЕ попадает.
       document
-        .querySelectorAll(".case-page .reveal:not(.is-visible)")
-        .forEach((element) => observer.observe(element));
+        .querySelectorAll<HTMLElement>(
+          `${pageSelector} .reveal:not(.is-visible)`,
+        )
+        .forEach((element) => {
+          if (element.closest(".case-intro")) return;
+          observer.observe(element);
+        });
+
+      // Если новый hero только что появился после router.push.
+      revealHero();
     };
 
-    observeReveals();
+    observeContent();
 
-    const page = document.querySelector(".case-page");
-    const mutationObserver = new MutationObserver(observeReveals);
+    // Наблюдаем body, потому что при SPA-переходе старый .case-page
+    // заменяется новым.
+    const mutationObserver = new MutationObserver(observeContent);
 
-    if (page) {
-      mutationObserver.observe(page, {
-        childList: true,
-        subtree: true,
-      });
-    }
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
 
     return () => {
+      window.cancelAnimationFrame(heroFrame1);
+      window.cancelAnimationFrame(heroFrame2);
+
       mutationObserver.disconnect();
       observer.disconnect();
     };
@@ -149,7 +206,10 @@ export default function CaseExperience() {
     let current = 0;
 
     const render = () => {
-      if (reducedMotion.matches) {
+      if (
+        reducedMotion.matches ||
+        window.matchMedia("(max-width: 1200px)").matches
+      ) {
         resultVisuals.forEach(({ element, property }) => {
           element.style.setProperty(property, "0px");
         });
@@ -181,17 +241,16 @@ export default function CaseExperience() {
       });
     };
   }, []);
-
-  return (
-    <header className="shrimp-header case-header text-normal">
-      <a className="shrimp-brand text-logo" href="/" data-cursor="link">
+return (
+    <header className="site-header case-header text-normal">
+      <a
+        className="brand text-logo"
+        href="/"
+        aria-label="Galina Chumak — главная"
+        data-cursor="link"
+      >
         Galina Chumak
       </a>
-
-      <nav aria-label="Навигация по портфолио">
-        <a href="/#projects" aria-current="page" data-cursor="nav">Проекты</a>
-        <a href="/about" data-cursor="nav">Обо мне</a>
-      </nav>
 
       <button
         className="theme-switch"
@@ -212,6 +271,16 @@ export default function CaseExperience() {
           <span className="theme-icon theme-icon--moon" aria-hidden="true" />
         </span>
       </button>
+
+      <nav className="header-contact-nav" aria-label="Связаться">
+        <a
+          className="header-contact"
+          href="/about"
+          data-cursor="nav"
+        >
+          Связаться
+        </a>
+      </nav>
     </header>
   );
 }

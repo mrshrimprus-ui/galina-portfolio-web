@@ -41,3 +41,6 @@ next-env.d.ts
 /outputs/
 /work/
 /UPLOAD-TO-HOSTING/
+
+*.persona-backup
+*.tsbuildinfo
