@@ -1,0 +1,16 @@
+2:I["f1aa0ba7b66d",[],"default",1]
+3:I["04f99535335a",[],"default",1]
+4:I["1e25899af903",[],"default",1]
+5:I["8c0f216c4604",[],"Children",1]
+6:I["b767a15e524a",[],"default",1]
+7:I["9908353fd9b3",[],"default",1]
+8:I["3b3cd9d481b1",[],"default",1]
+9:I["15c18cfaeeff",[],"LayoutSegmentProvider",1]
+a:I["8c0f216c4604",[],"Slot",1]
+b:I["593f344dc510",[],"RedirectBoundary",1]
+:HL["/assets/index-D169lCMo.css","style"]
+0:{"__route":"route:/","__interceptionContext":null,"__layoutIds":["layout:/"],"__rootLayout":"/","page:/":"$L1","layout:/":[[[["$","link","css:/assets/index-D169lCMo.css",{"rel":"stylesheet","precedence":"vite-rsc/importer-resources","href":"/assets/index-D169lCMo.css","data-rsc-css-href":"/assets/index-D169lCMo.css"}],"$undefined"],["$","html",null,{"lang":"ru","data-theme":"dark","suppressHydrationWarning":true,"children":[["$","head",null,{"children":["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var theme=localStorage.getItem('galina-chumak-theme');document.documentElement.dataset.theme=theme==='light'?'light':'dark'}catch(e){}})();"}}]}],["$","body",null,{"children":[["$","$L2",null,{}],["$","$L3",null,{}],["$","$L4",null,{}],["$","$L5",null,{}],["$","$L6",null,{}],["$","$L7",null,{}],["$","$L8",null,{}]]}]]}]],null],"route:/":[[["$","meta",null,{"charSet":"utf-8"}],[["$","title","0",{"children":"Galina Chumak — Senior Product Designer"}],["$","meta","1",{"name":"description","content":"Портфолио продуктового дизайнера Галины Чумак: мобильные и веб-продукты для B2C и B2B."}],["$","meta","2",{"property":"og:title","content":"Galina Chumak — Senior Product Designer"}],["$","meta","3",{"property":"og:description","content":"Мобильные и веб-продукты для B2C и B2B."}],["$","meta","4",{"property":"og:type","content":"website"}],["$","meta","5",{"property":"og:image","content":"https://galinachumak.ru/og.png"}],["$","meta","6",{"property":"og:image:width","content":"1672"}],["$","meta","7",{"property":"og:image:height","content":"943"}],["$","meta","8",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","9",{"name":"twitter:title","content":"Galina Chumak — Senior Product Designer"}],["$","meta","10",{"name":"twitter:description","content":"Мобильные и веб-продукты для B2C и B2B."}],["$","meta","11",{"name":"twitter:image","content":"https://galinachumak.ru/og.png"}],["$","link","12",{"rel":"shortcut icon","href":"https://galinachumak.ru/favicon.svg"}],["$","link","13",{"rel":"icon","href":"https://galinachumak.ru/favicon.svg"}]],[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]],["$","$L9",null,{"segmentMap":{"children":[]},"children":["$","$La",null,{"id":"layout:/","parallelSlots":"$undefined","children":["$","$Lb",null,{"children":["$","$L9",null,{"segmentMap":{"children":[]},"children":["$","$La",null,{"id":"page:/"}]}]}]}]}]],"__layoutFlags":{"layout:/":"s"},"__artifactCompatibility":{"schemaVersion":1,"graphVersion":"app-route-graph:4uhn5s1wvoptc","deploymentVersion":"82793602-d82e-4000-b0b0-f6ceb8a56972","appElementsSchemaVersion":1,"rscPayloadSchemaVersion":1,"rootBoundaryId":"/","renderEpoch":null}}
+c:I["6efdf509a785",[],"default",1]
+1:["$","$Lc",null,{"params":"$@d","searchParams":"$@e"}]
+d:{}
+e:{}
