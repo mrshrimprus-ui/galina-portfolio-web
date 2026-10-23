@@ -6,7 +6,10 @@ const outputDirectory = fileURLToPath(new URL("../dist/client/", import.meta.url
 const pagesBase = "/galina-portfolio-web";
 const textExtensions = new Set([".css", ".html", ".js"]);
 
-if (process.env.GITHUB_ACTIONS !== "true") process.exit(0);
+if (
+  process.env.GITHUB_ACTIONS !== "true" ||
+  process.env.GITHUB_PAGES_CUSTOM_DOMAIN
+) process.exit(0);
 
 async function* files(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
