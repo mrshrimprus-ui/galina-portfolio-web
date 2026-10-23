@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const AUTO_NAVIGATION_DELAY = 3200;
 
@@ -58,7 +58,6 @@ export function requestProjectPageTransition(project: ProjectTransitionData) {
 }
 
 export default function ProjectPageTransition() {
-  const router = useRouter();
   const pathname = usePathname();
   const navigationTimer = useRef<number | null>(null);
   const removalTimer = useRef<number | null>(null);
@@ -77,8 +76,9 @@ export default function ProjectPageTransition() {
   }, []);
 
   const openProject = useCallback((nextProject: ProjectTransitionData) => {
-    router.push(nextProject.route, { scroll: false });
-  }, [router]);
+    const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+    window.location.assign(`${base}${nextProject.route}`);
+  }, []);
 
   useEffect(() => {
     const handleOpen = (event: Event) => {

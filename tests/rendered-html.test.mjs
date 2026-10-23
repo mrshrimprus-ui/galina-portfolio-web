@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render(pathname = "/") {
@@ -32,7 +33,7 @@ test("server-renders the portfolio homepage", async () => {
   assert.match(html, /Senior Product/);
   assert.match(html, /MrShrimp/);
   assert.match(html, /Punto Pago/);
-  assert.match(html, /Smart Home/);
+  assert.match(html, /EKF Connect Industry/);
   assert.doesNotMatch(html, /codex-preview|Building your site/i);
 });
 
@@ -42,7 +43,7 @@ test("server-renders every public route", async () => {
     "/privacy/",
     "/projects/mrshrimp/",
     "/projects/punto/",
-    "/projects/smarthome/",
+    "/projects/industry/",
   ];
 
   for (const route of routes) {
@@ -54,4 +55,18 @@ test("server-renders every public route", async () => {
       route,
     );
   }
+});
+
+test("GitHub Pages build uses the repository prefix", async () => {
+  if (process.env.GITHUB_ACTIONS !== "true") return;
+
+  const html = await readFile(
+    new URL("../dist/client/index.html", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(html, /href="\/galina-portfolio-web\/assets\/[^\"]+\.css/);
+  assert.match(html, /src="\/galina-portfolio-web\/assets\//);
+  assert.match(html, /href="\/galina-portfolio-web\/about/);
+  assert.doesNotMatch(html, /(?:href|src)="\/(?:assets|videos)\//);
 });
